@@ -14,5 +14,3 @@ server.get('/', (req, res) =>{
 http.createServer(server).listen(8080, function(req, res){
     console.log('HTTPS listening on 8080');
 });
-
-
