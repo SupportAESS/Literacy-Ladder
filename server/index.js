@@ -14,19 +14,19 @@ const connectionUri = "mongodb+srv://shivendra2023is21:xl1XseRiuLs88wKf@literacy
 mongoose.connect(connectionUri, connectionOptions)
   .then(() => {
     console.log("Database Connected");
-    insert(); // Call insert function once the database is connected
+    //insert(); // Call insert function once the database is connected
     getData(); // Call getData function once the database is connected
   })
   .catch(err => console.error(err));
 
 const User = require('./models/userModel'); // Import the User model from userModel.js
 
-async function insert() {
+async function insert(name, email, mobileNo) {
   try {
     await User.create({
-      Name: "Shivendra Singh Thakur",
-      Email: "Shivendra323@gmail.com",
-      MobileNo: 8435963744
+      Name: name,
+      Email: email,
+      MobileNo: mobileNo
     });
     console.log("User inserted successfully");
   } catch (error) {
