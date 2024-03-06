@@ -10,12 +10,13 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model('User', userSchema);
 
 const bookSchema = new mongoose.Schema({
-    title: { type: String, required: true, minLength: 1, maxLength: 255 },
+    bookName: { type: String, required: true, minLength: 1, maxLength: 255 },
     author: { type: String, required: true, minLength: 1, maxLength: 255 },
-    genre: { type: String, required: true, enum: ["fiction", "non-fiction", "children", "young-adult"] },
-    price: { type: Number, required: true },
-    stock: { type: Number, required: true },
-    seller_id: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "User" }
+    genre: { type: String, required: true, enum: ["Fiction", "Non-fiction", "Action and Adventure", "Mystery", "Science Fiction", "Fantasy", "Horror", "Biography", "Auto-biography", "History", "Self-help", "Science", "Romance"] },
+    productPrice: { type: Number, required: true },
+    productQuantity: { type: Number, required: true },
+    productType: { type: String, required: true, enum: ["Book","Magazine"] },
+    productDescription: { type: String, required: true, minLength: 1, maxLength: 255 }
 });
 
 const Book = mongoose.model('Book', bookSchema);

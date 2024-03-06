@@ -43,11 +43,15 @@
                 <h5 class="card-title text-center">Inventory Details</h5>
             </div>
             <div class="card-body">
-                <form>
+                <form method="post" action="submit">
                     <div class="mb-3">
-                        <label for="productName" class="form-label">Product Name</label>
-                        <input type="text" class="form-control" id="productName" name="productName">
+                        <label for="bookName" class="form-label">Book Name</label>
+                        <input type="text" class="form-control" id="bookName" name="bookName">
                     </div>
+                    <div class="mb-3">
+                      <label for="author" class="form-label">Author</label>
+                      <input type="text" class="form-control" id="author" name="author">
+                  </div>
                     <div class="mb-3">
                         <label for="productPrice" class="form-label">Product Price</label>
                         <input type="text" class="form-control" id="productPrice" name="productPrice">
@@ -55,6 +59,32 @@
                     <div class="mb-3">
                         <label for="productQuantity" class="form-label">Product Quantity</label>
                         <input type="number" class="form-control" id="productQuantity" name="productQuantity">
+                    </div>
+                    <div class="mb-3">
+                      <label for="productType" class="form-label">Product Type</label>
+                        <select class="form-control" name="productType" id="productType">
+                          <option value="Book">Book</option>
+                          <option value="Magazine">Magazine</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                      <label for="genre" class="form-label">Genre</label>
+                      <select class="form-control" name="genre" id="genre">
+                        <option value="Fiction">Fiction</option>
+                        <option value="Non-fiction">Non-fiction</option>
+                        <option value="Action and Adventure">Action and Adventure</option>
+                        <option value="Mystery">Mystery</option>
+                        <option value="Science Fiction">Science Fiction</option>
+                        <option value="Fantasy">Fantasy</option>
+                        <option value="Horror">Horror</option>
+                        <option value="Biography">Biography</option>
+                        <option value="Auto-biography">Auto-biography</option>
+                        <option value="History">History</option>
+                        <option value="Self-help">Self-help</option>
+                        <option value="Science">Science</option>
+                        <option value="Romance">Romance</option>
+                    </select>
+                    
                     </div>
                     <div class="mb-3">
                         <label for="productDescription" class="form-label">Product Description</label>
