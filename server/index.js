@@ -10,7 +10,6 @@ const connectionOptions = {
   dbName: 'literacyLadder',
 };
 
-const connectionUri = "mongodb+srv://shivendra2023is21:xl1XseRiuLs88wKf@literacyladder.kkfnufu.mongodb.net/?retryWrites=true&w=majority";
 
 //for admin routes
 const adminRoute = require('./routes/admin.js');
@@ -43,9 +42,6 @@ server.post('/submit', (req, res) => {
 
   res.send('Data received successfully!');
 });
-   //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 
 const User = require('./models/userModel'); // Import the User model from userModel.js
 const { Book } = require('./models/userModel.js'); // Import the Book model from models.js
@@ -78,9 +74,6 @@ mongoose.connect(connectionUri, connectionOptions)
   console.log("Database Connected");
 })
 .catch(err => console.error(err));
-
-
-
 
 
 
