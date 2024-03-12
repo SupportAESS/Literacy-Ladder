@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const userSchema = new mongoose.Schema({
     username: { type: String, required: true, minLength: 1, maxLength: 50 },
     email: { type: String, required: true, minLength: 1, maxLength: 255 },
-    role: { type: String, required: true, enum: ["user", "seller", "admin"] }
+    role: { type: String, required: true, enum: ["user", "seller", "admin"] },
+    password: { type: String, required: true, minLength: 1, maxLength: 255 }
 });
 
 const User = mongoose.model('User', userSchema);

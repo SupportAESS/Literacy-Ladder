@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -31,7 +31,7 @@
               </li>
             </ul>
             <span class="navbar-text">
-              Navbar text with an inline element
+              <a class="nav-link" href="#">LogOut</a>
             </span>
           </div>
         </div>
@@ -98,5 +98,105 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-xxxx" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-xxxx" crossorigin="anonymous"></script>
+    <script src="./style/admin.js"></script>
+</body>
+</html>-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="./style/admin.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Admin Dashboard</h1>
+    <button id="dark-mode-toggle" class="button">Toggle Dark Mode</button>
+    <div class="section" id="user-management">
+      <h2>User Management</h2>
+      <div id="user-list">
+        <!-- User list will be populated dynamically -->
+      </div>
+      <button id="add-user-btn" class="button">Add User</button>
+    </div>
+    <div class="section" id="product-management">
+      <h2>Product Management</h2>
+      <div id="product-list">
+        <!-- Product list will be populated dynamically -->
+      </div>
+      <button id="add-product-btn" class="button">Add Product</button>
+    </div>
+    <div class="section" id="purchase-history">
+      <h2>Purchase History</h2>
+      <div id="purchase-list">
+        <!-- Purchase history will be populated dynamically -->
+      </div>
+    </div>
+    <div class="section" id="review-management">
+      <h2>Review Management</h2>
+      <div id="review-list">
+        <!-- Review list will be populated dynamically -->
+      </div>
+    </div>
+    <div class="section" id="invoice-generation">
+      <h2>Invoice Generation</h2>
+      <div id="invoice-list">
+        <!-- Invoice list will be populated dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Add User Modal -->
+  <div id="add-user-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Add User</h2>
+      <form id="add-user-form">
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <input type="password" id="confirm-password" placeholder="Confirm Password" required>
+        <button type="submit" class="button">Add User</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Product Modal -->
+  <div id="add-product-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Add Product</h2>
+      <form id="add-product-form">
+        <input type="text" id="product-name" placeholder="Product Name" required>
+        <input type="text" id="author" placeholder="Author" required>
+        <!-- <input type="text" id="genre" placeholder="Genre" required> -->
+        <select name="genre" id="genre">
+          <option value="Fiction">Fiction</option>
+          <option value="Non-fiction">Non-fiction</option>
+          <option value="Action and Adventure">Action and Adventure</option>
+          <option value="Mystery">Mystery</option>
+          <option value="Science Fiction">Science Fiction</option>
+          <option value="Fantasy">Fantasy</option>
+          <option value="Horror">Horror</option>
+          <option value="Biography">Biography</option>
+          <option value="Auto-biography">Auto-biography</option>
+          <option value="History">History</option>
+          <option value="Self-help">Self-help</option>
+          <option value="Science">Science</option>
+          <option value="Romance">Romance</option>
+      </select>
+        <input type="number" id="product-price" placeholder="Price" required>
+        <input type="number" id="product-quantity" placeholder="Quantity" required>
+        <textarea id="product-description" placeholder="Description" required></textarea>
+        <button type="submit" class="button">Add Product</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="./style/admin.js"></script>
 </body>
 </html>
+
+
+
