@@ -4,6 +4,8 @@ const http = require('http');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const crypto = require('crypto');
+
 
 const connectionOptions = {
   useNewUrlParser: true,
@@ -33,18 +35,32 @@ server.use(bodyParser.urlencoded({ extended: true }));
 server.use(bodyParser.json());
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///sha224
+function cryptoSha(password) {  
+  //creating hash object 
+  var hash = crypto.createHash('sha224');
+  //passing the data to be hashed
+  data = hash.update(password);
+  //Creating the hash in the required format
+  gen_hash= data.digest('hex');
+  //Printing the output on the console
+  console.log("hash : " + gen_hash);
+  return gen_hash;
+}
+
 //Login System
 const loginRoute = require('./routes/login.js');
 const { validateUser } = require('./controllers/loginController.js');
 
 server.post('/login', async (req, res) => {
   const { username, password } = req.body;
-  
-  console.log("Login clicked with username: " + username + " and password: " + password);
+  var pw = cryptoSha(password);
+  console.log("Login clicked with username: " + username + " and password: " + pw);
   
   try {
     // Validate username and password
-    const user = await validateUser(username, password);
+    const user = await validateUser(username, pw);
 
     if (user) {
       // Set session variables
@@ -64,13 +80,18 @@ server.post('/login', async (req, res) => {
 const signupRoute = require('./routes/signup.js');
 const { registerUser } = require('./controllers/signupController.js');
 
+
 server.post('/signup', async (req, res) => {
   const { username, email, role, password, confirmPassword } = req.body;
+    var pw = cryptoSha(password);
+    var cpw = cryptoSha(confirmPassword);
+
+  console.log("Signup clicked with username: " + username + ", email: " + email + ", role: " + role + " and password: "+ pw + "  confirm-password: "+  cpw);
 
 
   try {
     // Create new user
-    const newUser = await registerUser(username, email, role, password, confirmPassword);
+    const newUser = await registerUser(username, email, role, pw, cpw);
 
     // Redirect to signup success page
     res.sendFile(__dirname + '/view/index.html');
