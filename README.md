@@ -6,8 +6,10 @@ Let's Begin!!!
 start client-server
 
 cd client/
-npm start
+npm run dev
 
+# install 
+npm install react-icons
 
 
 #Nodejs Back-End server 
