@@ -22,7 +22,7 @@ const Navbar = () => {
           </div>
           
           {/* Search bar */}
-          <div className="flex-auto justify-center px-2 lg:ml-6 lg:justify-end">
+          {/* <div className="flex-auto justify-center px-2 lg:ml-6 lg:justify-end">
             <div className="max-w-7xl w-full lg:max-w-7xl">
               <label htmlFor="search" className="sr-only">Search</label>
               <div className="relative">
@@ -39,7 +39,7 @@ const Navbar = () => {
                 placeholder="Search" type="search"/>
               </div>
             </div>
-          </div>
+          </div> */}
           
           {/* Navigation links */}
           <div className="hidden md:flex md:items-center md:ml-10">

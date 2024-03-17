@@ -1,46 +1,74 @@
-import React, { useState } from 'react'
-import {BsChevronCompactLeft, BsChevronBarRight, BsChevronBarLeft} from 'react-icons/bs'
-function slider() {
+import React, { useState, useEffect } from 'react';
+import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
+import { HiSearch } from 'react-icons/hi';
+
+function Slider() {
   const slides = [
     {
-      url: 'https://images.unsplash.com/photo-1535905557558-afc4877a26fc?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Ym9va3N8ZW58MHx8MHx8fDA%3D'
+      url: 'https://alsharaypucollege.com/wp-content/uploads/2016/05/Books-banner.png'
     },
     {
-      url:'https://images.unsplash.com/photo-1519682337058-a94d519337bc?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGJvb2tzfGVufDB8fDB8fHww'
+      url: 'https://media.istockphoto.com/id/1173671270/photo/a-stack-of-leather-bound-books-with-gold-decoration.webp?s=2048x2048&w=is&k=20&c=q5PZ1fzdheODYcl0Uks9eprRCYWrlR7mysAL1-SK7yE='
     },
     {
-      url:'https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Ym9va3N8ZW58MHx8MHx8fDA%3D'
+      url: 'https://media.istockphoto.com/id/1189397041/photo/old-books-on-wooden-shelf.webp?s=2048x2048&w=is&k=20&c=EFRXRQD9i7tQrRgJN9QbOrK2zwASDHjRFxxPG9m78ws='
     },
   ];
 
-  const [currentIndex, setCurrentIndex] = useState(0)
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const prevSlide = () => {
-    const isFirstSlide = currentIndex === 0;
-    const newIndex = isFirstSlide ? slides.length - 1 : currentIndex - 1;
+    const newIndex = (currentIndex - 1 + slides.length) % slides.length;
     setCurrentIndex(newIndex);
   };
 
   const nextSlide = () => {
-    const isLastSlide = currentIndex === slides.length-1;
-    const newIndex = isLastSlide ? 0 : currentIndex + 1;
+    const newIndex = (currentIndex + 1) % slides.length;
     setCurrentIndex(newIndex);
   };
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      nextSlide();
+    }, 5000); // Change slide every 5 seconds
+    return () => clearInterval(interval);
+  }, [currentIndex]);
+
   return (
-    <div className='max-w-full h-[780px] w-full m-auto py-16 px-4 relative group'>
-      <div style={{
-        backgroundImage:`url(${slides[currentIndex].url})`}} 
-        className='w-full h-full rounded-2xl bg-center bg-cover transition  duration-500'> 
-      </div>
-      <div className='hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer'>
-        <BsChevronBarLeft onClick={prevSlide} size={30}/>
-      </div>
-      <div className='hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer'>
-        <BsChevronBarRight onClick={nextSlide} size={30}/>
+    <div className="p-4">
+      <div className="relative">
+        <div
+          className="w-full h-[360px] md:h-[480px] bg-gray-200 overflow-hidden rounded-lg relative"
+          style={{ backgroundImage: `url(${slides[currentIndex].url})`, backgroundPosition: 'center', backgroundSize: 'cover' }}
+        >
+          {/* Search Bar */}
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-800 bg-opacity-75 rounded-lg px-4 py-2 w-3/5 flex items-center">
+            <HiSearch className="text-white mr-2" />
+            <input
+              type="text"
+              placeholder="Search..."
+              className="w-full h-12 px-4 rounded-md border-2 border-gray-300 focus:outline-none focus:border-blue-500 bg-transparent text-white"
+            />
+          </div>
+
+          {/* Left Arrow */}
+          <button
+            onClick={prevSlide}
+            className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black/40 text-white p-2 rounded-full hover:bg-black/60 transition duration-300 focus:outline-none"
+          >
+            <BsChevronLeft size={30} />
+          </button>
+          {/* Right Arrow */}
+          <button
+            onClick={nextSlide}
+            className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black/40 text-white p-2 rounded-full hover:bg-black/60 transition duration-300 focus:outline-none"
+          >
+            <BsChevronRight size={30} />
+          </button>
+        </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default slider
+export default Slider;
