@@ -1,9 +1,9 @@
 import React from 'react'
-import Navbar from './Navbar'
+import Slider from './slider.jsx'
 function Home() {
   return (
     <>
-    
+      <Slider/>
     </>
   )
 }
