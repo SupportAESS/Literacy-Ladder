@@ -67,7 +67,6 @@ const { registerUser } = require('./controllers/signupController.js');
 server.post('/signup', async (req, res) => {
   const { username, email, role, password, confirmPassword } = req.body;
 
-  console.log("Signup clicked with username: " + username + ", email: " + email + ", role: " + role + " and password: " + password + "  confirm-password: "+  confirmPassword);
 
   try {
     // Create new user
@@ -102,8 +101,9 @@ server.get('/admin', (req, res) => {
 });
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Handle POST request to /submit
+const addProduct = require('./routes/addProduct.js');
 const bookController = require('./controllers/bookController.js');
-server.post('/submit', (req, res) => {
+server.post('/addProduct', (req, res) => {
   const { bookName, author, productPrice, productQuantity, productType, genre, productDescription } = req.body;
   
   // Here you can process the received data as needed
@@ -137,6 +137,6 @@ mongoose.connect(connectionUri, connectionOptions)
 
 
 //server create
-http.createServer(server).listen(8080, function (req, res) {
-  console.log('HTTP server listening on port 8080');
+http.createServer(server).listen(2211, function (req, res) {
+  console.log('HTTP server listening on port 2211');
 });

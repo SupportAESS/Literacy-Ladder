@@ -5,8 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard</title>
   <link rel="stylesheet" href="./style/admin.css">
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
 </head>
 <body>
+  <center><h1>Admin Deshboard</h1></center>
   <div class="container">
     <div class="section" id="user-management">
       <h2>User Management</h2>
@@ -21,25 +23,53 @@
         <!-- Product list will be populated dynamically -->
       </div>
       <button id="add-product-btn" class="button">Add Product</button>
+      <button id="remove-product-btn" class="button">Remove Product</button>
+      <button id="update-product-btn" class="button">Update Product</button>
+      <button id="view-product-btn" class="button">View Product</button>
     </div>
     <div class="section" id="purchase-history">
-      <h2>Purchase History</h2>
+      <h2>Sales Data</h2>
+      <div id="filter">
+        <label for="start-date">Start Date:</label>
+        <input type="date" id="start-date">
+    
+        <label for="end-date">End Date:</label>
+        <input type="date" id="end-date">
+
+        <div id="chart-type">
+          <label for="chart-select">Select Chart Type:</label>
+          <select id="chart-select">
+            <option value="line">Line Chart</option>
+            <option value="bar">Bar Chart</option>
+            <option value="pie">Pie Chart</option>
+            <!-- Add more chart types if needed -->
+          </select>
+        </div>
+        
+    
+        <button id="apply-filter" class="button">Apply Filter</button>
+      </div>
       <div id="purchase-list">
         <!-- Purchase history will be populated dynamically -->
       </div>
+      <div id="sales-chart-container">
+        <canvas id="sales-chart"></canvas>
+      </div>
     </div>
-    <div class="section" id="review-management">
+    
+    </div>
+    <!-- <div class="section" id="review-management">
       <h2>Review Management</h2>
       <div id="review-list">
-        <!-- Review list will be populated dynamically -->
-      </div>
+         Review list will be populated dynamically -->
+      <!-- </div> 
     </div>
     <div class="section" id="invoice-generation">
       <h2>Invoice Generation</h2>
       <div id="invoice-list">
-        <!-- Invoice list will be populated dynamically -->
+         Invoice list will be populated dynamically 
       </div>
-    </div>
+    </div> -->
   </div>
 
   <!-- Add User Modal -->
@@ -50,6 +80,11 @@
       <form id="add-user-form">
         <input type="text" id="username" placeholder="Username" required>
         <input type="email" id="email" placeholder="Email" required>
+        <select id="signup-role" required>
+          <option value="user">User</option>
+          <option value="seller">Seller</option>
+          <option value="admin">Admin</option>
+        </select>
         <input type="password" id="password" placeholder="Password" required>
         <input type="password" id="confirm-password" placeholder="Confirm Password" required>
         <button type="submit" class="button">Add User</button>
@@ -63,31 +98,170 @@
       <span class="close">&times;</span>
       <h2>Add Product</h2>
       <form id="add-product-form">
-        <input type="text" id="product-name" placeholder="Product Name" required>
+        <input type="text" id="bookName" placeholder="Book Name" required>
         <input type="text" id="author" placeholder="Author" required>
-        <select name="genre" id="genre">
-          <option value="Fiction">Fiction</option>
-          <option value="Non-fiction">Non-fiction</option>
-          <option value="Action and Adventure">Action and Adventure</option>
-          <option value="Mystery">Mystery</option>
-          <option value="Science Fiction">Science Fiction</option>
-          <option value="Fantasy">Fantasy</option>
-          <option value="Horror">Horror</option>
-          <option value="Biography">Biography</option>
-          <option value="Auto-biography">Auto-biography</option>
-          <option value="History">History</option>
-          <option value="Self-help">Self-help</option>
-          <option value="Science">Science</option>
-          <option value="Romance">Romance</option>
-      </select>
-        <input type="number" id="product-price" placeholder="Price" required>
-        <input type="number" id="product-quantity" placeholder="Quantity" required>
-        <textarea id="product-description" placeholder="Description" required></textarea>
+          <select name="genre" id="genre">
+            <option value="Fiction">Fiction</option>
+            <option value="Non-fiction">Non-fiction</option>
+            <option value="Action and Adventure">Action and Adventure</option>
+            <option value="Mystery">Mystery</option>
+            <option value="Science Fiction">Science Fiction</option>
+            <option value="Fantasy">Fantasy</option>
+            <option value="Horror">Horror</option>
+            <option value="Biography">Biography</option>
+            <option value="Auto-biography">Auto-biography</option>
+            <option value="History">History</option>
+            <option value="Self-help">Self-help</option>
+            <option value="Science">Science</option>
+            <option value="Romance">Romance</option>
+          </select>
+          <select name="productType" id="productType">
+            <option value="Book">Book</option>
+            <option value="Magazine">Magazine-</option>
+          </select>
+        <input type="number" id="price" placeholder="Price" required>
+        <input type="number" id="quantity" placeholder="Quantity" required>
+        <textarea id="description" placeholder="Description" required></textarea>
         <button type="submit" class="button">Add Product</button>
       </form>
     </div>
   </div>
 
+
+  <!-- Remove Product Modal -->
+  <div id="remove-product-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Remove Product</h2>
+      <form id="remove-product-form">
+        <input type="text" id="bookName" placeholder="Book Name" required>
+        <input type="text" id="author" placeholder="Author" required>
+          <select name="genre" id="genre">
+            <option value="Fiction">Fiction</option>
+            <option value="Non-fiction">Non-fiction</option>
+            <option value="Action and Adventure">Action and Adventure</option>
+            <option value="Mystery">Mystery</option>
+            <option value="Science Fiction">Science Fiction</option>
+            <option value="Fantasy">Fantasy</option>
+            <option value="Horror">Horror</option>
+            <option value="Biography">Biography</option>
+            <option value="Auto-biography">Auto-biography</option>
+            <option value="History">History</option>
+            <option value="Self-help">Self-help</option>
+            <option value="Science">Science</option>
+            <option value="Romance">Romance</option>
+          </select>
+        <input type="number" id="price" placeholder="Price" required>
+        <input type="number" id="quantity" placeholder="Quantity" required>
+        <textarea id="description" placeholder="Description" required></textarea>
+        <button type="submit" class="button">Remove Product</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Update Product Modal -->
+  <div id="update-product-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Update Product</h2>
+      <form id="update-product-form">
+        <input type="text" id="bookName" placeholder="Book Name" required>
+        <input type="text" id="author" placeholder="Author" required>
+          <select name="genre" id="genre">
+            <option value="Fiction">Fiction</option>
+            <option value="Non-fiction">Non-fiction</option>
+            <option value="Action and Adventure">Action and Adventure</option>
+            <option value="Mystery">Mystery</option>
+            <option value="Science Fiction">Science Fiction</option>
+            <option value="Fantasy">Fantasy</option>
+            <option value="Horror">Horror</option>
+            <option value="Biography">Biography</option>
+            <option value="Auto-biography">Auto-biography</option>
+            <option value="History">History</option>
+            <option value="Self-help">Self-help</option>
+            <option value="Science">Science</option>
+            <option value="Romance">Romance</option>
+          </select>
+        <input type="number" id="price" placeholder="Price" required>
+        <input type="number" id="quantity" placeholder="Quantity" required>
+        <textarea id="description" placeholder="Description" required></textarea>
+        <button type="submit" class="button">Update Product</button>
+      </form>
+    </div>
+  </div>
+
+ <!-- View Product Modal
+<div id="view-product-modal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>View Product</h2>
+    <select name="genre" id="genre-select">
+      <option value="">Select Genre</option>
+      <option value="Fiction">Fiction</option>
+      <option value="Non-fiction">Non-fiction</option>
+      <option value="Action and Adventure">Action and Adventure</option>
+      <option value="Mystery">Mystery</option>
+      <option value="Science Fiction">Science Fiction</option>
+      <option value="Fantasy">Fantasy</option>
+      <option value="Horror">Horror</option>
+      <option value="Biography">Biography</option>
+      <option value="Auto-biography">Auto-biography</option>
+      <option value="History">History</option>
+      <option value="Self-help">Self-help</option>
+      <option value="Science">Science</option>
+      <option value="Romance">Romance</option>
+    </select>
+    <button id="fetch-genre-products" class="button">Fetch Products</button>
+    Product List (Populated Dynamically) -->
+    <!-- <div id="product-list">
+      Product items will be populated dynamically here 
+    </div>
+  </div>
+</div> -->
+
+<!-- View Product Modal -->
+<div id="view-product-modal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>View Product</h2>
+    <div id="filter-options">
+      <label for="filter-all">
+        <input type="radio" name="filter-type" id="filter-all" value="all" checked>
+        All Products
+      </label>
+      <label for="filter-genre">
+        <input type="radio" name="filter-type" id="filter-genre" value="genre">
+        Filter by Genre
+      </label>
+      <label for="filter-name">
+        <input type="radio" name="filter-type" id="filter-name" value="name">
+        Search by Name
+      </label>
+    </div>
+    <div id="genre-filter" style="display: none;">
+      <select name="genre" id="genre-select">
+        <option value="">Select Genre</option>
+        <option value="Fiction">Fiction</option>
+        <option value="Non-fiction">Non-fiction</option>
+        <!-- Add more genres as needed -->
+      </select>
+    </div>
+    <div id="name-filter" style="display: none;">
+      <input type="text" id="name-search" placeholder="Enter product name">
+    </div>
+    <button id="fetch-products" class="button">Fetch Products</button>
+    <!-- Product List (Populated Dynamically) -->
+    <div id="product-list">
+      <!-- Product items will be populated dynamically here -->
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="./style/admin.js"></script>
 </body>
 </html>
