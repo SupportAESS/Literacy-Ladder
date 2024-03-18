@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-800 text-white py-6 w-full fixed bottom-0">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+    <footer className="bg-gray-800 text-white py-6 w-full bottom-0">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center relative">
         <div>
           <p className="text-lg font-semibold">Literacy Ladder</p>
           <p className="text-sm">MNNIT Allahabad Campus, Teliarganj, Prayagraj, Uttar Pradesh 211004</p>
