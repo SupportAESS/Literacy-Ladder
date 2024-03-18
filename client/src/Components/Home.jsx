@@ -1,9 +1,11 @@
 import React from 'react'
 import Slider from './slider.jsx'
+import Product from './Product.jsx'
 function Home() {
   return (
     <>
       <Slider/>
+      <Product/>
     </>
   )
 }
