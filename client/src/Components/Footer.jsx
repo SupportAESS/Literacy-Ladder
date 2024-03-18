@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
-    <footer className={`bg-gray-800 text-white py-6 w-full ${isFooterSticky ? 'fixed bottom-0' : ''}`}>
+    <footer className="bg-gray-800 text-white py-6 w-full fixed bottom-0">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
         <div>
           <p className="text-lg font-semibold">Literacy Ladder</p>
