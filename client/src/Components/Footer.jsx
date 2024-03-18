@@ -2,20 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
-  const [isFooterSticky, setIsFooterSticky] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const isScrollAtBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight;
-      setIsFooterSticky(!isScrollAtBottom);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
   return (
     <footer className={`bg-gray-800 text-white py-6 w-full ${isFooterSticky ? 'fixed bottom-0' : ''}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
