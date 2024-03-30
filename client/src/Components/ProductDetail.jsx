@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ProductDetail = ({ product, onClose, onAddToCart }) => {
+const ProductDetail = ({ product, onClose, onAddToCart, cartItems }) => {
     return (
         <div>
             <div className="fixed inset-0 flex items-center justify-center z-50">
@@ -14,7 +14,10 @@ const ProductDetail = ({ product, onClose, onAddToCart }) => {
                     <img className="w-full h-64 object-cover mb-4" src={product.img} alt={product.name} />
                     <h2 className="text-xl font-semibold mb-2">{product.name}</h2>
                     <p className="text-gray-700 mb-4">{product.author}</p>
-                    <button onClick={() => onAddToCart(product)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+                    <button onClick={() => {
+                        onAddToCart(product);
+                        onClose(); // Close the modal after adding to cart
+                    }} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
                         Add to Cart
                     </button>
                 </div>

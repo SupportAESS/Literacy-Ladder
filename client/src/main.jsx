@@ -7,12 +7,14 @@ import Layout from './Components/Layout'
 import Home from './Components/Home'
 import About from './Components/About'
 import Login from './Components/Login'
+import Cart from './Components/Cart'
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<Layout/>}>
       <Route path='' element={<Home />}/>
       <Route path='about' element={<About />}/>
       <Route path='login' element={<Login />}/>
+      <Route path='cart' element={<Cart />}/>
     </Route>
   )
 )
