@@ -6,7 +6,6 @@ import about from './About';
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Assume initial state is logged out
-  const [showDropdown, setShowDropdown] = useState(false);
 
   const handleLogout = () => {
     // Handle logout logic, e.g., clearing session storage or calling logout API
@@ -20,24 +19,12 @@ const Navbar = () => {
 
   const handleAccountClick = () => {
     if (window.innerWidth < 768) {
-      setShowDropdown(!showDropdown);
-    }
-  };
-
-  const handleAccountMouseEnter = () => {
-    if (window.innerWidth >= 768) {
-      setShowDropdown(true);
-    }
-  };
-
-  const handleAccountMouseLeave = () => {
-    if (window.innerWidth >= 768) {
-      setShowDropdown(false);
+      setIsOpen(!isOpen);
     }
   };
 
   return (
-    <nav className="bg-gray-800 relative z-50">
+    <nav className="bg-gray-800 fixed top-0 w-full z-50">
       <div className="max-w-full px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex-none flex items-center space-x-2">
@@ -53,20 +40,17 @@ const Navbar = () => {
               <Link to="/about" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-lg font-medium">About</Link>
               <div 
                 className="relative"
-                onMouseEnter={handleAccountMouseEnter}
-                onMouseLeave={handleAccountMouseLeave}
+                onMouseEnter={() => setIsOpen(true)}
+                onMouseLeave={() => setIsOpen(false)}
+                onClick={handleAccountClick}
               >
                 <button 
-                  onClick={handleAccountClick}
                   className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-lg font-medium"
                 >
                   Account
                 </button>
-                {showDropdown && (
-                  <div className="absolute top-full left-0 mt-1 bg-gray-700 text-white py-2 rounded-md text-lg font-medium z-50"
-                       onMouseEnter={handleAccountMouseEnter}
-                       onMouseLeave={handleAccountMouseLeave}
-                  >
+                {isOpen && (
+                  <div className="absolute top-full left-0 mt-1 bg-gray-700 text-white py-2 rounded-md text-lg font-medium z-50">
                     {isLoggedIn ? (
                       <>
                         <Link to="/profile" className="block px-4 py-2 hover:bg-gray-600">Profile</Link>
@@ -74,8 +58,7 @@ const Navbar = () => {
                       </>
                     ) : (
                       <>
-                        <Link to="/login" className="block px-4 py-2 hover:bg-gray-600">Login</Link>
-                        <Link to="/signup" className="block px-4 py-2 hover:bg-gray-600">Signup</Link>
+                        <Link to="/login" className="block px-4 py-2 hover:bg-gray-600">Login / Signup</Link>
                       </>
                     )}
                   </div>
@@ -102,15 +85,17 @@ const Navbar = () => {
         <div className="px-2 pt-2 pb-3 sm:px-3">
           <Link to="/" className="block text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-base font-medium">Home</Link>
           <Link to="/about" className="block text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-base font-medium">About</Link>
-          <div className="relative">
+          <div 
+            className="relative"
+            onClick={handleAccountClick}
+          >
             <button 
-              onClick={toggleNavbar}
               className="block text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-base font-medium"
             >
               Account
             </button>
             {isOpen && (
-              <div className="absolute top-full left-0 mt-1 bg-gray-700 text-white py-2 rounded-md text-base font-medium">
+              <div className="absolute top-full left-0 mt-1 bg-gray-700 text-white py-2 rounded-md text-base font-medium z-50">
                 {isLoggedIn ? (
                   <>
                     <Link to="/profile" className="block px-4 py-2 hover:bg-gray-600">Profile</Link>
@@ -118,8 +103,7 @@ const Navbar = () => {
                   </>
                 ) : (
                   <>
-                    <Link to="/login" className="block px-4 py-2 hover:bg-gray-600">Login</Link>
-                    <Link to="/signup" className="block px-4 py-2 hover:bg-gray-600">Signup</Link>
+                    <Link to="/login" className="block px-4 py-2 hover:bg-gray-600">Login / Signup</Link>
                   </>
                 )}
               </div>
