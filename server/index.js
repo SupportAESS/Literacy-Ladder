@@ -5,7 +5,13 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const crypto = require('crypto');
+const cors = require('cors');
 
+// Allow requests from the frontend server
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true // Enable credentials (cookies, authorization headers, etc.)
+}));
 
 const connectionOptions = {
   useNewUrlParser: true,
