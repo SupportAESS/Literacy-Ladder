@@ -1,15 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import logo from '../asset/logo.png';
 import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Assume initial state is logged out
+  const [username, setUsername] = useState('');
+
+  useEffect(() => {
+    // Check if user is logged in
+    const loggedInUser = localStorage.getItem('user');
+    if (loggedInUser) {
+      setIsLoggedIn(true);
+      setUsername(JSON.parse(loggedInUser).username); // Get username from localStorage
+    } else {
+      setIsLoggedIn(false);
+      setUsername('');
+    }
+  }, []);
 
   const handleLogout = () => {
     // Handle logout logic, e.g., clearing session storage or calling logout API
-    // Then update isLoggedIn state
+    // Then update isLoggedIn state and remove user data from localStorage
+    localStorage.removeItem('user');
     setIsLoggedIn(false);
+    setUsername('');
   };
 
   const toggleNavbar = () => {
@@ -46,7 +61,7 @@ const Navbar = () => {
                 <button 
                   className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-lg font-medium"
                 >
-                  Account
+                  Account {isLoggedIn && <span className="ml-1 text-gray-400 text-sm">(Logged in as {username})</span>}
                 </button>
                 {isOpen && (
                   <div className="absolute top-full left-0 mt-1 bg-gray-700 text-white py-2 rounded-md text-lg font-medium z-50">
@@ -91,7 +106,7 @@ const Navbar = () => {
             <button 
               className="block text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-base font-medium"
             >
-              Account
+              Account {isLoggedIn && <span className="ml-1 text-gray-400 text-sm">(Logged in as {username})</span>}
             </button>
             {isOpen && (
               <div className="absolute top-full left-0 mt-1 bg-gray-700 text-white py-2 rounded-md text-base font-medium z-50">

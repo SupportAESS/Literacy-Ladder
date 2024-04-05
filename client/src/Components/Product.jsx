@@ -1,101 +1,98 @@
-import React, { useState, useEffect } from 'react';
-import ProductDetail from './ProductDetail';
-
+import {React, useState} from 'react'
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
 function Product() {
-    const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
-    const generateBooks = (genre, genreIndex) => {
-        const books = [];
-        for (let i = 1; i <= 12; i++) {
-            const book = {
-                name: `${genre} Book ${i}`,
-                img: `https://via.placeholder.com/300x400?text=${genreIndex}_${i}`,
-                author: `Author ${i}`,
-                genre: genre
-            };
-            books.push(book);
+  const handleCardClick = (product) => {
+    setSelectedProduct(product);
+  };
+  
+  var settings = {
+    dots: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 4,
+    initialSlide: 0,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: true
         }
-        return books;
-    };
-    
-    const genres = [
-        'Fiction',
-        'Non-fiction',
-        'Action and Adventure',
-        'Mystery',
-        'Science Fiction',
-        'Fantasy',
-        'Horror',
-        'Biography',
-        'Auto-biography',
-        'History',
-        'Self-help',
-        'Science',
-        'Romance'
-    ];
-    
-    let data = [];
-    genres.forEach((genre, index) => {
-        data = [...data, ...generateBooks(genre, index + 1)];
-    });
-    
-    useEffect(() => {
-        const handleCloseModal = (event) => {
-            if (event.keyCode === 27) { // Close modal on ESC key press
-                setSelectedProduct(null);
-            }
-        };
-
-        window.addEventListener('keydown', handleCloseModal);
-
-        return () => {
-            window.removeEventListener('keydown', handleCloseModal);
-        };
-    }, []);
-
-    const handleProductClick = (product) => {
-        setSelectedProduct(product);
-    };
-
-    const handleCloseModal = () => {
-        setSelectedProduct(null);
-    };
-
-    const handleAddToCart = (product) => {
-        console.log('Adding to cart:', product);
-    };
-
-    return (
-        <div className="p-6">
-            {/* Render products for each genre */}
-            {genres.map((genre, index) => (
-                <div key={index} className="mb-8">
-                    <h2 className="text-lg font-semibold mb-2 text-gray-800">{genre}</h2>
-                    <div className="flex overflow-x-auto max-w-full space-x-4">
-                        {/* Filter products based on genre */}
-                        {data.filter(product => product.genre === genre).map((product, index) => (
-                            <div key={index} className="max-w-[200px] w-[20%] rounded-lg overflow-hidden shadow-lg cursor-pointer transform transition duration-300 hover:scale-105">
-                                <img className="w-full h-32 object-cover rounded-t-lg" src={product.img} alt={product.name} onClick={() => handleProductClick(product)} />
-                                <div className="bg-gray-100 p-4 rounded-b-lg">
-                                    <div className="font-semibold text-lg mb-2 text-gray-800">{product.name}</div>
-                                    <p className="text-gray-600 text-sm">{product.author}</p>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            ))}
-
-            {/* Render product detail modal */}
-            {selectedProduct && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" onClick={handleCloseModal}>
-                    <div className="bg-white p-8 rounded-lg max-w-md">
-                        <ProductDetail product={selectedProduct} onClose={handleCloseModal} onAddToCart={handleAddToCart} />
-                    </div>
-                </div>
-            )}
-        </div>
-    );
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2
+        }
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1
+        }
+      }
+    ]
+  };
+  return (
+    <>
+    <h1 className='text-4xl font-bold'>Book</h1>
+    <div className='w-11/12 mx-auto'>
+      <div className='mt-10 mb-10'>
+        <Slider {...settings}>
+          {data.map((d) => (
+            <div className='bg-white text-black rounded-xl'>
+              <div className='h-60 flex justify-center items-center'>
+                <img src={d.img} alt="" className='rounded-t-xl w-full h-full'/>          
+              </div>
+              <div className='flex flex-col justify-center items-center gap-4 p-4'>
+                <p className='text-xl font-semibold'>{d.name}</p>
+                <p>{d.desc}</p>
+                <button className='bg-indigo-500 text-white text-lg px-6 py-1 rounded-xl'>Add to Card</button>
+              </div>
+            </div>
+          ))}
+        </Slider>
+      </div>  
+    </div>
+    </>
+  )
 }
+const data = [
+  {
+    name:"abc",
+    img:"https://img.freepik.com/free-photo/decorative-reading-concept_23-2147690510.jpg?size=626&ext=jpg&ga=GA1.1.1595312299.1711267404&semt=ais",
+    desc:"xyz"
+  },
+  {
+    name:"abc",
+    img:"https://img.freepik.com/free-photo/decorative-reading-concept_23-2147690510.jpg?size=626&ext=jpg&ga=GA1.1.1595312299.1711267404&semt=ais",
+    desc:"xyz"
+  },
+  {
+    name:"abc",
+    img:"https://img.freepik.com/free-photo/decorative-reading-concept_23-2147690510.jpg?size=626&ext=jpg&ga=GA1.1.1595312299.1711267404&semt=ais",
+    desc:"xyz"
+  },
+  {
+    name:"abc",
+    img:"https://img.freepik.com/free-photo/decorative-reading-concept_23-2147690510.jpg?size=626&ext=jpg&ga=GA1.1.1595312299.1711267404&semt=ais",
+    desc:"xyz"
+  },
+  {
+    name:"abc",
+    img:"https://img.freepik.com/free-photo/decorative-reading-concept_23-2147690510.jpg?size=626&ext=jpg&ga=GA1.1.1595312299.1711267404&semt=ais",
+    desc:"xyz"
+  },
 
-export default Product;
+]
+export default Product

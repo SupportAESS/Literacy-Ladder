@@ -1,20 +1,64 @@
 import React, { useState } from 'react';
 
 const Login = () => {
-  const [showLogin, setShowLogin] = useState(true);
+  const [isLogin, setIsLogin] = useState(true);
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     // Handle login logic
-    console.log('Logging in with email:', email, 'and password:', password);
+    
+    console.log('Logging in with email:', username, 'and password:', password);
+    try {
+      const response = await fetch('http://localhost:2211/login', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            username: username,
+            password: password
+          })
+          
+      });
+
+      if (response.ok) {
+          const data = await response.json();
+          console.log('Response from server:', data.message);
+          console.log('Session:', data.session);
+          //console.log(response);
+          // You can handle the response from the server accordingly, such as redirecting the user or showing a success message
+          if (isLogin) {
+            // Example: Set session data in local storage after successful login
+            localStorage.setItem('session', JSON.stringify(data.session));
+            // Example: Redirect user to dashboard page after successful login
+            alert('Login successful.');
+            // Redirect to dashboard or home page
+            window.location.href = '/';
+
+          } else {
+            // Example: Show a success message to the user after successful signup
+            alert('Signup successful. Please login to continue.');
+            // Optionally, you can also toggle the form to show the login form after successful signup
+            setIsLogin(true);
+          }
+      } else {
+          console.error('Failed to submit form:', response.statusText);
+          // Handle error response from server
+      }
+  } catch (error) {
+      console.error('Error submitting form:', error);
+      // Handle any errors that occur during the form submission process
+  }
   };
 
   const handleSignup = (e) => {
     e.preventDefault();
     // Handle signup logic
-    console.log('Signing up with email:', email, 'and password:', password);
+    console.log('username',username, ' Signing up with email:', email, 'and password:', password, 'confirmPassword', confirmPassword);
   };
 
   const handleGoogleLogin = () => {
@@ -26,22 +70,34 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">{showLogin ? 'Log in' : 'Sign up'}</h2>
-          <p className="mt-2 text-center text-sm text-gray-600">{showLogin ? 'Don\'t have an account? ' : 'Already have an account? '}
-            <button onClick={() => setShowLogin(!showLogin)} className="font-medium text-indigo-600 hover:text-indigo-500">{showLogin ? 'Sign up' : 'Log in'}</button>
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">{isLogin ? 'Log in' : 'Sign up'}</h2>
+          <p className="mt-2 text-center text-sm text-gray-600">{isLogin ? 'Don\'t have an account? ' : 'Already have an account? '}
+            <button onClick={() => setIsLogin(!isLogin)} className="font-medium text-indigo-600 hover:text-indigo-500">{isLogin ? 'Sign up' : 'Log in'}</button>
           </p>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={showLogin ? handleLogin : handleSignup}>
+        <form className="mt-8 space-y-6" onSubmit={isLogin ? handleLogin : handleSignup}>
           <input type="hidden" name="remember" value="true" />
           <div className="rounded-md shadow-sm -space-y-px">
+              <div className="mb-4">
+                <label htmlFor="name" className="sr-only">Full Name</label>
+                <input id="username" name="username" type="name" autoComplete="Username" required className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
+              </div>
+              {!isLogin && (
             <div>
               <label htmlFor="email-address" className="sr-only">Email address</label>
-              <input id="email-address" name="email" type="email" autoComplete="email" required className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Email address" value={email} onChange={(e) => setEmail(e.target.value)} />
+              <input id="email-address" name="email" type="email" autoComplete="email" required className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Email Address" value={email} onChange={(e) => setEmail(e.target.value)} />
             </div>
+            )}
             <div>
               <label htmlFor="password" className="sr-only">Password</label>
               <input id="password" name="password" type="password" autoComplete="current-password" required className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
             </div>
+            {!isLogin && (
+              <div className="mb-4">
+                <label htmlFor="confirmPassword" className="sr-only">Confirm Password</label>
+                <input id="confirmPassword" name="password" type="password" autoComplete="current-password" required className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Confirm Password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+              </div>
+            )}
           </div>
 
           <div className="flex items-center justify-between">
@@ -68,7 +124,7 @@ const Login = () => {
                   <path fillRule="evenodd" d="M4 8V6a6 6 0 1112 0v2h2a1 1 0 011 1v7a3 3 0 01-3 3H4a3 3 0 01-3-3V9a1 1 0 011-1h2zm8 2h-4a1 1 0 00-1 1v5h6v-5a1 1 0 00-1-1z" clipRule="evenodd" />
                 </svg>
               </span>
-              {showLogin ? 'Log in' : 'Sign up'}
+              {isLogin ? 'Log in' : 'Sign up'}
             </button>
           </div>
         </form>
@@ -78,3 +134,25 @@ const Login = () => {
 };
 
 export default Login;
+
+{/* <form id="login-form" class="form active">
+      <h2>Login</h2>
+      <input type="text" id="login-username" placeholder="Username" required>
+      <input type="password" id="login-password" placeholder="Password" required>
+      <button type="submit">Login</button>
+      <p class="toggle-form">Don't have an account? <a href="#" id="signup-link">Register</a></p>
+    </form>
+    <form id="signup-form" class="form">
+      <h2>Signup</h2>
+      <input type="text" id="signup-username" placeholder="Username" required>
+      <input type="email" id="signup-email" placeholder="Email" required>
+      <select id="signup-role" required>
+        <option value="user">User</option>
+        <option value="seller">Seller</option>
+        <option value="admin">Admin</option>
+      </select>
+      <input type="password" id="signup-password" placeholder="Password" required>
+      <input type="password" id="confirm-password" placeholder="Confirm Password" required>
+      <button type="submit">Signup</button>
+      <p class="toggle-form">Already have an account? <a href="#" id="login-link">Login</a></p>
+    </form> */}

@@ -8,7 +8,7 @@ const crypto = require('crypto');
 const cors = require('cors');
 
 // Allow requests from the frontend server
-app.use(cors({
+server.use(cors({
   origin: 'http://localhost:5173',
   credentials: true // Enable credentials (cookies, authorization headers, etc.)
 }));
@@ -72,7 +72,7 @@ server.post('/login', async (req, res) => {
       // Set session variables
       req.session.username = username;
       req.session.loggedIn = true;
-      res.send('Login successful');
+      res.json({ message: 'Login successful', session: req.session })
     } else {
       res.status(401).send('Invalid username or password');
     }
