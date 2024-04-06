@@ -59,10 +59,6 @@ function cryptoSha(password) {
 const loginRoute = require('./routes/login.js');
 const { validateUser } = require('./controllers/loginController.js');
 
-server.post('/login', async (req, res) => {
-  const { username, password } = req.body;
-  var pw = cryptoSha(password);
-  console.log("Login clicked with username: " + username + " and password: " + pw);
   
   try {
     // Validate username and password
