@@ -134,25 +134,3 @@ const Login = () => {
 };
 
 export default Login;
-
-{/* <form id="login-form" class="form active">
-      <h2>Login</h2>
-      <input type="text" id="login-username" placeholder="Username" required>
-      <input type="password" id="login-password" placeholder="Password" required>
-      <button type="submit">Login</button>
-      <p class="toggle-form">Don't have an account? <a href="#" id="signup-link">Register</a></p>
-    </form>
-    <form id="signup-form" class="form">
-      <h2>Signup</h2>
-      <input type="text" id="signup-username" placeholder="Username" required>
-      <input type="email" id="signup-email" placeholder="Email" required>
-      <select id="signup-role" required>
-        <option value="user">User</option>
-        <option value="seller">Seller</option>
-        <option value="admin">Admin</option>
-      </select>
-      <input type="password" id="signup-password" placeholder="Password" required>
-      <input type="password" id="confirm-password" placeholder="Confirm Password" required>
-      <button type="submit">Signup</button>
-      <p class="toggle-form">Already have an account? <a href="#" id="login-link">Login</a></p>
-    </form> */}

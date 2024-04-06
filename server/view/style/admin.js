@@ -88,7 +88,7 @@ function showAddUserModal() {
 
     console.log(bookName, author, productPrice, productQuantity, productType,  genre, productDescription);
 
-    fetch('/addProduct', {
+    fetch('/addBooks', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

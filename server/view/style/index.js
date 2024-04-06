@@ -74,6 +74,8 @@ document.getElementById('signup-link').addEventListener('click', function(event)
         if (response.ok) {
           // Redirect to signup success page
           console.log("successful register")
+          alert('Register successful.');
+          window.location.href = '/admin';
           //window.location.href = '/signup-success';
         } else {
           console.error('Signup failed');

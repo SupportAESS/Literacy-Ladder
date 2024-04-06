@@ -1,4 +1,5 @@
 const { User } = require('../models/userModel');
+const { cryptoSha } = require('./securityController')
 
 async function validateUser(username, password) {
   try {
@@ -27,4 +28,27 @@ async function validateUser(username, password) {
   }
 }
 
-module.exports = { validateUser };
+const Login = async (req, res) => {
+  const { username, password } = req.body;
+  var pw = cryptoSha(password);
+  console.log("Login clicked with username: " + username + " and password: " + pw);
+  
+  try {
+    // Validate username and password
+    const user = await validateUser(username, pw);
+
+    if (user) {
+      // Set session variables
+      req.session.username = username;
+      req.session.loggedIn = true;
+      res.json({ message: 'Login successful', session: req.session })
+    } else {
+      res.status(401).send('Invalid username or password');
+    }
+  } catch (error) {
+    console.error('Error during login:', error);
+    res.status(500).send('Internal server error');
+  }
+};
+
+module.exports = { Login };
