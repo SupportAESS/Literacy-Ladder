@@ -18,7 +18,6 @@ async function registerUser(username, email, role, password, confirmPassword) {
 
     // Save user to database
     const savedUser = await newUser.save();
-
     // Return the saved user
     return savedUser;
   } catch (error) {

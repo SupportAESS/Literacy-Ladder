@@ -55,10 +55,37 @@ const Login = () => {
   }
   };
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
     // Handle signup logic
     console.log('username',username, ' Signing up with email:', email, 'and password:', password, 'confirmPassword', confirmPassword);
+    try{
+    const response = await fetch('http://localhost:2211/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: username,
+        email: email,
+        role: "user",
+        password: password,
+        confirmPassword: password
+      })
+    })
+      if (response.ok) {
+        // Redirect to signup success page
+        console.log("successful register")
+        alert('Register successful.');
+        //window.location.href = '/admin';
+        //window.location.href = '/signup-success';
+      } else {
+        console.error('Signup failed');
+        // Handle signup failure
+      }
+    }catch(error) {
+      console.error('Error:', error);
+    };
   };
 
   const handleGoogleLogin = () => {
