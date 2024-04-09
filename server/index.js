@@ -6,6 +6,11 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const cors = require('cors');
 
+
+// Set 'ejs' as the view engine
+server.set('view engine', 'ejs');
+
+
 // Allow requests from the frontend server
 server.use(cors({
   origin: 'http://localhost:5173',
@@ -56,11 +61,18 @@ server.post('/signup',Signup);
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////admin 
 // Example protected route
+// Specify the directory where your views are located
+server.set('views', __dirname + '/view');
+
+server.get('/', (req, res) => {
+  res.render('index', { title: 'Home Page', message: 'Welcome to my website!' });
+});
 server.get('/admin', (req, res) => {
   // Check if user is logged in
   if (req.session.loggedIn) {
     // User is logged in, render the dashboard
-    res.sendFile(__dirname + '/view/admin.html');
+    res.render('admin', { title: 'Home Page', message: 'Welcome to my website!' });
+    //res.sendFile(__dirname + '/view/admin.html');
   } else {
     // User is not logged in, redirect to login page
     res.redirect('/');

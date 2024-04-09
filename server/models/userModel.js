@@ -13,10 +13,11 @@ const bookSchema = new mongoose.Schema({
     bookName: { type: String, required: true, minLength: 1, maxLength: 255 },
     author: { type: String, required: true, minLength: 1, maxLength: 255 },
     genre: { type: String, required: true, enum: ["Fiction", "Non-fiction", "Action and Adventure", "Mystery", "Science Fiction", "Fantasy", "Horror", "Biography", "Auto-biography", "History", "Self-help", "Science", "Romance"] },
-    productPrice: { type: Number, required: true },
-    productQuantity: { type: Number, required: true },
-    productType: { type: String, required: true, enum: ["Book","Magazine"] },
-    productDescription: { type: String, required: true, minLength: 1, maxLength: 255 }
+    bookPrice: { type: Number, required: true },
+    bookQuantity: { type: Number, required: true },
+    bookType: { type: String, required: true, enum: ["Book","Magazine"] },
+    bookImage: { type: String,  required: true, minLength: 1, maxLength: 255}, // Assuming image is stored as a path or URL
+    bookDescription: { type: String, required: true, minLength: 1, maxLength: 255 }
 });
 
 const Book = mongoose.model('Book', bookSchema);

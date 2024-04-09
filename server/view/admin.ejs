@@ -100,7 +100,7 @@
       <form id="add-product-form">
         <input type="text" id="bookName" placeholder="Book Name" required>
         <input type="text" id="author" placeholder="Author" required>
-          <select name="genre" id="genre">
+        <select name="genre" id="genre">
             <option value="Fiction">Fiction</option>
             <option value="Non-fiction">Non-fiction</option>
             <option value="Action and Adventure">Action and Adventure</option>
@@ -114,16 +114,18 @@
             <option value="Self-help">Self-help</option>
             <option value="Science">Science</option>
             <option value="Romance">Romance</option>
-          </select>
-          <select name="productType" id="productType">
+        </select>
+        <select name="productType" id="productType">
             <option value="Book">Book</option>
-            <option value="Magazine">Magazine-</option>
-          </select>
+            <option value="Magazine">Magazine</option>
+        </select>
         <input type="number" id="price" placeholder="Price" required>
         <input type="number" id="quantity" placeholder="Quantity" required>
+        <input type="file" id="imageAttachment" name="image" accept=".jpg, .jpeg, .png" required>
         <textarea id="description" placeholder="Description" required></textarea>
         <button type="submit" class="button">Add Product</button>
-      </form>
+    </form>
+    
     </div>
   </div>
 
@@ -262,6 +264,7 @@
 
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="./style/admin.js"></script>
 </body>
 </html>
