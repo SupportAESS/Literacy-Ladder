@@ -81,27 +81,27 @@ function addProduct(event) {
   var bookName = document.getElementById("bookName").value;
   var author = document.getElementById("author").value;
   var genre = document.getElementById("genre").value;
-  var productType = document.getElementById("productType").value;
-  var productPrice = document.getElementById("price").value;
-  var productQuantity = document.getElementById("quantity").value;
-  var productImage = document.getElementById("imageAttachment").files[0];
-  var productDescription = document.getElementById("description").value;
+  var bookType = document.getElementById("productType").value;
+  var bookPrice = document.getElementById("price").value;
+  var bookQuantity = document.getElementById("quantity").value;
+  var bookImage = document.getElementById("imageAttachment").files[0];
+  var bookDescription = document.getElementById("description").value;
 
-  console.log(bookName, author, productPrice, productQuantity, productType,  genre, productImage, productDescription);
+  console.log(bookName, author, bookPrice, bookQuantity, bookType,  genre, bookImage, bookDescription);
   // Create a new FormData object
   const formData = new FormData();
 
   // Append the file to the FormData object
-  formData.append('image', productImage);
+  formData.append('image', bookImage);
 
   // Append other form data to the FormData object
   formData.append('bookName', bookName);
   formData.append('author', author);
-  formData.append('productPrice', productPrice);
-  formData.append('productQuantity', productQuantity);
-  formData.append('productType', productType);
+  formData.append('bookPrice', Price);
+  formData.append('bookQuantity', bookQuantity);
+  formData.append('bookType', bookType);
   formData.append('genre', genre);
-  formData.append('productDescription', productDescription);
+  formData.append('bookDescription', bookDescription);
   console.log(formData);
   axios.post('/addBooks', formData, {
     headers: {
