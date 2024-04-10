@@ -72,21 +72,14 @@ const AdminDashboard = () => {
           </div>
           <div id="sales-chart-container">
             {/* Sales chart */}
+            <p></p>
           </div>
         </div>
       </div>
 
       {/* Add Book Modal */}
       {showAddBookModal && (
-        <div id="add-book-modal" className="modal">
-          <div className="modal-content">
-            <span className="close" onClick={closeModal}>&times;</span>
-            <h2 className="text-xl font-semibold mb-4">Add Book</h2>
-            {/* Render the AddBookModal component here */}
-            <p></p>
-            <AddBookModal />
-          </div>
-        </div>
+            <AddBookModal onClose={closeModal}/>
       )}
 
       {/* Remove Book Modal */}
