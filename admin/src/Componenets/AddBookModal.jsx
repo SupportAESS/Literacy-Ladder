@@ -37,7 +37,7 @@ function addBook({ onClose }) {
     console.log(formData);
     try {
       //let url = isLogin ? '' : 'http://localhost:3000/signup'; // Determine the correct endpoint based on isLogin state
-      const response = await axios.post('http://localhost:3000/post', formData, {
+      const response = await axios.post('http://localhost:2211/addBooks', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -66,9 +66,17 @@ function addBook({ onClose }) {
             {/* <Form.Text className="text-xs text-gray-500">*This field is mandatory.</Form.Text> */}
           </Form.Group>
 
-          <Form.Group >
+          <Form.Group>
             <Form.Label className='block mb-1 text-base font-bold text-gray-700'>Genre</Form.Label>
-            <select name="genre" id="genre" value={formData.genre} onChange={handleChange} required className='block w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500'>
+            <select
+              name="genre"
+              id="genre"
+              value={formData.genre}
+              onChange={handleChange}
+              required
+              className='block w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500'
+            >
+              <option value="">Select Genre</option>
               <option value="Fiction">Fiction</option>
               <option value="Non-fiction">Non-fiction</option>
               <option value="Action and Adventure">Action and Adventure</option>
@@ -81,9 +89,10 @@ function addBook({ onClose }) {
               <option value="History">History</option>
               <option value="Self-help">Self-help</option>
               <option value="Science">Science</option>
-              <option value="Romance">Romance</option>S
+              <option value="Romance">Romance</option>
             </select>
           </Form.Group>
+
 
           <Form.Group >
             <Form.Label className='block mb-1 text-base font-bold text-gray-700'>Book Price</Form.Label>

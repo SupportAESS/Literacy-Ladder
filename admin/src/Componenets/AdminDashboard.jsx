@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import AddBookModal from './AddBookModal'; // Import the correct component
+import RemoveBookModal from './RemoveBookModal';
+import UpdateBookModal from './UpdateBookModal';
+import ViewBookModal from './ViewBookModal';
 
 const AdminDashboard = () => {
   const [showAddBookModal, setShowAddBookModal] = useState(false);
@@ -84,35 +87,17 @@ const AdminDashboard = () => {
 
       {/* Remove Book Modal */}
       {showRemoveBookModal && (
-        <div id="remove-book-modal" className="modal">
-          <div className="modal-content">
-            <span className="close" onClick={closeModal}>&times;</span>
-            <h2 className="text-xl font-semibold mb-4">Remove Book</h2>
-            {/* Remove Book Form */}
-          </div>
-        </div>
+            <RemoveBookModal onClose={closeModal}/>
       )}
 
       {/* Update Book Modal */}
       {showUpdateBookModal && (
-        <div id="update-book-modal" className="modal">
-          <div className="modal-content">
-            <span className="close" onClick={closeModal}>&times;</span>
-            <h2 className="text-xl font-semibold mb-4">Update Book</h2>
-            {/* Update Book Form */}
-          </div>
-        </div>
+            <UpdateBookModal onClose={closeModal}/>
       )}
 
       {/* View Book Modal */}
       {showViewBookModal && (
-        <div id="view-book-modal" className="modal">
-          <div className="modal-content">
-            <span className="close" onClick={closeModal}>&times;</span>
-            <h2 className="text-xl font-semibold mb-4">View Book</h2>
-            {/* View Book List */}
-          </div>
-        </div>
+            <ViewBookModal onClose={closeModal}/>
       )}
 
     </div>
