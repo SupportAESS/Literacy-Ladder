@@ -13,9 +13,10 @@ server.set('view engine', 'ejs');
 
 // Allow requests from the frontend server
 server.use(cors({
-  origin: 'http://localhost:5173',
+  origin: ['http://localhost:5173', 'http://localhost:3001'],
   credentials: true // Enable credentials (cookies, authorization headers, etc.)
 }));
+
 
 const connectionOptions = {
   useNewUrlParser: true,
@@ -96,6 +97,6 @@ mongoose.connect(connectionUri, connectionOptions)
 
 
 //server create
-http.createServer(server).listen(2211, function (req, res) {
+server.listen(2211, function (req, res) {
   console.log('HTTP server listening on port 2211');
 });

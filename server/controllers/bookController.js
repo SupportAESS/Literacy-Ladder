@@ -29,7 +29,7 @@ const AddBooks = (req, res) => {
   
   // Here you can process the received data as needed
   // For this example, I'm just logging it to the console
-  console.log(req.file);
+  console.log(req.body);
   // console.log('Received data:', {
   //   bookName,
   //   author,

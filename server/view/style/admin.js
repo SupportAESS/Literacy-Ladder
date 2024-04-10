@@ -75,7 +75,7 @@ function addUser(event) {
 }
 
 // Function to handle form submission for adding a product
-function addProduct(event) {
+async function addProduct(event)  {
   event.preventDefault();
 
   var bookName = document.getElementById("bookName").value;
@@ -97,18 +97,19 @@ function addProduct(event) {
   // Append other form data to the FormData object
   formData.append('bookName', bookName);
   formData.append('author', author);
-  formData.append('bookPrice', Price);
+  formData.append('bookPrice', bookPrice);
   formData.append('bookQuantity', bookQuantity);
   formData.append('bookType', bookType);
   formData.append('genre', genre);
   formData.append('bookDescription', bookDescription);
   console.log(formData);
-  axios.post('/addBooks', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    }
-  })
-  .then(response => {
+  try{
+    const response = await axios.post('/addBooks', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      }
+    })
+  
     if (response.ok) {
       // Redirect to dashboard upon successful login
       window.location.href = '/admin';
@@ -116,10 +117,9 @@ function addProduct(event) {
       console.error('Add product failed');
       // Handle login failure
     }
-  })
-  .catch(error => {
+  }catch(error){
     console.error('Error:', error);
-  });
+  };
 
   // Perform validation and submit data to backend
   // You'll need to use fetch or XMLHttpRequest to send data to the server
