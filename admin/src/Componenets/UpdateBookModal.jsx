@@ -4,11 +4,14 @@ import axios from 'axios';
 
 function removeBook({ onClose }) {
   const [formData, setFormData] = useState({
+    updateFields: '',
+    bookId: '',
     bookName: '',
     author: '',
     genre: '',
     bookQuantity: '',
     bookPrice: '',
+    bookISBN:'',
     bookDescription: '',
     image: null,
   });
@@ -27,29 +30,27 @@ function removeBook({ onClose }) {
       image: e.target.files[0],
     });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission logic here
-    onClose();
-    // const sessionData = localStorage.getItem('session');
-    // const session = JSON.parse(sessionData);
-    // formData.username = session.username;
     console.log(formData);
     try {
-      //let url = isLogin ? '' : 'http://localhost:3000/signup'; // Determine the correct endpoint based on isLogin state
-      const response = await axios.post('http://localhost:3000/post', formData, {
+      const response = await axios.post('http://localhost:2211/updateBookDetails', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
-
+      
+      if(response.status === 200){
+        alert("Book updated successfully");
+        console.log(response);
+        onClose();
+      }
     }
     catch (error) {
       console.error('Error submitting form:', error);
-      // Handle any errors that occur during the form submission process
       throw error;
     }
-    
   };
   return (
     <div className='fixed top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50 z-50'>
@@ -58,9 +59,9 @@ function removeBook({ onClose }) {
         <Form.Group>
             <Form.Label className='block mb-1 text-base font-bold text-gray-700'>Select Field For Update</Form.Label>
             <select
-              name="selectOption"
-              id="selectOption"
-              value={formData.selectOption}
+              name="updateFields"
+              id="updateFields"
+              value={formData.updateFields}
               onChange={handleChange}
               required
               className='block w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500'
@@ -72,6 +73,7 @@ function removeBook({ onClose }) {
               <option value="BookGenre">Book Genre</option>
               <option value="BookQuantity">Book Quantity</option>
               <option value="BookPrice">Book Price</option>
+              <option value="BookISBN">Book ISBN</option>
               <option value="BookDescription">Book Description</option>
               <option value="BookImage">Book Image</option>
             </select>
@@ -83,7 +85,7 @@ function removeBook({ onClose }) {
                 type="text" 
                 placeholder="Enter Book Id" 
                 name="bookId" 
-                value={formData.bookName} 
+                value={formData.bookId} 
                 onChange={handleChange} 
                 required 
                 className='block w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500' 
@@ -91,7 +93,7 @@ function removeBook({ onClose }) {
               <Form.Text className="text-xs text-gray-500">*This field is mandatory.</Form.Text>
             </Form.Group>
 
-          {(formData.selectOption === "AllFields" || formData.selectOption === "BookName") && (
+          {(formData.updateFields === "AllFields" || formData.updateFields === "BookName") && (
             <Form.Group>
               <Form.Label className='block mb-1 text-base font-bold text-gray-700'>Book Name</Form.Label>
               <Form.Control 
@@ -106,7 +108,7 @@ function removeBook({ onClose }) {
             </Form.Group>
           )}
 
-          {(formData.selectOption === "AllFields" || formData.selectOption === "BookAuthor") && (
+          {(formData.updateFields === "AllFields" || formData.updateFields === "BookAuthor") && (
             <Form.Group>
               <Form.Label className='block mb-1 text-base font-bold text-gray-700'>Author</Form.Label>
               <Form.Control 
@@ -121,7 +123,7 @@ function removeBook({ onClose }) {
             </Form.Group>
           )}
 
-          {(formData.selectOption === "AllFields" || formData.selectOption === "BookGenre") && (
+          {(formData.updateFields === "AllFields" || formData.updateFields === "BookGenre") && (
             <Form.Group>
               <Form.Label className='block mb-1 text-base font-bold text-gray-700'>Genre</Form.Label>
               <select 
@@ -149,11 +151,11 @@ function removeBook({ onClose }) {
             </Form.Group>
           )}
 
-          {(formData.selectOption === "AllFields" || formData.selectOption === "BookPrice") && (
+          {(formData.updateFields === "AllFields" || formData.updateFields === "BookPrice") && (
             <Form.Group>
               <Form.Label className='block mb-1 text-base font-bold text-gray-700'>Book Price</Form.Label>
               <Form.Control 
-                type="text" 
+                type="number" 
                 placeholder="Enter Book Price" 
                 name="bookPrice" 
                 value={formData.bookPrice} 
@@ -164,11 +166,11 @@ function removeBook({ onClose }) {
             </Form.Group>
           )}
 
-          {(formData.selectOption === "AllFields" || formData.selectOption === "BookQuantity") && (
+          {(formData.updateFields === "AllFields" || formData.updateFields === "BookQuantity") && (
             <Form.Group>
               <Form.Label className='block mb-1 text-base font-bold text-gray-700'>Book Quantity</Form.Label>
               <Form.Control 
-                type="text" 
+                type="number" 
                 placeholder="Enter Book Quantity" 
                 name="bookQuantity" 
                 value={formData.bookQuantity} 
@@ -179,7 +181,22 @@ function removeBook({ onClose }) {
             </Form.Group>
           )}
 
-          {(formData.selectOption === "AllFields" || formData.selectOption === "BookDescription") && (
+          {(formData.updateFields === "AllFields" || formData.updateFields === "BookISBN") && (
+            <Form.Group>
+              <Form.Label className='block mb-1 text-base font-bold text-gray-700'>Book ISBN</Form.Label>
+              <Form.Control 
+                type="number" 
+                placeholder="Enter Book ISBN" 
+                name="bookISBN" 
+                value={formData.bookISBN} 
+                onChange={handleChange} 
+                required 
+                className='block w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500' 
+              />
+            </Form.Group>
+          )}
+
+          {(formData.updateFields === "AllFields" || formData.updateFields === "BookDescription") && (
             <Form.Group>
               <Form.Label className='block mb-1 text-base font-bold text-gray-700'>Book Description</Form.Label>
               <Form.Control 
@@ -194,7 +211,7 @@ function removeBook({ onClose }) {
             </Form.Group>
           )}
 
-          {(formData.selectOption === "AllFields" || formData.selectOption === "BookImage") && (
+          {(formData.updateFields === "AllFields" || formData.updateFields === "BookImage") && (
             <Form.Group className='mt-4'>
               <Form.Label className='block mb-1 text-base font-bold text-gray-700'>Image Attachment</Form.Label>
               <Form.Control 
