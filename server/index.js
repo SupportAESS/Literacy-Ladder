@@ -47,7 +47,7 @@ server.use('/',getSignUpRoute);
 
 // server.use(bodyParser.urlencoded());
 
-//AddBook
+//Add, remove Book
 server.use('/', addBookRoute);
 
 // server.post('/addBook', (req, res)=>{

@@ -34,31 +34,20 @@ const AddBooks = async (req, res) => {
 
 const removeBook = async (req, res) => {
   //desearlizing the req.body
-  const { genre, bookName } = req.body;
+  const { criteria, value } = req.body;
 
-  const book = await Book.find({})
-
-  //setting the image src as cloud url
-  const bookImage = response.url;
   try {
-    const newBook = new Book({
-      bookName,
-      author,
-      genre,
-      bookPrice,
-      bookQuantity,
-      bookImage,
-      bookDescription
-    });
-
-    // Save the new book to the database
-    await newBook.save();
-    console.log("Book inserted successfully");
+    const product = await Book.findOneAndDelete({ critera: value });
+    if (!product) {
+      return res.status(400).json({ message: "Product not found" });
+    }
+    res.status(200).json({ message: "Product deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
-  catch (error) {
-    console.error("Error inserting book:", error);
-  }
-  res.send("Success");
 }
 
-module.exports = { AddBooks };
+module.exports = { 
+  AddBooks ,
+  removeBook 
+};
