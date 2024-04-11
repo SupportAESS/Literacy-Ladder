@@ -10,6 +10,7 @@ function AddBook({ onClose }) {
     bookQuantity: 0,
     bookPrice: 0,
     bookDescription: '',
+    isbn: 0,
     image: null,
   });
 
@@ -110,11 +111,28 @@ function AddBook({ onClose }) {
             {/* <Form.Text className="text-xs text-gray-500">*This field is mandatory.</Form.Text> */}
           
             <Form.Label className='block mb-1 text-base font-bold text-gray-700'>Book Description</Form.Label>
-            <Form.Control type="text" placeholder="Enter Book Description" name="bookDescription" value={formData.bookDescription} 
-            onChange={handleChange} required className='block w-full px-3 py-2 text-sm border border-gray-300 rounded-md 
+            <Form.Control 
+            type="text" 
+            placeholder="Enter Book Description" 
+            name="bookDescription" 
+            value={formData.bookDescription} 
+            onChange={handleChange} 
+            required 
+            className='block w-full px-3 py-2 text-sm border border-gray-300 rounded-md 
             focus:outline-none focus:border-indigo-500' />
             {/* <Form.Text className="text-xs text-gray-500">*This field is mandatory.</Form.Text> */}
-          
+            
+            <Form.Label className='block mb-1 text-base font-bold text-gray-700'>ISBN</Form.Label>
+            <Form.Control 
+              type="number" 
+              placeholder="Enter Book ISBN Number" 
+              name="isbn" 
+              value={formData.isbn} 
+              onChange={handleChange} 
+              required 
+              className='block w-full px-3 py-2 text-sm border border-gray-300 rounded-md 
+              focus:outline-none focus:border-indigo-500' />
+
             <Form.Label className='block mb-1 text-base font-bold text-gray-700'>Image Attachment</Form.Label>
             <Form.Control 
               type='file' 

@@ -15,7 +15,18 @@ const bookSchema = new mongoose.Schema({
     genre: { type: String, required: true, enum: ["Fiction", "Non-fiction", "Action and Adventure", "Mystery", "Science Fiction", "Fantasy", "Horror", "Biography", "Auto-biography", "History", "Self-help", "Science", "Romance"] },
     bookPrice: { type: Number, required: true },
     bookQuantity: { type: Number, required: true },
-    bookType: { type: String, required: true, enum: ["Book","Magazine"] },
+    isbn: {
+        type: Number,
+        required: true,
+        validate: {
+            validator: function(value) {
+                // ISBN Validation: ISBN must be a 10 or 13 digit number
+                return /^\d{10}|\d{13}$/.test(value);
+            },
+            message: props => `${props.value} is not a valid ISBN number!`
+        }
+    },
+    // bookType: { type: String, required: true, enum: ["Book","Magazine"] },
     bookImage: { type: String,  required: true, minLength: 1, maxLength: 255}, // Assuming image is stored as a path or URL
     bookDescription: { type: String, required: true, minLength: 1, maxLength: 255 }
 });
