@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import axios from 'axios';
 
-function addBook({ onClose }) {
+function AddBook({ onClose }) {
   const [formData, setFormData] = useState({
     bookName: '',
     author: '',
     genre: '',
-    bookQuantity: '',
-    bookPrice: '',
+    bookQuantity: 0,
+    bookPrice: 0,
     bookDescription: '',
     image: null,
   });
@@ -35,10 +35,14 @@ function addBook({ onClose }) {
     // const session = JSON.parse(sessionData);
     // formData.username = session.username;
     console.log(formData);
+
+    // const newData = new FormData(formData)
+
+    // console.log(newData)
     try {
       //let url = isLogin ? '' : 'http://localhost:3000/signup'; // Determine the correct endpoint based on isLogin state
-      const response = await axios.post('http://localhost:2211/addBooks', formData, {
-        headers: {
+      const response = await axios.post('http://localhost:2211/addBook', formData, {
+        headers:{
           'Content-Type': 'multipart/form-data'
         }
       });
@@ -57,16 +61,16 @@ function addBook({ onClose }) {
         <Form encType='multipart/form-data' onSubmit={handleSubmit} className='p-6'>
           <Form.Group >
             <Form.Label className='block mb-1 text-base font-bold text-gray-700'>Book Name</Form.Label>
-            <Form.Control type="text" placeholder="Enter Book Name" name="bookName" value={formData.bookName} onChange={handleChange} required className='block w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500' />
-          </Form.Group>
-
-          <Form.Group >
+            <Form.Control type="text" placeholder="Enter Book Name" name="bookName" value={formData.bookName} 
+            onChange={handleChange} required className='block w-full px-3 py-2 text-sm border border-gray-300 rounded-md 
+            focus:outline-none focus:border-indigo-500' />
+          
             <Form.Label className='block mb-1 text-base font-bold text-gray-700'>Author</Form.Label>
-            <Form.Control type="text" placeholder="Enter Author" name="author" value={formData.author} onChange={handleChange} required className='block w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500' />
+            <Form.Control type="text" placeholder="Enter Author" name="author" value={formData.author} 
+            onChange={handleChange} required className='block w-full px-3 py-2 text-sm border border-gray-300 rounded-md 
+            focus:outline-none focus:border-indigo-500' />
             {/* <Form.Text className="text-xs text-gray-500">*This field is mandatory.</Form.Text> */}
-          </Form.Group>
-
-          <Form.Group>
+          
             <Form.Label className='block mb-1 text-base font-bold text-gray-700'>Genre</Form.Label>
             <select
               name="genre"
@@ -74,7 +78,8 @@ function addBook({ onClose }) {
               value={formData.genre}
               onChange={handleChange}
               required
-              className='block w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500'
+              className='block w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none 
+              focus:border-indigo-500'
             >
               <option value="">Select Genre</option>
               <option value="Fiction">Fiction</option>
@@ -91,28 +96,25 @@ function addBook({ onClose }) {
               <option value="Science">Science</option>
               <option value="Romance">Romance</option>
             </select>
-          </Form.Group>
-
-
-          <Form.Group >
+        
             <Form.Label className='block mb-1 text-base font-bold text-gray-700'>Book Price</Form.Label>
-            <Form.Control type="text" placeholder="Enter Book Price" name="bookPrice" value={formData.bookPrice} onChange={handleChange} required className='block w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500' />
+            <Form.Control type="number" placeholder="Enter Book Price" name="bookPrice" value={formData.bookPrice} 
+            onChange={handleChange} required className='block w-full px-3 py-2 text-sm border border-gray-300 rounded-md 
+            focus:outline-none focus:border-indigo-500' />
             {/* <Form.Text className="text-xs text-gray-500">*This field is mandatory.</Form.Text> */}
-          </Form.Group>
-
-          <Form.Group >
+         
             <Form.Label className='block mb-1 text-base font-bold text-gray-700'>Book Quantity</Form.Label>
-            <Form.Control type="text" placeholder="Enter Book Quantity" name="bookQuantity" value={formData.bookQuantity} onChange={handleChange} required className='block w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500' />
+            <Form.Control type="number" placeholder="Enter Book Quantity" name="bookQuantity" value={formData.bookQuantity} 
+            onChange={handleChange} required className='block w-full px-3 py-2 text-sm border border-gray-300 rounded-md 
+            focus:outline-none focus:border-indigo-500' />
             {/* <Form.Text className="text-xs text-gray-500">*This field is mandatory.</Form.Text> */}
-          </Form.Group>
-
-          <Form.Group >
+          
             <Form.Label className='block mb-1 text-base font-bold text-gray-700'>Book Description</Form.Label>
-            <Form.Control type="text" placeholder="Enter Book Description" name="bookDescription" value={formData.bookDescription} onChange={handleChange} required className='block w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500' />
+            <Form.Control type="text" placeholder="Enter Book Description" name="bookDescription" value={formData.bookDescription} 
+            onChange={handleChange} required className='block w-full px-3 py-2 text-sm border border-gray-300 rounded-md 
+            focus:outline-none focus:border-indigo-500' />
             {/* <Form.Text className="text-xs text-gray-500">*This field is mandatory.</Form.Text> */}
-          </Form.Group>
-
-          <Form.Group  className='mt-4'>
+          
             <Form.Label className='block mb-1 text-base font-bold text-gray-700'>Image Attachment</Form.Label>
             <Form.Control 
               type='file' 
@@ -128,7 +130,8 @@ function addBook({ onClose }) {
           <div className='mt-6'>
             <Button variant="primary" type="submit" className='w-full font-semibold py-2 text-sm
                  text-white bg-indigo-600 border border-transparent rounded-md
-                  hover:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo'>
+                  hover:bg-indigo-700 focus:outline-none focus:border-indigo-700 
+                  focus:shadow-outline-indigo'>
               Submit
             </Button>
             <Button variant="danger" onClick={onClose}
@@ -145,4 +148,4 @@ function addBook({ onClose }) {
   )
 }
 
-export default addBook
+export default AddBook

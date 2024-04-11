@@ -1,9 +1,12 @@
 const express = require('express');
 const server = express();
-const http = require('http');
+// const http = require('http');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const addBookRoute = require('./routes/book.route.js');
+const getLoginRoute = require('./routes/login.route.js');
+const getSignUpRoute = require('./routes/signup.route.js')
 const cors = require('cors');
 
 
@@ -33,61 +36,28 @@ server.use(session({
 }));
 
 
-//for admin routes
-const adminRoute = require('./routes/admin.js');
-server.use(express.static("view"));
-
-//server.use('/admin', adminRoute);
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-server.use(bodyParser.urlencoded({ extended: true }));
-
-// Parse JSON bodies (as sent by API clients)
-server.use(bodyParser.json());
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+// var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 
 //Login System
-const { Login } = require('./controllers/loginController.js')
-server.post('/login', Login);
+server.use('/', getLoginRoute);
 
 //SignUp System
-const { Signup } = require('./controllers/signupController.js');
-server.post('/signup',Signup);
+server.use('/',getSignUpRoute);
 
+// server.use(bodyParser.urlencoded());
 
+//AddBook
+server.use('/', addBookRoute);
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////admin 
-// Example protected route
-// // Specify the directory where your views are located
-// server.set('views', __dirname + '/view');
-
-// server.get('/', (req, res) => {
-//   res.render('index', { title: 'Home Page', message: 'Welcome to my website!' });
-// });
-// server.get('/admin', (req, res) => {
-//   // Check if user is logged in
-//   if (req.session.loggedIn) {
-//     // User is logged in, render the dashboard
-//     res.render('admin', { title: 'Home Page', message: 'Welcome to my website!' });
-//     //res.sendFile(__dirname + '/view/admin.html');
-//   } else {
-//     // User is not logged in, redirect to login page
-//     res.redirect('/');
-//   }
-// });
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Handle POST request to /submit
-const { AddBooks } = require('./controllers/bookController.js');
-server.post('/addBooks', AddBooks);
+// server.post('/addBook', (req, res)=>{
+//   console.log(req.body)
+//   res.send("success")
+// })
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //  connect database
-const User = require('./models/userModel'); // Import the User model from userModel.js
 const connectionUri = "mongodb+srv://shivendra2023is21:xl1XseRiuLs88wKf@literacyladder.kkfnufu.mongodb.net/?retryWrites=true&w=majority";
 mongoose.connect(connectionUri, connectionOptions)
 .then(() => {
@@ -97,6 +67,6 @@ mongoose.connect(connectionUri, connectionOptions)
 
 
 //server create
-server.listen(2211, function (req, res) {
+server.listen(2211, ()=> {
   console.log('HTTP server listening on port 2211');
 });

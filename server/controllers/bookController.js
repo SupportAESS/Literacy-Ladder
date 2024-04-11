@@ -1,28 +1,28 @@
-const { Book } = require('../models/userModel');
-const uploadOnCloudinary = require('../utils/cloudinary.js');
+// const { Book } = require('../models/userModel');
+// const uploadOnCloudinary = require('../utils/cloudinary.js');
 
-async function insertBookData(bookName, author, genre, bookPrice, bookQuantity, bookType,bookImage, bookDescription) {
-  try {
-    // Create a new document with the provided data
-    const newBook = new Book({
-      bookName,
-      author,
-      genre,
-      bookPrice,
-      bookQuantity,
-      bookType,
-      bookImage,
-      bookDescription
-    });
+// async function insertBookData(bookName, author, genre, bookPrice, bookQuantity, bookType,bookImage, bookDescription) {
+//   try {
+//     // Create a new document with the provided data
+//     const newBook = new Book({
+//       bookName,
+//       author,
+//       genre,
+//       bookPrice,
+//       bookQuantity,
+//       bookType,
+//       bookImage,
+//       bookDescription
+//     });
 
-    // Save the new document to the database
-    await newBook.save();
+//     // Save the new document to the database
+//     await newBook.save();
 
-    console.log("Book inserted successfully");
-  } catch (error) {
-    console.error("Error inserting book:", error);
-  }
-}
+//     console.log("Book inserted successfully");
+//   } catch (error) {
+//     console.error("Error inserting book:", error);
+//   }
+// }
 
 const AddBooks = (req, res) => {
   const { bookName, author, bookPrice, bookQuantity, bookType, genre, bookImage, bookDescription } = req.body;
@@ -30,6 +30,7 @@ const AddBooks = (req, res) => {
   // Here you can process the received data as needed
   // For this example, I'm just logging it to the console
   console.log(req.body);
+  //console.log(req.file);
   // console.log('Received data:', {
   //   bookName,
   //   author,
