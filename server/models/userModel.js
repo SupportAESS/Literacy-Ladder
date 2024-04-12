@@ -1,13 +1,20 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-    username: { type: String, required: true, minLength: 1, maxLength: 50 },
-    email: { type: String, required: true, minLength: 1, maxLength: 255 },
-    role: { type: String, required: true, enum: ["user", "seller", "admin"] },
+    fullName: { type: String, required: true, minLength: 1, maxLength: 50 },
+    email: { type: String, required: true, unique: true, minLength: 1, maxLength: 255 },
     password: { type: String, required: true, minLength: 1, maxLength: 255 }
 });
 
 const User = mongoose.model('User', userSchema);
+
+const adminSchema = new mongoose.Schema({
+    username: { type: String, required: true, minLength: 1, maxLength: 50 },
+    email: { type: String, required: true, minLength: 1, maxLength: 255 },
+    password: { type: String, required: true, minLength: 1, maxLength: 255 }
+});
+
+const Admin = mongoose.model('Admin', userSchema);
 
 const bookSchema = new mongoose.Schema({
     bookName: { type: String, required: true, minLength: 1, maxLength: 255 },
@@ -61,4 +68,4 @@ const invoiceSchema = new mongoose.Schema({
 
 const Invoice = mongoose.model('Invoice', invoiceSchema);
 
-module.exports = { User, Book, Purchase, Review, Invoice };
+module.exports = { User, Admin, Book, Purchase, Review, Invoice };

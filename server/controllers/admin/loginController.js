@@ -1,10 +1,10 @@
-const { User } = require('../models/userModel');
-const { cryptoSha } = require('./securityController')
+const { Admin } = require('../../models/userModel');
+const { cryptoSha } = require('../securityController')
 
 async function validateUser(username, password) {
   try {
     // Find user by username
-    const user = await User.findOne({ username: username });
+    const user = await Admin.findOne({ username: username });
 
     // If user not found, return null
     if (!user) {
@@ -12,7 +12,7 @@ async function validateUser(username, password) {
     }
 
     // Validate password
-    const isValidPassword = await User.findOne({ password: password});
+    const isValidPassword = await Admin.findOne({ password: password});
 
     // If password is invalid, return null
     if (!isValidPassword) {

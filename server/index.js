@@ -6,9 +6,11 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const addBookRoute = require('./routes/book.route.js');
 const updateBookRoute = require('./routes/bookUpdate.route.js');
-const getLoginRoute = require('./routes/login.route.js');
-const getSignUpRoute = require('./routes/signup.route.js');
+const getLoginRoute = require('./routes/admin/login.route.js');
+const getSignUpRoute = require('./routes/admin/signup.route.js');
 const viewBookRoute = require('./routes/viewBook.route.js');
+const userLoginRoute = require('./routes/user/user.login.route.js');
+const userSignupRounte = require('./routes/user/user.signup.route.js');
 const cors = require('cors');
 
 
@@ -40,7 +42,7 @@ server.use(session({
 
 // var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
-
+//Admin 
 //Login System
 server.use('/', getLoginRoute);
 
@@ -57,6 +59,11 @@ server.use('/', updateBookRoute);
 
 //UpdateBook
 server.use('/', viewBookRoute);
+
+
+//user
+server.use('/', userLoginRoute);
+server.use('/', userSignupRounte);
 
 // server.post('/addBook', (req, res)=>{
 //   console.log(req.body)

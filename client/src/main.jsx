@@ -6,7 +6,7 @@ import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } 
 import Layout from './Components/Layout'
 import Home from './Components/Home'
 import About from './Components/About'
-import Login from './Components/Login'
+import Login from './Components/user/Login'
 import Cart from './Components/Cart'
 const router = createBrowserRouter(
   createRoutesFromElements(
