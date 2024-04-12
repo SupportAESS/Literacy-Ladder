@@ -16,7 +16,7 @@ const bookSchema = new mongoose.Schema({
     bookPrice: { type: Number, required: true },
     bookQuantity: { type: Number, required: true },
     isbn: {
-        type: Number,
+        type: String,
         required: true,
         validate: {
             validator: function(value) {

@@ -34,16 +34,21 @@ const AddBooks = async (req, res) => {
 
 const removeBook = async (req, res) => {
   //desearlizing the req.body
-  const { criteria, value } = req.body;
+  // console.log(req.body);
+  const { deleteBy, fieldValue } = req.body;
+  const search = {};
+  search[deleteBy] = fieldValue;
+  console.log(search);
 
   try {
-    const product = await Book.findOneAndDelete({ critera: value });
-    if (!product) {
-      return res.status(400).json({ message: "Product not found" });
+    const book = await Book.findOneAndDelete(search);
+    console.log(book.bookDescription);
+    if (!book) {
+      return res.status(400).json({ message: "Book not found" });
     }
-    res.status(200).json({ message: "Product deleted successfully" });
+    return res.status(200).json({ message: "Book deleted successfully" });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 }
 

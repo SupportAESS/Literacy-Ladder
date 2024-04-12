@@ -24,8 +24,8 @@ server.use(cors({
 
 
 const connectionOptions = {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+  // useNewUrlParser: true,
+  // useUnifiedTopology: true,
   dbName: 'literacyLadder',
 };
 

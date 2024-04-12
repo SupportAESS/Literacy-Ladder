@@ -19,29 +19,22 @@ function removeBook({ onClose }) {
     e.preventDefault();
     // Handle form submission logic here
     onClose();
-    
-    console.log(formData);
     try {
       //let url = isLogin ? '' : 'http://localhost:3000/signup'; // Determine the correct endpoint based on isLogin state
       // const response = await axios.delete('http://localhost:2211/removeBook', formData);
-      const response = await fetch('http://localhost:2211/removeBook', {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-            // Add any additional headers if needed
-        },
-        // Add any body data if needed
-    });
+      const response = await axios.delete('http://localhost:2211/removeBook', {
+        data: formData
+      });
 
-    // Check if the request was successful
-    if (!response.ok) {
-        // Handle error response
-        const errorData = await response.json();
-        throw new Error(errorData.message);
-    }
+      // Check if the request was successful
+      if (!response.ok) {
+        console.log("Issue with server");
+      }
+      else {
+        // Handle successful response
+        console.log('Delete request successful');
+      }
 
-    // Handle successful response
-    console.log('Delete request successful');
     }
     catch (error) {
       console.error('Error submitting form:', error);
@@ -59,7 +52,7 @@ function removeBook({ onClose }) {
             <select name="deleteBy" id="deleteBy" value={formData.deleteBy} onChange={handleChange} required className='block w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500'>
               <option value="" >Select</option>
               <option value="bookName">Book Name</option>
-              <option value="isbn">ISBN Number</option> {/* Added option for ISBN */}
+              <option value="isbn">ISBN</option> {/* Added option for ISBN */}
             </select>
           </Form.Group>
           {formData.deleteBy === "bookName" &&
@@ -69,7 +62,7 @@ function removeBook({ onClose }) {
                   type="text"
                   name="fieldValue"
                   placeholder="Enter Book Name"
-                  value={formData.bookName}
+                  value={formData.fieldValue}
                   onChange={handleChange}
                   required
                   className='my-2 block w-full px-3 py-2 text-sm border border-gray-300 rounded-md 
@@ -81,10 +74,10 @@ function removeBook({ onClose }) {
             ( //Render input field for ISBN if selected 
               <Form.Group>
                 <Form.Control
-                  type="text"
+                  type="number"
                   name="fieldValue"
                   placeholder="Enter ISBN"
-                  value={formData.isbnNumber}
+                  value={formData.fieldValue}
                   onChange={handleChange}
                   required
                   className='my-2 block w-full px-3 py-2 text-sm border border-gray-300 rounded-md 
