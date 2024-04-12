@@ -37,8 +37,8 @@ const UpdateBooks = async (req, res) => {
     }
 
     // Upload the file to cloudinary and update the book image if necessary
-    if (image) {
-      const response = await uploadOnCloudinary(image.path);
+    if (updateFields === "AllFields" || updateFields === "BookImage") {
+      const response = await uploadOnCloudinary(req.file.path);
       book.bookImage = response.url;
     }
 
