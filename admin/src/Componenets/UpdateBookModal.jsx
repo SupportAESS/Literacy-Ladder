@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 function removeBook({ onClose }) {
   const [formData, setFormData] = useState({
@@ -40,16 +41,27 @@ function removeBook({ onClose }) {
           'Content-Type': 'multipart/form-data'
         }
       });
-      
+      console.log(response);
       if(response.status === 200){
-        alert("Book updated successfully");
-        console.log(response);
+        toast.success('Book updated successfully', {
+          theme: 'colored'
+        });
+        
         onClose();
       }
     }
     catch (error) {
-      console.error('Error submitting form:', error);
-      throw error;
+      if (error.response && error.response.status === 400) {
+        toast.error("Book not found",{
+          theme: 'colored'
+        });
+      } else {
+        toast.error("Internal Server Error",{
+          theme:'colored'
+        })
+        console.error('Error submitting form:', error);
+        throw error;
+      }
     }
   };
   return (

@@ -8,9 +8,9 @@ const UpdateBooks = async (req, res) => {
 
     // Find the book by its ID
     const book = await Book.findById(bookId);
-
+    console.log(book);
     if (!book) {
-      return res.status(404).send("Book not found");
+      return res.status(400).send("Book not found");
     }
 
     // Update the book fields based on the provided input
