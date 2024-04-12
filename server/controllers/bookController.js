@@ -38,17 +38,16 @@ const removeBook = async (req, res) => {
   const { deleteBy, fieldValue } = req.body;
   const search = {};
   search[deleteBy] = fieldValue;
-  console.log(search);
+  // console.log(search);
 
   try {
     const book = await Book.findOneAndDelete(search);
-    console.log(book.bookDescription);
     if (!book) {
       return res.status(400).json({ message: "Book not found" });
     }
     return res.status(200).json({ message: "Book deleted successfully" });
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message || "Internal Server Error" });
   }
 }
 

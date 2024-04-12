@@ -28,7 +28,7 @@ function removeBook({ onClose }) {
 
       // Check if the request was successful
       if (!response.ok) {
-        console.log("Issue with server");
+        console.log("Issue with server ");
       }
       else {
         // Handle successful response
@@ -37,9 +37,12 @@ function removeBook({ onClose }) {
 
     }
     catch (error) {
-      console.error('Error submitting form:', error);
-      // Handle any errors that occur during the form submission process
-      throw error;
+      if (error.response && error.response.status === 400) {
+        console.log("Book not found");
+      } else {
+        console.error('Error submitting form:', error);
+        throw error;
+      }
     }
 
   };
@@ -52,7 +55,7 @@ function removeBook({ onClose }) {
             <select name="deleteBy" id="deleteBy" value={formData.deleteBy} onChange={handleChange} required className='block w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500'>
               <option value="" >Select</option>
               <option value="bookName">Book Name</option>
-              <option value="isbn">ISBN</option> {/* Added option for ISBN */}
+              <option value="isbn">ISBN Number</option> {/* Added option for ISBN */}
             </select>
           </Form.Group>
           {formData.deleteBy === "bookName" &&
@@ -62,7 +65,7 @@ function removeBook({ onClose }) {
                   type="text"
                   name="fieldValue"
                   placeholder="Enter Book Name"
-                  value={formData.fieldValue}
+                  value={formData.bookName}
                   onChange={handleChange}
                   required
                   className='my-2 block w-full px-3 py-2 text-sm border border-gray-300 rounded-md 
@@ -77,7 +80,7 @@ function removeBook({ onClose }) {
                   type="number"
                   name="fieldValue"
                   placeholder="Enter ISBN"
-                  value={formData.fieldValue}
+                  value={formData.isbn}
                   onChange={handleChange}
                   required
                   className='my-2 block w-full px-3 py-2 text-sm border border-gray-300 rounded-md 
