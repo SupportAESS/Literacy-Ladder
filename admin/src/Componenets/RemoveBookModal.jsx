@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 function removeBook({ onClose }) {
   const [formData, setFormData] = useState({
@@ -27,24 +28,25 @@ function removeBook({ onClose }) {
       });
 
       // Check if the request was successful
-      if (!response.ok) {
-        console.log("Issue with server ");
+      if(response.status === 200){
+        toast.success('Delete request successful', {
+          theme: 'colored'
+        });
       }
-      else {
-        // Handle successful response
-        console.log('Delete request successful');
-      }
-
     }
     catch (error) {
       if (error.response && error.response.status === 400) {
-        console.log("Book not found");
+        toast.error("Book not found",{
+          theme: 'colored'
+        });
       } else {
+        toast.error("Internal Server Error",{
+          theme:'colored'
+        })
         console.error('Error submitting form:', error);
         throw error;
       }
     }
-
   };
   return (
     <div className='fixed top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50 z-50'>
