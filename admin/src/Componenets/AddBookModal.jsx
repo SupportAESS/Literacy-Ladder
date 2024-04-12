@@ -84,7 +84,6 @@ function AddBook({ onClose }) {
             >
               <option value="">Select Genre</option>
               <option value="Fiction">Fiction</option>
-              <option value="Non-fiction">Non-fiction</option>
               <option value="Action and Adventure">Action and Adventure</option>
               <option value="Mystery">Mystery</option>
               <option value="Science Fiction">Science Fiction</option>

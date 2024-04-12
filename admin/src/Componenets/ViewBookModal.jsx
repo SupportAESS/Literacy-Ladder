@@ -26,7 +26,9 @@ function ViewBook({ onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:2211/viewBook', formData);
+      const response = await axios.get('http://localhost:2211/viewBook', {
+        params:formData
+      });
       if (response.status === 200) {
         setBooks(response.data); // Assuming the response data is an array of books
       }

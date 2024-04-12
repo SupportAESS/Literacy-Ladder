@@ -12,7 +12,7 @@ const User = mongoose.model('User', userSchema);
 const bookSchema = new mongoose.Schema({
     bookName: { type: String, required: true, minLength: 1, maxLength: 255 },
     author: { type: String, required: true, minLength: 1, maxLength: 255 },
-    genre: { type: String, required: true, enum: ["Fiction", "Non-fiction", "Action and Adventure", "Mystery", "Science Fiction", "Fantasy", "Horror", "Biography", "Auto-biography", "History", "Self-help", "Science", "Romance"] },
+    genre: { type: String, required: true, enum: ["Fiction", "Action and Adventure", "Mystery", "Science Fiction", "Fantasy", "Horror", "Biography", "Auto-biography", "History", "Self-help", "Science", "Romance"] },
     bookPrice: { type: Number, required: true },
     bookQuantity: { type: Number, required: true },
     isbn: {
