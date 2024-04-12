@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import axios from 'axios';
+import ViewPanel from './ViewPanel';
 
 function viewBook({ onClose }) {
+  const [ViewData, setViewPanel] = useState(false);
   const [formData, setFormData] = useState({
     searchBy: '',
     bookName: null,
-    bookAuthor: null,
+    author: null,
     bookPrice: null,
-    bookGenre: null
+    genre: null
   });
 
   const handleChange = (e) => {
@@ -28,18 +30,25 @@ function viewBook({ onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Handle form submission logic here
-    onClose();
+    
     // const sessionData = localStorage.getItem('session');
     // const session = JSON.parse(sessionData);
     // formData.username = session.username;
     console.log(formData);
     try {
       //let url = isLogin ? '' : 'http://localhost:3000/signup'; // Determine the correct endpoint based on isLogin state
-      const response = await axios.post('http://localhost:3000/post', formData, {
+      const response = await axios.post('http://localhost:2211/viewBook', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
+
+      if(response.status === 200){
+        const result = JSON.stringify(response);
+        
+        alert(<ViewPanel books={result}/>);
+        onClose();
+      }
 
     }
     catch (error) {
@@ -112,6 +121,7 @@ function viewBook({ onClose }) {
                 required 
                 className='block w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500'
               >
+                <option value="">Select</option>
                 <option value="Fiction">Fiction</option>
                 <option value="Non-fiction">Non-fiction</option>
                 <option value="Action and Adventure">Action and Adventure</option>

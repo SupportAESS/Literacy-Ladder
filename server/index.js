@@ -7,7 +7,8 @@ const session = require('express-session');
 const addBookRoute = require('./routes/book.route.js');
 const updateBookRoute = require('./routes/bookUpdate.route.js');
 const getLoginRoute = require('./routes/login.route.js');
-const getSignUpRoute = require('./routes/signup.route.js')
+const getSignUpRoute = require('./routes/signup.route.js');
+const viewBookRoute = require('./routes/viewBook.route.js');
 const cors = require('cors');
 
 
@@ -53,6 +54,9 @@ server.use('/', addBookRoute);
 
 //UpdateBook
 server.use('/', updateBookRoute);
+
+//UpdateBook
+server.use('/', viewBookRoute);
 
 // server.post('/addBook', (req, res)=>{
 //   console.log(req.body)
