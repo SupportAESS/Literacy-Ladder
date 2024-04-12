@@ -1,102 +1,84 @@
-import React, { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import React, { useState, useEffect, useRef } from 'react'; // Add useRef here
+import { Form, Button, Table } from 'react-bootstrap'; // Import Table from react-bootstrap
 import axios from 'axios';
-import ViewPanel from './ViewPanel';
 
-function viewBook({ onClose }) {
-  const [ViewData, setViewPanel] = useState(false);
+function ViewBook({ onClose }) {
+  const [books, setBooks] = useState([]);
   const [formData, setFormData] = useState({
     searchBy: '',
-    bookName: null,
-    author: null,
-    bookPrice: null,
-    genre: null
+    bookName: '',
+    author: '',
+    genre: '',
+    minPrice: '',
+    maxPrice: ''
   });
+
+  const bookListRef = useRef(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: value
     });
   };
 
-  const handleImageChange = (e) => {
-    setFormData({
-      ...formData,
-      image: e.target.files[0],
-    });
-  };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission logic here
-    
-    // const sessionData = localStorage.getItem('session');
-    // const session = JSON.parse(sessionData);
-    // formData.username = session.username;
-    console.log(formData);
     try {
-      //let url = isLogin ? '' : 'http://localhost:3000/signup'; // Determine the correct endpoint based on isLogin state
-      const response = await axios.post('http://localhost:2211/viewBook', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-
-      if(response.status === 200){
-        const result = JSON.stringify(response);
-        
-        alert(<ViewPanel books={result}/>);
-        onClose();
+      const response = await axios.post('http://localhost:2211/viewBook', formData);
+      if (response.status === 200) {
+        setBooks(response.data); // Assuming the response data is an array of books
       }
-
-    }
-    catch (error) {
+    } catch (error) {
       console.error('Error submitting form:', error);
-      // Handle any errors that occur during the form submission process
       throw error;
     }
-    
   };
+
+  useEffect(() => {
+    // Scroll to the bottom of the book list when books change
+    bookListRef.current.scrollTop = bookListRef.current.scrollHeight;
+  }, [books]);
+
   return (
     <div className='fixed top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50 z-50'>
-      <div className='w-96 bg-white rounded-md shadow-lg'>
-        <Form encType='multipart/form-data' onSubmit={handleSubmit} className='p-6'>
-        <Form.Group>
-              <Form.Label className='block mb-1 text-base font-bold text-gray-700'>Search By</Form.Label>
-              <select
-                name="searchBy"
-                id="searchBy"
-                value={formData.searchBy}
-                onChange={handleChange}
-                required
-                className='block w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500'
-              >
-                <option value="">Select Search Options</option>
-                <option value="AllBooks">All Books</option>
-                <option value="BookName">Book Name</option>
-                <option value="BookAuthor">Book Author</option>
-                <option value="BookGenre">Book Genre</option>
-                <option value="BookPrice">Book Price</option>
-              </select>
+      <div className='w-97 bg-white rounded-md shadow-lg'>
+      <Form onSubmit={handleSubmit} className='p-6'>
+          <Form.Group>
+            <Form.Label className='block mb-1 text-base font-bold text-gray-700'>Search By</Form.Label>
+            <select
+              name="searchBy"
+              value={formData.searchBy}
+              onChange={handleChange}
+              required
+              className='block w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500'
+            >
+              <option value="">Select Search Options</option>
+              <option value="AllBooks">All Books</option>
+              <option value="BookName">Book Name</option>
+              <option value="BookAuthor">Book Author</option>
+              <option value="BookGenre">Book Genre</option>
+              <option value="BookPrice">Book Price</option>
+            </select>
+          </Form.Group>
+
+          {formData.searchBy === "BookName" && (
+            <Form.Group>
+              <Form.Label className='block mb-1 text-base font-bold text-gray-700'>Book Name</Form.Label>
+              <Form.Control 
+                type="text" 
+                placeholder="Enter Book Name" 
+                name="bookName" 
+                value={formData.bookName} 
+                onChange={handleChange} 
+                required 
+                className='block w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500' 
+              />
             </Form.Group>
+          )}
 
-            {formData.searchBy === "BookName" && (
-              <Form.Group>
-                <Form.Label className='block mb-1 text-base font-bold text-gray-700'>Book Name</Form.Label>
-                <Form.Control 
-                  type="text" 
-                  placeholder="Enter Book Name" 
-                  name="bookName" 
-                  value={formData.bookName} 
-                  onChange={handleChange} 
-                  required 
-                  className='block w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500' 
-                />
-              </Form.Group>
-            )}
-
-            {formData.searchBy === "BookAuthor" && (
+          {formData.searchBy === "BookAuthor" && (
             <Form.Group>
               <Form.Label className='block mb-1 text-base font-bold text-gray-700'>Author</Form.Label>
               <Form.Control 
@@ -109,13 +91,13 @@ function viewBook({ onClose }) {
                 className='block w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500' 
               />
             </Form.Group>
-            )}
-            {formData.searchBy === "BookGenre" && (
+          )}
+
+          {formData.searchBy === "BookGenre" && (
             <Form.Group>
               <Form.Label className='block mb-1 text-base font-bold text-gray-700'>Genre</Form.Label>
               <select 
                 name="genre" 
-                id="genre" 
                 value={formData.genre} 
                 onChange={handleChange} 
                 required 
@@ -137,40 +119,82 @@ function viewBook({ onClose }) {
                 <option value="Romance">Romance</option>
               </select>
             </Form.Group>
-            )}
-            {formData.searchBy === "BookPrice" && (
-            <Form.Group>
-              <Form.Label className='block mb-1 text-base font-bold text-gray-700'>Book Price</Form.Label>
-              <Form.Control 
-                type="text" 
-                placeholder="Enter Book Price" 
-                name="bookPrice" 
-                value={formData.bookPrice} 
-                onChange={handleChange} 
-                required 
-                className='block w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500' 
-              />
-            </Form.Group>
-            )}
+          )}
+
+          {formData.searchBy === "BookPrice" && (
+            <div>
+              <Form.Group>
+                <Form.Label className='block mb-1 text-base font-bold text-gray-700'>Minimum Price</Form.Label>
+                <Form.Control 
+                  type="text" 
+                  placeholder="Enter Minimum Price" 
+                  name="minPrice" 
+                  value={formData.minPrice} 
+                  onChange={handleChange} 
+                  required 
+                  className='block w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500' 
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label className='block mb-1 text-base font-bold text-gray-700'>Maximum Price</Form.Label>
+                <Form.Control 
+                  type="text" 
+                  placeholder="Enter Maximum Price" 
+                  name="maxPrice" 
+                  value={formData.maxPrice} 
+                  onChange={handleChange} 
+                  required 
+                  className='block w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500' 
+                />
+              </Form.Group>
+            </div>
+          )}
+
 
           <div className='mt-6'>
-            <Button variant="primary" type="submit" className='w-full font-semibold py-2 text-sm
-                 text-white bg-indigo-600 border border-transparent rounded-md
-                  hover:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo'>
+            <Button variant="primary" type="submit" className='w-full font-semibold py-2 text-sm text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo'>
               Submit
             </Button>
-            <Button variant="danger" onClick={onClose}
-              className='mt-3 w-full py-2 text-sm font-semibold 
-                  text-white border border-gray-300 rounded hover:bg-red-600 focus:outline-none
-                  focus:text-gray-500 focus:border-gray-500'
-            >
+            <Button variant="danger" onClick={onClose} className='mt-3 w-full py-2 text-sm font-semibold text-white border border-gray-300 rounded hover:bg-red-600 focus:outline-none focus:text-gray-500 focus:border-gray-500'>
               Close
             </Button>
           </div>
         </Form>
+
+        <div className="mt-6" ref={bookListRef} style={{ maxHeight: '300px', overflowY: 'auto' }}>
+          <h1>Book List</h1>
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>Book Name</th>
+                <th>Author</th>
+                <th>Genre</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>ISBN</th>
+                <th>Description</th>
+                <th>Image</th>
+              </tr>
+            </thead>
+            <tbody>
+              {books.map(book => (
+                <tr key={book._id}>
+                  <td>{book.bookName}</td>
+                  <td>{book.author}</td>
+                  <td>{book.genre}</td>
+                  <td>{book.bookPrice}</td>
+                  <td>{book.bookQuantity}</td>
+                  <td>{book.isbn}</td>
+                  <td>{book.bookDescription}</td>
+                  <td><img src={book.bookImage} alt={book.bookName} style={{ width: '100px' }} /></td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default viewBook
+export default ViewBook;
