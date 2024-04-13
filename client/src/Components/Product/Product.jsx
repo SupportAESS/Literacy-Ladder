@@ -8,6 +8,7 @@ function Product() {
   const [productsByGenre, setProductsByGenre] = useState({});
   const [hoveredProduct, setHoveredProduct] = useState(null);
   const [isHovering, setIsHovering] = useState(false);
+  const [cart, setCart] = useState([]); // State to manage the cart
   const genres = ["Fiction", "Action and Adventure", "Mystery", "Science Fiction", "Fantasy", "Horror", "Biography", "Auto-biography", "History", "Self-help", "Science", "Romance"];
 
   useEffect(() => {
@@ -42,6 +43,11 @@ function Product() {
 
   const handleLeave = () => {
     setIsHovering(false);
+  };
+
+  // Function to add a product to the cart
+  const addToCart = (product) => {
+    setCart([...cart, product]);
   };
 
   return (
@@ -93,7 +99,7 @@ function Product() {
                       <div className="absolute bottom-0 left-0 right-0 bg-white text-black p-4">
                         <p className='text-xl font-semibold'>{product.bookName}</p>
                         <p className="text-sm">{product.bookDescription}</p>
-                        <button className='bg-indigo-500 text-white text-lg px-6 py-1 rounded-xl mt-2'>Add to Cart</button>
+                        <button onClick={() => addToCart(product)} className='bg-indigo-500 text-white text-lg px-6 py-1 rounded-xl mt-2'>Add to Cart</button>
                       </div>
                     )}
                   </div>

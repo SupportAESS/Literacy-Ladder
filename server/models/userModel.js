@@ -69,4 +69,19 @@ const invoiceSchema = new mongoose.Schema({
 
 const Invoice = mongoose.model('Invoice', invoiceSchema);
 
-module.exports = { User, Admin, Book, Purchase, Review, Invoice };
+const cartSchema = new mongoose.Schema({
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User' // Reference to the user collection
+    },
+    cartItem: bookSchema,
+    quantity: {
+      type: Number,
+      default: 0 // Default quantity is 1
+    },
+    // Add other fields as needed
+});
+
+const Cart  = mongoose.model('Cart', cartSchema);
+
+module.exports = { User, Admin, Book, Purchase, Review, Invoice, Cart };
