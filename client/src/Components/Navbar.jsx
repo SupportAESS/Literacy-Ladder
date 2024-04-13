@@ -70,7 +70,7 @@ const Navbar = () => {
                   <div className="absolute top-full left-0 mt-1 bg-gray-700 text-white py-2 rounded-md text-lg font-medium z-50">
                     {isLoggedIn ? (
                       <>
-                        <Link to="/profile" className="block px-4 py-2 hover:bg-gray-600">Profile</Link>
+                        <Link to="/userProfile" className="block px-4 py-2 hover:bg-gray-600">Profile</Link>
                         <button onClick={handleLogout} className="block w-full text-left px-4 py-2 hover:bg-gray-600">Logout</button>
                       </>
                     ) : (

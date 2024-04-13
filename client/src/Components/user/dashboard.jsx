@@ -25,8 +25,8 @@ function UserProfile() {
   };
 
   return (
-    <div className="container mx-auto mt-20 flex h-full">
-      <div className="w-1/5 h-screen bg-gray-100 mr-4">
+    <div className="container mx-auto mt-20 flex bg-gray-300">
+      <div className="w-1/5 h-screen bg-gray-800 mr-4">
         <ul className="mt-4">
           <li className={`py-2 px-4 cursor-pointer ${selectedNavItem === 'orders' && 'bg-blue-500 text-white'}`} onClick={() => handleNavItemClick('orders')}>
             <Link to="#">My Orders</Link>
