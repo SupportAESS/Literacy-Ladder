@@ -41,7 +41,7 @@ const Login = () => {
             toast.success("Login successful.", { theme: 'colored' });
 
             // Redirect to dashboard page
-            history.push('/dashboard');
+            window.location.href = '/userProfile';
           } else {
             // Example: Show a success message to the user after successful signup
             toast.success("Signup successful. Please login to continue.",{

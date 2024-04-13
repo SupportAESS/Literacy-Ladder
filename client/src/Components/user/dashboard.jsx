@@ -1,25 +1,95 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom'; // Assuming you're using React Router for navigation
 
-const UserDashboard = () => {
+function UserProfile() {
+  const [user, setUser] = useState(null);
+  const [selectedNavItem, setSelectedNavItem] = useState('orders');
+
+  useEffect(() => {
+    const userData = getUserData();
+    if (userData) {
+      setUser(userData.user);
+    } else {
+      // Handle user not logged in
+      // Redirect to login page or show a message
+    }
+  }, []);
+
+  const getUserData = () => {
+    const sessionData = localStorage.getItem('session');
+    return sessionData ? JSON.parse(sessionData) : null;
+  };
+
+  const handleNavItemClick = (item) => {
+    setSelectedNavItem(item);
+  };
+
   return (
-    <div className="container">
-      <h1>User Dashboard</h1>
-      <div className="books-container">
-        {/* List of books */}
-        <div className="book">
-          <img src="book-cover.jpg" alt="Book Cover" />
-          <div className="book-details">
-            <h2>Title: Book Title</h2>
-            <p>Author: Author Name</p>
-            <p>Price: $20</p>
-            {/* Other book details */}
-            <button>Add to Cart</button>
-          </div>
+    <div className="container mx-auto mt-20 flex h-full">
+      <div className="w-1/5 h-screen bg-gray-100 mr-4">
+        <ul className="mt-4">
+          <li className={`py-2 px-4 cursor-pointer ${selectedNavItem === 'orders' && 'bg-blue-500 text-white'}`} onClick={() => handleNavItemClick('orders')}>
+            <Link to="#">My Orders</Link>
+          </li>
+          <li className={`py-2 px-4 cursor-pointer ${selectedNavItem === 'address' && 'bg-blue-500 text-white'}`} onClick={() => handleNavItemClick('address')}>
+            <Link to="#">Address</Link>
+          </li>
+          <li className={`py-2 px-4 cursor-pointer ${selectedNavItem === 'details' && 'bg-blue-500 text-white'}`} onClick={() => handleNavItemClick('details')}>
+            <Link to="#">Personal Details</Link>
+          </li>
+        </ul>
+      </div>
+      <div className="w-3/4">
+        <div>
+          <h1 className="text-2xl font-bold mb-4">User Profile</h1>
+          {user ? (
+            <div>
+              {selectedNavItem === 'orders' && (
+                <div>
+                  <h2 className="text-xl font-bold mb-2">My Orders</h2>
+                  {user.orders && user.orders.length > 0 ? (
+                    <ul>
+                      {user.orders.map(order => (
+                        <li key={order.id}>
+                          <Link to={`/orders/${order.id}`}>{order.title}</Link>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>No orders found.</p>
+                  )}
+                </div>
+              )}
+              {selectedNavItem === 'address' && (
+                <div>
+                  <h2 className="text-xl font-bold mb-2">Address</h2>
+                  {user.address ? (
+                    <div>
+                      <p>Street: {user.address.street}</p>
+                      <p>City: {user.address.city}</p>
+                      <p>Country: {user.address.country}</p>
+                    </div>
+                  ) : (
+                    <p>No address found.</p>
+                  )}
+                </div>
+              )}
+              {selectedNavItem === 'details' && (
+                <div>
+                  <h2 className="text-xl font-bold mb-2">Personal Details</h2>
+                  <p>Name: {user.fullName}</p>
+                  <p>Email: {user.email}</p>
+                  {/* Add more user details as needed */}
+                </div>
+              )}
+            </div>
+          ) : (
+            <p>Loading...</p>
+          )}
         </div>
-        {/* Repeat the book structure for each book */}
       </div>
     </div>
   );
-};
+}
 
-export default UserDashboard;
+export default UserProfile;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import logo from '../asset/logo.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,10 +9,11 @@ const Navbar = () => {
 
   useEffect(() => {
     // Check if user is logged in
-    const loggedInUser = localStorage.getItem('user');
+    const loggedInUser = localStorage.getItem('session');
+    //console.log(loggedInUser);
     if (loggedInUser) {
       setIsLoggedIn(true);
-      setUsername(JSON.parse(loggedInUser).username); // Get username from localStorage
+      setUsername(JSON.parse(loggedInUser).user.fullName); // Get username from localStorage
     } else {
       setIsLoggedIn(false);
       setUsername('');
@@ -22,9 +23,11 @@ const Navbar = () => {
   const handleLogout = () => {
     // Handle logout logic, e.g., clearing session storage or calling logout API
     // Then update isLoggedIn state and remove user data from localStorage
-    localStorage.removeItem('user');
+    localStorage.removeItem('session');
     setIsLoggedIn(false);
     setUsername('');
+    window.location.href = '/login';
+
   };
 
   const toggleNavbar = () => {
@@ -112,7 +115,7 @@ const Navbar = () => {
               <div className="absolute top-full left-0 mt-1 bg-gray-700 text-white py-2 rounded-md text-base font-medium z-50">
                 {isLoggedIn ? (
                   <>
-                    <Link to="/profile" className="block px-4 py-2 hover:bg-gray-600">Profile</Link>
+                    <Link to="/userProfile" className="block px-4 py-2 hover:bg-gray-600">Profile</Link>
                     <button onClick={handleLogout} className="block w-full text-left px-4 py-2 hover:bg-gray-600">Logout</button>
                   </>
                 ) : (
