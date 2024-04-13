@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom'; // Assuming you're using React Router for navigation
+import UserAddress from './userAddress';
 
 function UserProfile() {
   const [user, setUser] = useState(null);
@@ -17,6 +18,7 @@ function UserProfile() {
 
   const getUserData = () => {
     const sessionData = localStorage.getItem('session');
+    // console.log(sessionData);
     return sessionData ? JSON.parse(sessionData) : null;
   };
 
@@ -62,16 +64,7 @@ function UserProfile() {
               )}
               {selectedNavItem === 'address' && (
                 <div>
-                  <h2 className="text-xl font-bold mb-2">Address</h2>
-                  {user.address ? (
-                    <div>
-                      <p>Street: {user.address.street}</p>
-                      <p>City: {user.address.city}</p>
-                      <p>Country: {user.address.country}</p>
-                    </div>
-                  ) : (
-                    <p>No address found.</p>
-                  )}
+                  <UserAddress />
                 </div>
               )}
               {selectedNavItem === 'details' && (

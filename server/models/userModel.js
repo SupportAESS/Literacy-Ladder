@@ -8,6 +8,27 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
+const userAddressSchema = new mongoose.Schema({
+    // fullName: { type: String, required: true, minLength: 1, maxLength: 50 },
+    // email: { type: String, required: true, unique: true, minLength: 1, maxLength: 255 },
+    refUser: { type: mongoose.Schema.Types.ObjectId, required: true, unique: true,  ref: 'User' }, // Reference to another User schema
+    addresses: [
+        {
+            street: { type: String, required: true },
+            city: { type: String, required: true },
+            state: { type: String },
+            country: { type: String, required: true },
+            postalCode: { type: String, required: true },
+            isDefault: { type: Boolean, default: false } // Set to true for default address
+        }
+    ],
+    mobileNumber: { type: String },
+    alternativeMobileNumber: { type: String }, // Added field for alternative mobile number
+});
+
+
+const UserAddress = mongoose.model('UserAddress', userAddressSchema);
+
 const adminSchema = new mongoose.Schema({
     username: { type: String, required: true, minLength: 1, maxLength: 50 },
     email: { type: String, required: true, minLength: 1, maxLength: 255 },
@@ -84,4 +105,4 @@ const cartSchema = new mongoose.Schema({
 
 const Cart  = mongoose.model('Cart', cartSchema);
 
-module.exports = { User, Admin, Book, Purchase, Review, Invoice, Cart };
+module.exports = { User, Admin, Book, Purchase, Review, Invoice, Cart, UserAddress };

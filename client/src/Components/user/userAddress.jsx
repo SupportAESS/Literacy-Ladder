@@ -1,0 +1,154 @@
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom'; // Assuming you're using React Router for navigation
+import axios from 'axios';
+import { toast } from 'react-toastify';
+
+function AddAddressForm({ onSubmit }) {
+    const [address, setAddress] = useState({
+        refUser: '',
+        street: '',
+        city: '',
+        state: '',
+        country: '',
+        postalCode: '',
+        isDefault: false,
+        mobileNumber: '',
+        alternativeMobileNumber: ''
+    });
+
+    const handleChange = (e) => {
+        setAddress({ ...address, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
+        const sessionData = localStorage.getItem('session');
+        const data = JSON.parse(sessionData);
+        address.refUser = data.user._id;;
+
+        e.preventDefault();
+        onSubmit(address);
+        setAddress({
+            refUser: '',
+            street: '',
+            city: '',
+            state: '',
+            country: '',
+            postalCode: '',
+            isDefault: false,
+            mobileNumber: '',
+            alternativeMobileNumber: ''
+        });
+        console.log(address);
+        try {
+            const response = axios.post('http://localhost:2211/userAddressSave', address);
+            if (response.status === 200) {
+                toast.success("Success Address Added", {
+                    theme: 'colored'
+                });
+            }
+
+        } catch (e) {
+            toast.error(e, {
+                theme: 'colored'
+            })
+        }
+    };
+
+    return (
+        <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto">
+            <div className="mb-4">
+                <label htmlFor="street" className="block text-gray-700">Street:</label>
+                <input type="text" id="street" name="street" value={address.street} onChange={handleChange} required className="mt-1 p-2 border rounded-md w-full" />
+            </div>
+            <div className="mb-4">
+                <label htmlFor="city" className="block text-gray-700">City:</label>
+                <input type="text" id="city" name="city" value={address.city} onChange={handleChange} required className="mt-1 p-2 border rounded-md w-full" />
+            </div>
+            <div className="mb-4">
+                <label htmlFor="state" className="block text-gray-700">State:</label>
+                <input type="text" id="state" name="state" value={address.state} onChange={handleChange} required className="mt-1 p-2 border rounded-md w-full" />
+            </div>
+            <div className="mb-4">
+                <label htmlFor="country" className="block text-gray-700">Country:</label>
+                <input type="text" id="country" name="country" value={address.country} onChange={handleChange} required className="mt-1 p-2 border rounded-md w-full" />
+            </div>
+            <div className="mb-4">
+                <label htmlFor="postalCode" className="block text-gray-700">Postal Code:</label>
+                <input type="number" id="postalCode" name="postalCode" value={address.postalCode} onChange={handleChange} required className="mt-1 p-2 border rounded-md w-full" />
+            </div>
+            <div className="mb-4">
+                <label htmlFor="mobileNumber" className="block text-gray-700">Mobile Number:</label>
+                <input type="number" id="mobileNumber" name="mobileNumber" value={address.mobileNumber} onChange={handleChange} required className="mt-1 p-2 border rounded-md w-full" />
+            </div>
+            <div className="mb-4">
+                <label htmlFor="alternativeMobileNumber" className="block text-gray-700">Alternative Mobile Number <span className="text-red-500">*</span>:</label>
+                <input type="number" id="alternativeMobileNumber" name="alternativeMobileNumber" value={address.alternativeMobileNumber} onChange={handleChange} className="mt-1 p-2 border rounded-md w-full" />
+                <p className="text-sm text-gray-500">*Optional</p>
+            </div>
+            <div className="mb-4">
+                <label htmlFor="isDefault" className="flex items-center">
+                    <input type="checkbox" id="isDefault" name="isDefault" checked={address.isDefault} onChange={() => setAddress({ ...address, isDefault: !address.isDefault })} className="mr-2" />
+                    <span className="text-gray-700">Default Address</span>
+                </label>
+            </div>
+            <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Add Address</button>
+            <p className="mt-2 text-sm text-gray-500">Note: Fields marked with <span className="text-red-500">*</span> are optional.</p>
+        </form>
+
+
+    );
+}
+
+function UserAddress() {
+    const [user, setUser] = useState(null);
+    const [addresses, setAddresses] = useState([]);
+    const [showForm, setShowForm] = useState(false); // State to toggle form visibility
+
+    useEffect(() => {
+        const userData = getUserData();
+        if (userData) {
+            setUser(userData.user);
+            if (userData.user.addresses) {
+                setAddresses(userData.user.addresses);
+            } else {
+                setAddresses([]); // Initialize addresses to an empty array if not available
+            }
+        } else {
+            // Handle user not logged in
+            // Redirect to login page or show a message
+        }
+    }, []);
+
+    const getUserData = () => {
+        const sessionData = localStorage.getItem('session');
+        return sessionData ? JSON.parse(sessionData) : null;
+    };
+
+    const addAddress = (newAddress) => {
+        // Assuming you have a function to post the new address to the backend
+        // Replace this with your actual API call to post the data to the server
+        // Also, assuming the backend returns the updated user data with the new address included
+        // Here, we just update the state with the new address
+        setAddresses([...addresses, newAddress]);
+        setShowForm(false); // Close the form after adding the address
+    };
+
+    return (
+        <div>
+            <h2 className="text-xl font-bold mb-2">Addresses</h2>
+            <div>
+                <button onClick={() => setShowForm(!showForm)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Add Address</button>
+            </div>
+            {showForm && <AddAddressForm onSubmit={addAddress} />}
+            <div>
+                {addresses && addresses.map((address, index) => (
+                    <div key={index}>
+                        <p>{address.street}, {address.city}, {address.country}</p>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+}
+
+export default UserAddress;

@@ -11,6 +11,7 @@ const getSignUpRoute = require('./routes/admin/signup.route.js');
 const viewBookRoute = require('./routes/viewBook.route.js');
 const userLoginRoute = require('./routes/user/user.login.route.js');
 const userSignupRounte = require('./routes/user/user.signup.route.js');
+const userAddressSaveRoute = require('./routes/user/user.address.save.route.js');
 const cors = require('cors');
 
 
@@ -64,6 +65,7 @@ server.use('/', viewBookRoute);
 //user
 server.use('/', userLoginRoute);
 server.use('/', userSignupRounte);
+server.use('/', userAddressSaveRoute);
 
 // server.post('/addBook', (req, res)=>{
 //   console.log(req.body)
