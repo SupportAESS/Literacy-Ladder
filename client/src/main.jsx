@@ -8,6 +8,7 @@ import Home from './Components/Home'
 import About from './Components/About'
 import Login from './Components/user/Login'
 import Cart from './Components/Cart'
+import UserDashboard from './Components/user/dashboard'
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<Layout/>}>
@@ -15,6 +16,7 @@ const router = createBrowserRouter(
       <Route path='about' element={<About />}/>
       <Route path='login' element={<Login />}/>
       <Route path='cart' element={<Cart />}/>
+      <Route path='UserDashboard' element={<UserDashboard/>}/>
     </Route>
   )
 )
