@@ -47,9 +47,9 @@ function Product() {
   return (
     <>
       {Object.keys(productsByGenre).map(genre => (
-        <div key={genre}>
-          <h2 className='text-4xl font-bold'>{genre}</h2>
-          <div className='w-11/12 mx-auto'>
+        <div key={genre} className=''>
+          <center><h2 className='text-4xl font-bold px-10 py-1 mt-6'>{genre}</h2></center>
+          <div className='w-11/12 mx-auto bg-gray-800 bg-opacity-75 rounded-lg px-8 py-1'>
             <div className='mt-10 mb-10'>
               <Slider
                 dots

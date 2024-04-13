@@ -17,7 +17,7 @@ const adminSchema = new mongoose.Schema({
 const Admin = mongoose.model('Admin', userSchema);
 
 const bookSchema = new mongoose.Schema({
-    bookName: { type: String, required: true, minLength: 1, maxLength: 255 },
+    bookName: { type: String, required: true, unique: true, minLength: 1, maxLength: 255 },
     author: { type: String, required: true, minLength: 1, maxLength: 255 },
     genre: { type: String, required: true, enum: ["Fiction", "Action and Adventure", "Mystery", "Science Fiction", "Fantasy", "Horror", "Biography", "Auto-biography", "History", "Self-help", "Science", "Romance"] },
     bookPrice: { type: Number, required: true },
@@ -25,6 +25,7 @@ const bookSchema = new mongoose.Schema({
     isbn: {
         type: String,
         required: true,
+        unique: true,
         validate: {
             validator: function(value) {
                 // ISBN Validation: ISBN must be a 10 or 13 digit number
