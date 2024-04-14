@@ -12,6 +12,7 @@ const viewBookRoute = require('./routes/viewBook.route.js');
 const userLoginRoute = require('./routes/user/user.login.route.js');
 const userSignupRounte = require('./routes/user/user.signup.route.js');
 const userAddressSaveRoute = require('./routes/user/user.address.save.route.js');
+const cartRoute = require('./routes/Cart/addToCart.route.js');
 const cors = require('cors');
 
 
@@ -60,7 +61,16 @@ server.use('/', updateBookRoute);
 
 //UpdateBook
 server.use('/', viewBookRoute);
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Cart
 
+//Add Book To Cart
+server.use('/', cartRoute);
+
+//Get Cart Details
+server.use('/', cartRoute);
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //user
 server.use('/', userLoginRoute);

@@ -97,12 +97,16 @@ const cartSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User' // Reference to the user collection
     },
-    cartItem: [bookSchema],
-    quantity: {
-      type: Number,
-      default: 1 // Default quantity is 1
-    },
-    // Add other fields as needed
+    cartItems:[{
+        item: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Book'
+        },
+        quantity: {
+          type: Number,
+          default: 1 // Default quantity is 1
+        }
+    }]
 });
 
 const Cart  = mongoose.model('Cart', cartSchema);

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Slider from "react-slick";
 import axios from 'axios';
+import { toast } from 'react-toastify';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
@@ -59,7 +60,7 @@ function Product() {
         let existingData = parsedData.cartItem;
         console.log(existingData);
         for(let entry of existingData){
-          if(entry.item === product._id){
+          if(entry.item._id === product._id){
             entry.quantity += 1;
             found = true;
             break;
@@ -68,33 +69,56 @@ function Product() {
 
         if(!found){
           existingData.push({
-            item:product._id,
+            item:product,
             quantity: 1
           });
         }
         parsedData.cartItem = existingData;
         localStorage.setItem('userData',JSON.stringify(parsedData));
+
+        console.log(localStorage.getItem('userData'));
         }
         else{
           const data = {
             cartItem: [{
-              item: product._id,
+              item: product,
               quantity: 1
             }]
           };
           localStorage.setItem('userData', JSON.stringify(data));
-          // console.log(localStorage.getItem('userData'));
+          console.log(localStorage.getItem('userData'));
+        }
+      }
+      else{
+        const id = JSON.parse(session).user._id;
+        const data = {
+          userId:id,
+          cartItem:{
+            item: product._id,
+            quantity: 1
+          }
+        };
+        try {
+          const response = await axios.post("http://localhost:2211/addToCart", data);
+          if (response.status === 200){
+            toast.success("Added Item to cart",{
+              theme:'colored'
+            });
+          }
+          else{
+            toast.error("Failed due to Server error",{
+              theme: 'colored'
+            })
+          }
+        }
+        catch (error) {
+          console.error('Error submitting form:', error);
+          // Handle any errors that occur during the form submission process
+          throw error;
         }
       }
     }
-  //   // try {
-  //   //   const response = await axios.post("http://localhost:2211/addToCart", data);
-  //   // }
-  //   // catch (error) {
-  //   //   console.error('Error submitting form:', error);
-  //   //   // Handle any errors that occur during the form submission process
-  //   //   throw error;
-  //   // }
+    
   // };
 
   // // useEffect(()=>{

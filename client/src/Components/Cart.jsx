@@ -1,36 +1,69 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 
 const Cart = () => {
+  const [cartItems, setCartItems] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const session = localStorage.getItem("session");
+      let items;
+
+      if (session !== null) {
+        // If session is set, fetch data from the backend API
+        try {
+          const userId = JSON.parse(session).user._id;
+          console.log(userId);
+          const response = await axios.get('http://localhost:2211/getCartDetails',{
+            params: userId
+          });
+          // items = response.data;
+        } catch (error) {
+          console.error("Error fetching cart items: ", error);
+          // Handle error
+        }
+      } else {
+        // If session is not set, use data from localStorage
+        items = JSON.parse(localStorage.getItem("userData"));
+        setCartItems(JSON.parse(JSON.stringify(items.cartItem)));
+      }
+      //console.log(items);
+      
+    };
+
+    fetchData();
+  }, []);
+
+  let total = 0;
+
   return (
     <div className="min-h-screen max-w-4xl mx-auto px-4 py-8">
       <h2 className="text-3xl font-semibold mb-4">Your Cart</h2>
       <div className="bg-white shadow-md rounded-md overflow-hidden">
-        {/* Cart items */}
         <div className="divide-y divide-gray-200">
-          {/* Single cart item */}
-          <div className="flex items-center justify-between p-4">
-            <div className="flex items-center space-x-4">
-              <img src="https://via.placeholder.com/150" alt="Book cover" className="w-16 h-24" />
+          {cartItems.map((item, index) => (
+            // No semicolon here and wrap the expression inside curly braces
+            total = total + (item.quantity * item.item.bookPrice),
+            <div key={index} className="flex items-center justify-between p-4">
+              <div className="flex items-center space-x-4">
+                <img src={item.item.bookImage} alt="Book cover" className="w-16 h-24" />
+                <div>
+                  {/* Assuming you have an endpoint to fetch book details */}
+                  <h3 className="text-lg font-semibold">{item.item.bookName}</h3>
+                  <p className="text-gray-500">{item.quantity}</p>
+                  <p className="text-gray-600">Price: ₹{item.item.bookPrice}</p>
+                </div>
+              </div>
               <div>
-                <h3 className="text-lg font-semibold">Book Title</h3>
-                <p className="text-gray-500">Author Name</p>
-                <p className="text-gray-600">Price: ₹10</p>
+                <button className="text-red-500">Remove</button>
               </div>
             </div>
-            <div>
-              <button className="text-red-500">Remove</button>
-            </div>
-          </div>
-          {/* End of single cart item */}
-          {/* Repeat this structure for each item in the cart */}
+          ))}
         </div>
-        {/* End of cart items */}
-        {/* Cart summary */}
         <div className="p-4 flex items-center justify-between bg-gray-100">
-          <p className="text-lg font-semibold">Total: ₹50</p>
+          <p className="text-lg font-semibold">Total: ₹{total}</p>
           <button className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Checkout</button>
         </div>
-        {/* End of cart summary */}
       </div>
     </div>
   );

@@ -40,7 +40,7 @@ function AddAddressForm({ onSubmit }) {
         });
         console.log(address);
         try {
-            const response = axios.post('http://localhost:2211/userAddressSave', address);
+            const response = await axios.post('http://localhost:2211/userAddressSave', address);
             if (response.status === 200) {
                 toast.success("Success Address Added", {
                     theme: 'colored'
@@ -157,10 +157,14 @@ function UserAddress() {
                 const updatedAddresses = addresses.filter(address => address._id !== addressId);
                 setAddresses(updatedAddresses);
                 // Optionally, display a success message to the user
-                console.log('Address deleted successfully');
+                toast.success('Address deleted successfully',{
+                    theme:'colored'
+                });
             } else {
                 // Handle errors or display an error message
-                console.error('Failed to delete address:', response.data);
+                toast.error('Failed to delete address:', {
+                    theme:'colored'
+                });
                 // Optionally, display an error message to the user
             }
         } catch (error) {

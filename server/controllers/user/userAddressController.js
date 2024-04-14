@@ -45,10 +45,10 @@ const userAddressSave = async (req, res) => {
     // Save the user address
     await userAddress.save();
 
-    res.status(200).send("Address added successfully");
+    return res.status(200).send("Address added successfully");
   } catch (error) {
     console.error(error);
-    res.status(500).send('Internal server error');
+    return res.status(500).send('Internal server error');
   }
 };
 
