@@ -23,7 +23,7 @@ function AddAddressForm({ onSubmit }) {
     const handleSubmit = async (e) => {
         const sessionData = localStorage.getItem('session');
         const data = JSON.parse(sessionData);
-        address.refUser = data.user._id;;
+        address.refUser = data.user._id;
 
         e.preventDefault();
         onSubmit(address);
@@ -103,26 +103,51 @@ function UserAddress() {
     const [user, setUser] = useState(null);
     const [addresses, setAddresses] = useState([]);
     const [showForm, setShowForm] = useState(false); // State to toggle form visibility
-
     useEffect(() => {
         const userData = getUserData();
-        if (userData) {
-            setUser(userData.user);
-            if (userData.user.addresses) {
-                setAddresses(userData.user.addresses);
+        userData.then(value => {
+            console.log(value.addresses); // Output: "8435963744"
+            if (value.addresses) {
+                setUser(value.addresses);
+                if (value.addresses) {
+                    setAddresses(value.addresses);
+                } else {
+                    setAddresses([]);
+                }
             } else {
-                setAddresses([]); // Initialize addresses to an empty array if not available
+                // Handle user not logged in
+                // Redirect to login page or show a message
             }
-        } else {
-            // Handle user not logged in
-            // Redirect to login page or show a message
-        }
+        }).catch(error => {
+            console.error(error);
+        });
+        console.log(userData);
     }, []);
 
-    const getUserData = () => {
+    const getUserData = async () => {
         const sessionData = localStorage.getItem('session');
-        return sessionData ? JSON.parse(sessionData) : null;
+        const s = JSON.parse(sessionData);
+        const refUser = s.user._id;
+
+        try {
+            const response = await axios.get(`http://localhost:2211/userAddressGet?userId=${refUser}`);
+
+            if (response.data && response.data.ok) {
+                return response.data.address; // Return the actual response data
+            }
+        } catch (e) {
+            console.log(e);
+        }
+
+        return null; // Return null if there's an error or no session data
     };
+
+    const deleteAddress = (index) => {
+        const updatedAddresses = [...addresses];
+        updatedAddresses.splice(index, 1);
+        setAddresses(updatedAddresses);
+    };
+    
 
     const addAddress = (newAddress) => {
         // Assuming you have a function to post the new address to the backend
@@ -134,16 +159,28 @@ function UserAddress() {
     };
 
     return (
-        <div>
-            <h2 className="text-xl font-bold mb-2">Addresses</h2>
-            <div>
-                <button onClick={() => setShowForm(!showForm)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Add Address</button>
+        <div className="bg-gray-100 p-6 rounded-lg">
+            <h2 className="text-xl font-bold mb-4">Addresses</h2>
+            <div className="mb-4">
+                <button onClick={() => setShowForm(!showForm)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    {showForm ? 'Hide Form' : 'Add Address'}
+                </button>
             </div>
             {showForm && <AddAddressForm onSubmit={addAddress} />}
             <div>
                 {addresses && addresses.map((address, index) => (
-                    <div key={index}>
-                        <p>{address.street}, {address.city}, {address.country}</p>
+                    <div key={index} className="border border-gray-300 p-4 my-4 rounded-lg">
+                        <p><strong className="text-blue-700">Street:</strong> {address.street}</p>
+                        <p><strong className="text-blue-700">City:</strong> {address.city}</p>
+                        <p><strong className="text-blue-700">State:</strong> {address.state}</p>
+                        <p><strong className="text-blue-700">Country:</strong> {address.country}</p>
+                        <p><strong className="text-blue-700">Postal Code:</strong> {address.postalCode}</p>
+                        <p><strong className="text-blue-700">Is Default:</strong> {address.isDefault ? 'Yes' : 'No'}</p>
+                        <p><strong className="text-blue-700">Mobile Number:</strong> {address.mobileNumber}</p>
+                        <p><strong className="text-blue-700">Alternative Mobile Number:</strong> {address.alternativeMobileNumber}</p>
+                        <button onClick={() => deleteAddress(index)} className="mt-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                            Delete
+                        </button>
                     </div>
                 ))}
             </div>

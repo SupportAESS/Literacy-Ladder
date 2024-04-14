@@ -28,7 +28,9 @@ const userAddressSave = async (req, res) => {
       state: req.body.state,
       country: req.body.country,
       postalCode: req.body.postalCode,
-      isDefault: req.body.isDefault
+      isDefault: req.body.isDefault,
+      mobileNumber: req.body.mobileNumber,
+      alternativeMobileNumber: req.body.alternativeMobileNumber
     };
 
     // Ensure only one address is marked as default
@@ -40,10 +42,6 @@ const userAddressSave = async (req, res) => {
 
     userAddress.addresses.push(newAddress);
 
-    // Set the latest mobile number and alternative mobile number
-    userAddress.mobileNumber = req.body.mobileNumber;
-    userAddress.alternativeMobileNumber = req.body.alternativeMobileNumber;
-
     // Save the user address
     await userAddress.save();
 
@@ -54,12 +52,41 @@ const userAddressSave = async (req, res) => {
   }
 };
 
-const userAddressGet = async (req, res) =>{
-    try{
+const userAddressGet = async (req, res) => {
+  try {
+    // Assuming you're using some kind of database or external service to fetch the user's address based on userId
+    const userId = req.query.userId; // Extract userId from query parameters
+    const userAddress = await fetchUserAddress(userId); // Fetch user address data based on userId
 
-    }catch(e){
-
+    // Assuming fetchUserAddress returns an object with the user's address data
+    if (userAddress) {
+      // If user address data is found, send it back in the response
+      res.status(200).json({ ok: true, address: userAddress });
+    } else {
+      // If user address data is not found, send a 404 Not Found response
+      res.status(404).json({ ok: false, error: 'User address not found' });
     }
+  } catch (e) {
+    // Handle any errors that occur during the process
+    console.error('Error fetching user address:', e);
+    res.status(500).json({ ok: false, error: 'Internal server error' });
+  }
 };
+
+// Example function to fetch user address data based on userId
+const fetchUserAddress = async (userId) => {
+  try {
+    // Query the UserAddress model to find the user address data by userId
+    const userAddressData = await UserAddress.findOne({ refUser: userId });
+
+    // Return the user address data if found
+    return userAddressData;
+  } catch (error) {
+    // Handle any errors that occur during the database query
+    console.error('Error fetching user address:', error);
+    throw error; // Rethrow the error to be caught by the caller
+  }
+};
+
 
 module.exports = { userAddressSave, userAddressGet };

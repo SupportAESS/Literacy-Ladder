@@ -19,11 +19,13 @@ const userAddressSchema = new mongoose.Schema({
             state: { type: String },
             country: { type: String, required: true },
             postalCode: { type: String, required: true },
-            isDefault: { type: Boolean, default: false } // Set to true for default address
+            isDefault: { type: Boolean, default: false }, // Set to true for default address
+            mobileNumber: { type: String },
+            alternativeMobileNumber: { type: String } // Added field for alternative mobile number
         }
     ],
-    mobileNumber: { type: String },
-    alternativeMobileNumber: { type: String }, // Added field for alternative mobile number
+    // mobileNumber: { type: String },
+    // alternativeMobileNumber: { type: String }, // Added field for alternative mobile number
 });
 
 
