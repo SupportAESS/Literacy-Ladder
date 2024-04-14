@@ -126,8 +126,9 @@ function UserAddress() {
 
     const getUserData = async () => {
         const sessionData = localStorage.getItem('session');
-        const s = JSON.parse(sessionData);
-        const refUser = s.user._id;
+        console.log(sessionData);
+        const id = JSON.parse(sessionData);
+        const refUser = id.user._id;
 
         try {
             const response = await axios.get(`http://localhost:2211/userAddressGet?userId=${refUser}`);

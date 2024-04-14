@@ -12,6 +12,7 @@ import Login from './Components/user/Login';
 import Cart from './Components/Cart';
 import UserProfile from './Components/user/dashboard';
 import ProtectedRoute from './ProtectedRoute'; // Import ProtectedRoute
+import Checkout from './Components/Order/CheckOut';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -21,6 +22,7 @@ const router = createBrowserRouter(
       <Route path='login' element={<Login />}/>
       <Route path='cart' element={<Cart />}/>
       <Route path='userProfile' element={<ProtectedRoute Component={UserProfile} />}/> {/*Use ProtectedRoute for userProfile*/}
+      <Route path='checkOut' element={<Checkout />}/>
     </Route>
   )
 );
