@@ -88,5 +88,29 @@ const fetchUserAddress = async (userId) => {
   }
 };
 
+const deleteAddress = async (req, res) => {
+  try {
+    // Extract the address ID from the request parameters
+    const addressId = req.body.addressId;
+    // console.log(req.body.addressId);
+    // Check if the address exists
+    const address = await UserAddress.findOne({ 'addresses._id': addressId });
+    if (!address) {
+      return res.status(404).json({ error: 'Address not found' });
+    }
 
-module.exports = { userAddressSave, userAddressGet };
+    // Delete the address from the database
+    await UserAddress.updateOne(
+      { 'addresses._id': addressId },
+      { $pull: { addresses: { _id: addressId } } }
+    );
+
+    res.status(200).json({ message: 'Address deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting address:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
+module.exports = { userAddressSave, userAddressGet, deleteAddress };

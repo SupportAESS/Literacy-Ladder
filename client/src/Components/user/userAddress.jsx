@@ -142,11 +142,33 @@ function UserAddress() {
         return null; // Return null if there's an error or no session data
     };
 
-    const deleteAddress = (index) => {
-        const updatedAddresses = [...addresses];
-        updatedAddresses.splice(index, 1);
-        setAddresses(updatedAddresses);
+    const deleteAddress = async (addressId) => {
+        console.log(addressId);
+        const deleteAddress = {
+            "addressId": addressId
+        }
+        try {
+            const response = await axios.delete(`http://localhost:2211/deleteAddress/`,{
+                data: deleteAddress
+              });
+            if (response.status === 200) {
+                // Address deleted successfully from the server
+                // Remove the address from the state
+                const updatedAddresses = addresses.filter(address => address._id !== addressId);
+                setAddresses(updatedAddresses);
+                // Optionally, display a success message to the user
+                console.log('Address deleted successfully');
+            } else {
+                // Handle errors or display an error message
+                console.error('Failed to delete address:', response.data);
+                // Optionally, display an error message to the user
+            }
+        } catch (error) {
+            console.error('Error deleting address:', error);
+            // Handle errors or display an error message
+        }
     };
+    
     
 
     const addAddress = (newAddress) => {
@@ -178,7 +200,7 @@ function UserAddress() {
                         <p><strong className="text-blue-700">Is Default:</strong> {address.isDefault ? 'Yes' : 'No'}</p>
                         <p><strong className="text-blue-700">Mobile Number:</strong> {address.mobileNumber}</p>
                         <p><strong className="text-blue-700">Alternative Mobile Number:</strong> {address.alternativeMobileNumber}</p>
-                        <button onClick={() => deleteAddress(index)} className="mt-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                        <button onClick={() => deleteAddress(address._id)} className="mt-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                             Delete
                         </button>
                     </div>
