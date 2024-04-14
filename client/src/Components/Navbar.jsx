@@ -67,7 +67,7 @@ const Navbar = () => {
                   Account {isLoggedIn && <span className="ml-1 text-gray-400 text-sm">(Logged in as {username})</span>}
                 </button>
                 {isOpen && (
-                  <div className="absolute top-full left-0 mt-1 bg-gray-700 text-white py-2 rounded-md text-lg font-medium z-50">
+                  <div className="absolute top-full left-0 mt-0 bg-gray-700 text-white py-2 rounded-md text-lg font-medium z-50">
                     {isLoggedIn ? (
                       <>
                         <Link to="/userProfile" className="block px-4 py-2 hover:bg-gray-600">Profile</Link>

@@ -6,7 +6,8 @@ const Checkout = () => {
         name: '',
         email: '',
         phone: '',
-        selectedAddress: null, // Track the selected address
+        selectedAddress: null,
+        selectedPaymentMethod: '', // Track the selected payment method
         cartItems: [],
         addresses: [],
     });
@@ -27,7 +28,7 @@ const Checkout = () => {
                             name: sessionData.user.fullName,
                             email: sessionData.user.email,
                             phone: sessionData.user.mobileNumber,
-                            selectedAddress: addresses.length > 0 ? addresses[0]._id : null, // Set the default selected address
+                            selectedAddress: addresses.length > 0 ? addresses[0]._id : null,
                         }));
                     }
 
@@ -54,8 +55,41 @@ const Checkout = () => {
         }));
     };
 
+    // Handle payment method selection
+    const handlePaymentMethodSelection = (method) => {
+        setFormData(prevFormData => ({
+            ...prevFormData,
+            selectedPaymentMethod: method,
+        }));
+    };
+
+    // Handle order confirmation and payment
+    const handleConfirmOrder = async () => {
+        try {
+            // Make a request to the server to process the order and initiate the payment
+            const response = await axios.post('http://localhost:2211/confirmOrder', {
+                userId: formData.userId,
+                addressId: formData.selectedAddress,
+                paymentMethod: formData.selectedPaymentMethod,
+                cartItems: formData.cartItems,
+            });
+            if (response.status === 200) {
+                // Order successfully confirmed and payment initiated
+                // Optionally, display a success message to the user
+                console.log('Order confirmed and payment initiated');
+            } else {
+                // Handle errors or display an error message
+                console.error('Failed to confirm order:', response.data);
+                // Optionally, display an error message to the user
+            }
+        } catch (error) {
+            console.error('Error confirming order:', error);
+            // Handle errors or display an error message
+        }
+    };
+
     return (
-        <div className="max-w-md mx-auto p-4 mt-16 min-h-screen">
+        <div className="max-w-md mx-auto p-4 mt-16 min-h-screen bg-gray-100 p-6 rounded-lg">
             <h2 className="text-xl font-semibold mb-4">Checkout</h2>
             <div className="mb-8">
                 <h3 className="text-lg font-semibold mb-2">Select Address</h3>
@@ -91,6 +125,65 @@ const Checkout = () => {
 
             <div className="mb-8">
                 <h3 className="text-lg font-semibold mb-2">Payment Method Selection</h3>
+                <div className="flex items-center mb-4">
+                    <input
+                        type="radio"
+                        id="cashOnDelivery"
+                        name="paymentMethod"
+                        value="cashOnDelivery"
+                        checked={formData.selectedPaymentMethod === 'cashOnDelivery'}
+                        onChange={() => handlePaymentMethodSelection('cashOnDelivery')}
+                        className="form-radio h-5 w-5 text-blue-500 mr-2"
+                    />
+                    <label htmlFor="cashOnDelivery" className="font-semibold cursor-pointer">Cash on Delivery</label>
+                </div>
+                <div className="flex items-center mb-4">
+                    <input
+                        type="radio"
+                        id="debitCreditCard"
+                        name="paymentMethod"
+                        value="debitCreditCard"
+                        checked={formData.selectedPaymentMethod === 'debitCreditCard'}
+                        onChange={() => handlePaymentMethodSelection('debitCreditCard')}
+                        className="form-radio h-5 w-5 text-blue-500 mr-2"
+                    />
+                    <label htmlFor="debitCreditCard" className="font-semibold cursor-pointer">Debit Card / Credit Card</label>
+                </div>
+                <div className="flex items-center mb-4">
+                    <input
+                        type="radio"
+                        id="upi"
+                        name="paymentMethod"
+                        value="upi"
+                        checked={formData.selectedPaymentMethod === 'upi'}
+                        onChange={() => handlePaymentMethodSelection('upi')}
+                        className="form-radio h-5 w-5 text-blue-500 mr-2"
+                    />
+                    <label htmlFor="upi" className="font-semibold cursor-pointer">UPI</label>
+                </div>
+                <div className="flex items-center mb-4">
+                    <input
+                        type="radio"
+                        id="netBanking"
+                        name="paymentMethod"
+                        value="netBanking"
+                        checked={formData.selectedPaymentMethod === 'netBanking'}
+                        onChange={() => handlePaymentMethodSelection('netBanking')}
+                        className="form-radio h-5 w-5 text-blue-500 mr-2"
+                    />
+                    <label htmlFor="netBanking" className="font-semibold cursor-pointer">Net Banking</label>
+                </div>
+                {/* Add other payment methods similarly */}
+            </div>
+
+            {/* Button to confirm order */}
+            <div className="text-center">
+                <button
+                    onClick={handleConfirmOrder}
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
+                >
+                    Confirm Order & Make Payment
+                </button>
             </div>
         </div>
     );
