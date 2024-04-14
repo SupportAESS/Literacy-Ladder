@@ -8,7 +8,8 @@ function Product() {
   const [productsByGenre, setProductsByGenre] = useState({});
   const [hoveredProduct, setHoveredProduct] = useState(null);
   const [isHovering, setIsHovering] = useState(false);
-  const [cart, setCart] = useState([]); // State to manage the cart
+  //const [cart, setCart] = useState([]); // State to manage the cart
+
   const genres = ["Fiction", "Action and Adventure", "Mystery", "Science Fiction", "Fantasy", "Horror", "Biography", "Auto-biography", "History", "Self-help", "Science", "Romance"];
 
   useEffect(() => {
@@ -45,10 +46,79 @@ function Product() {
     setIsHovering(false);
   };
 
-  // Function to add a product to the cart
-  const addToCart = (product) => {
-    setCart([...cart, product]);
-  };
+  const addToCart = async (product) => {
+  //   console.log(product);
+    const session = localStorage.getItem("session");
+    const data = {
+      cartItem: [{
+        item: product._id,
+        quantity: 1
+      }]
+    };
+    // localStorage.setItem('userData', JSON.stringify(data));
+    if (session === null) {
+      // Step 1: Retrieve existing data from local storage
+      const existingDataString = localStorage.getItem('userData');
+      console.log(existingDataString);
+      // Step 2: Update or append new data
+      // Check if the product already exists in the data
+      let existingData = [];
+      if (existingDataString !== null) {
+        existingData = JSON.parse(existingDataString).cartItem;
+        console.log(existingData);
+      //   let existingProductIndex = -1;
+      //   for (let i = 0; i < existingData.length; i++) {
+      //     if (existingData[i].item === product._id) {
+      //       existingProductIndex = i;
+      //       break;
+      //     }
+      //   }
+      //   if (existingProductIndex !== -1) {
+      //     // If the product already exists, increase its quantity
+      //     existingData[existingProductIndex].quantity++;
+      //   } else {
+      //     const newData  = {
+      //       cartItem:{
+      //         item: product._id,
+      //         quantity: 1
+      //       }
+      //     }
+      //     // If the product doesn't exist, push a new item
+      //     existingData.push(data);
+      //   }
+      //   // Step 3: Store the updated data back into local storage
+      //   localStorage.setItem('userData', JSON.stringify(existingData));
+      }
+      else{
+        localStorage.setItem('userData', JSON.stringify(data));
+      }
+      // console.log(localStorage);
+    }
+  }
+
+        
+  //       
+  //     }
+  //     else{
+  //       localStorage.setItem('userData', JSON.stringify(data));
+  //     }
+  //     console.log(localStorage);
+  //   }
+  //   // try {
+  //   //   const response = await axios.post("http://localhost:2211/addToCart", data);
+  //   // }
+  //   // catch (error) {
+  //   //   console.error('Error submitting form:', error);
+  //   //   // Handle any errors that occur during the form submission process
+  //   //   throw error;
+  //   // }
+  // };
+
+  // // useEffect(()=>{
+  // //   console.log(formData);
+  // // },[formData]);
+
+
 
   return (
     <>

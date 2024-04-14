@@ -97,10 +97,10 @@ const cartSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User' // Reference to the user collection
     },
-    cartItem: bookSchema,
+    cartItem: [bookSchema],
     quantity: {
       type: Number,
-      default: 0 // Default quantity is 1
+      default: 1 // Default quantity is 1
     },
     // Add other fields as needed
 });

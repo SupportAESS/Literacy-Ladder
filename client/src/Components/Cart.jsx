@@ -2,7 +2,7 @@ import React from 'react';
 
 const Cart = () => {
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="min-h-screen max-w-4xl mx-auto px-4 py-8">
       <h2 className="text-3xl font-semibold mb-4">Your Cart</h2>
       <div className="bg-white shadow-md rounded-md overflow-hidden">
         {/* Cart items */}
