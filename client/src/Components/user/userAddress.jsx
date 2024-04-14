@@ -55,46 +55,62 @@ function AddAddressForm({ onSubmit }) {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto">
-            <div className="mb-4">
-                <label htmlFor="street" className="block text-gray-700">Street:</label>
-                <input type="text" id="street" name="street" value={address.street} onChange={handleChange} required className="mt-1 p-2 border rounded-md w-full" />
+        <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div className="grid grid-cols-2 gap-4">
+            <div className="flex flex-col">
+                <label htmlFor="street" className="text-gray-700 font-bold mb-1">
+                    <span className="text-red-500">*</span> Street:
+                </label>
+                <input type="text" id="street" name="street" value={address.street} onChange={handleChange} required className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500" />
             </div>
-            <div className="mb-4">
-                <label htmlFor="city" className="block text-gray-700">City:</label>
-                <input type="text" id="city" name="city" value={address.city} onChange={handleChange} required className="mt-1 p-2 border rounded-md w-full" />
+            <div className="flex flex-col">
+                <label htmlFor="city" className="text-gray-700 font-bold mb-1">
+                    <span className="text-red-500">*</span> City:
+                </label>
+                <input type="text" id="city" name="city" value={address.city} onChange={handleChange} required className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500" />
             </div>
-            <div className="mb-4">
-                <label htmlFor="state" className="block text-gray-700">State:</label>
-                <input type="text" id="state" name="state" value={address.state} onChange={handleChange} required className="mt-1 p-2 border rounded-md w-full" />
+            <div className="flex flex-col">
+                <label htmlFor="state" className="text-gray-700 font-bold mb-1">
+                    <span className="text-red-500">*</span> State:
+                </label>
+                <input type="text" id="state" name="state" value={address.state} onChange={handleChange} required className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500" />
             </div>
-            <div className="mb-4">
-                <label htmlFor="country" className="block text-gray-700">Country:</label>
-                <input type="text" id="country" name="country" value={address.country} onChange={handleChange} required className="mt-1 p-2 border rounded-md w-full" />
+            <div className="flex flex-col">
+                <label htmlFor="country" className="text-gray-700 font-bold mb-1">
+                    <span className="text-red-500">*</span> Country:
+                </label>
+                <input type="text" id="country" name="country" value={address.country} onChange={handleChange} required className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500" />
             </div>
-            <div className="mb-4">
-                <label htmlFor="postalCode" className="block text-gray-700">Postal Code:</label>
-                <input type="number" id="postalCode" name="postalCode" value={address.postalCode} onChange={handleChange} required className="mt-1 p-2 border rounded-md w-full" />
+            <div className="flex flex-col">
+                <label htmlFor="postalCode" className="text-gray-700 font-bold mb-1">
+                    <span className="text-red-500">*</span> Postal Code:
+                </label>
+                <input type="number" id="postalCode" name="postalCode" value={address.postalCode} onChange={handleChange} required className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500" />
             </div>
-            <div className="mb-4">
-                <label htmlFor="mobileNumber" className="block text-gray-700">Mobile Number:</label>
-                <input type="number" id="mobileNumber" name="mobileNumber" value={address.mobileNumber} onChange={handleChange} required className="mt-1 p-2 border rounded-md w-full" />
+            <div className="flex flex-col">
+                <label htmlFor="mobileNumber" className="text-gray-700 font-bold mb-1">
+                    <span className="text-red-500">*</span> Mobile Number:
+                </label>
+                <input type="number" id="mobileNumber" name="mobileNumber" value={address.mobileNumber} onChange={handleChange} required className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500" />
             </div>
-            <div className="mb-4">
-                <label htmlFor="alternativeMobileNumber" className="block text-gray-700">Alternative Mobile Number <span className="text-red-500">*</span>:</label>
-                <input type="number" id="alternativeMobileNumber" name="alternativeMobileNumber" value={address.alternativeMobileNumber} onChange={handleChange} className="mt-1 p-2 border rounded-md w-full" />
-                <p className="text-sm text-gray-500">*Optional</p>
+            <div className="flex flex-col">
+                <label htmlFor="alternativeMobileNumber" className="text-gray-700 font-bold mb-1">
+                    Alternative Mobile Number:
+                </label>
+                <input type="number" id="alternativeMobileNumber" name="alternativeMobileNumber" value={address.alternativeMobileNumber} onChange={handleChange} className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500" />
+                <p className="text-sm text-gray-500">This field is optional.</p>
             </div>
-            <div className="mb-4">
+            <div className="flex flex-col">
                 <label htmlFor="isDefault" className="flex items-center">
-                    <input type="checkbox" id="isDefault" name="isDefault" checked={address.isDefault} onChange={() => setAddress({ ...address, isDefault: !address.isDefault })} className="mr-2" />
+                    <input type="checkbox" id="isDefault" name="isDefault" checked={address.isDefault} onChange={() => setAddress({ ...address, isDefault: !address.isDefault })} className="mr-2 rounded focus:outline-none focus:ring focus:border-blue-500" />
                     <span className="text-gray-700">Default Address</span>
                 </label>
             </div>
-            <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Add Address</button>
-            <p className="mt-2 text-sm text-gray-500">Note: Fields marked with <span className="text-red-500">*</span> are optional.</p>
-        </form>
-
+        </div>
+        <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 focus:outline-none focus:ring focus:border-blue-500">Add Address</button>
+        <p className="mt-2 text-sm text-gray-500">Note: Fields marked with <span className="text-red-500">*</span> are mandatory.</p>
+    </form>
+        
 
     );
 }
@@ -149,22 +165,22 @@ function UserAddress() {
             "addressId": addressId
         }
         try {
-            const response = await axios.delete(`http://localhost:2211/deleteAddress/`,{
+            const response = await axios.delete(`http://localhost:2211/deleteAddress/`, {
                 data: deleteAddress
-              });
+            });
             if (response.status === 200) {
                 // Address deleted successfully from the server
                 // Remove the address from the state
                 const updatedAddresses = addresses.filter(address => address._id !== addressId);
                 setAddresses(updatedAddresses);
                 // Optionally, display a success message to the user
-                toast.success('Address deleted successfully',{
-                    theme:'colored'
+                toast.success('Address deleted successfully', {
+                    theme: 'colored'
                 });
             } else {
                 // Handle errors or display an error message
                 toast.error('Failed to delete address:', {
-                    theme:'colored'
+                    theme: 'colored'
                 });
                 // Optionally, display an error message to the user
             }
@@ -173,8 +189,8 @@ function UserAddress() {
             // Handle errors or display an error message
         }
     };
-    
-    
+
+
 
     const addAddress = (newAddress) => {
         // Assuming you have a function to post the new address to the backend
@@ -188,12 +204,31 @@ function UserAddress() {
     return (
         <div className="bg-gray-100 p-6 rounded-lg">
             <h2 className="text-xl font-bold mb-4">Addresses</h2>
-            <div className="mb-4">
-                <button onClick={() => setShowForm(!showForm)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                    {showForm ? 'Hide Form' : 'Add Address'}
-                </button>
+            <div className="relative">
+                <div className="mb-4">
+                    <button onClick={() => setShowForm(!showForm)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        {showForm ? 'Hide Form' : 'Add Address'}
+                    </button>
+                </div>
+                {showForm && (
+                    <div className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50 z-50">
+                        <div className="bg-white rounded-lg p-8 max-w-md relative">
+                            <button className="absolute top-2 right-2 text-gray-600 hover:text-gray-700"
+                                onClick={() => setShowForm(false)}>
+                                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                            <AddAddressForm onSubmit={addAddress} />
+                            <button onClick={() => setShowForm(false)} className="absolute bottom-2 right-2 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                                Hide Form
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+
             </div>
-            {showForm && <AddAddressForm onSubmit={addAddress} />}
             <div>
                 {addresses && addresses.map((address, index) => (
                     <div key={index} className="border border-gray-300 p-4 my-4 rounded-lg">
