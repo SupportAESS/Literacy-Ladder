@@ -93,11 +93,10 @@ function Product() {
         const id = JSON.parse(session).user._id;
         const data = {
           userId:id,
-          cartItem:{
-            item: product._id,
-            quantity: 1
-          }
+          book: product._id,
+          quantity: 1
         };
+        //console.log(data);
         try {
           const response = await axios.post("http://localhost:2211/addToCart", data);
           if (response.status === 200){

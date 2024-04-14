@@ -65,7 +65,7 @@ server.use('/', viewBookRoute);
 //Cart
 
 //Add Book To Cart
-server.use('/', cartRoute);
+server.use('/api/cart', cartRoute);
 
 //Get Cart Details
 server.use('/', cartRoute);

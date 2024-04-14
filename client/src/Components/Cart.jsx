@@ -13,9 +13,8 @@ const Cart = () => {
         // If session is set, fetch data from the backend API
         try {
           const userId = JSON.parse(session).user._id;
-          console.log(userId);
           const response = await axios.get('http://localhost:2211/getCartDetails',{
-            params: userId
+            params: {userId:userId}
           });
           // items = response.data;
         } catch (error) {

@@ -92,22 +92,25 @@ const invoiceSchema = new mongoose.Schema({
 
 const Invoice = mongoose.model('Invoice', invoiceSchema);
 
+const cartItemSchema = new mongoose.Schema({
+    book: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Book'
+    },
+    quantity: {
+        type: Number,
+        default: 1 // Default quantity is 1
+    }
+},{_id:false});
+
 const cartSchema = new mongoose.Schema({
     userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User' // Reference to the user collection
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User' // Reference to the user collection
     },
-    cartItems:[{
-        item: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Book'
-        },
-        quantity: {
-          type: Number,
-          default: 1 // Default quantity is 1
-        }
-    }]
+    cartItems: [cartItemSchema]
 });
+
 
 const Cart  = mongoose.model('Cart', cartSchema);
 
