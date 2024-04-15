@@ -37,7 +37,7 @@ const Checkout = () => {
                     }
 
                     const cartResponse = await axios.get(`http://localhost:2211/getCartDetails?userId=${refUser}`);
-                    console.log(cartResponse.data);
+                    //console.log(cartResponse.data);
                     if (cartResponse.status === 200) {
                         setFormData(prevFormData => ({
                             ...prevFormData,
@@ -110,12 +110,12 @@ const Checkout = () => {
         }
         try {
             // Make a request to the server to process the order and initiate the payment
-            console.log({userId: refUser,
-                addressId: formData.selectedAddress,
-                paymentMethod: formData.selectedPaymentMethod,
-                cartItems: formData.cartItems.map(item => item.book._id),
-                totalAmount: total
-            });
+            // console.log({userId: refUser,
+            //     addressId: formData.selectedAddress,
+            //     paymentMethod: formData.selectedPaymentMethod,
+            //     cartItems: formData.cartItems.map(item => item.book._id),
+            //     totalAmount: total
+            // });
             const response = await axios.post('http://localhost:2211/confirmOrder', {
                 userId: formData.userId,
                 addressId: formData.selectedAddress,
@@ -192,7 +192,7 @@ const Checkout = () => {
     
     let total = 0;
     return (
-        <div className="max-w-6xl mx-auto p-4 mt-16 min-h-screen bg-gray-100 p-6 rounded-lg">
+        <div className="max-w-6xl mx-auto p-4 mt-16 min-h-screen bg-gray-100 rounded-lg">
             <h2 className="text-xl font-semibold mb-4">Checkout</h2>
             <div className="mb-8">
                 <h3 className="text-lg font-semibold mb-2">Select Address</h3>
@@ -215,7 +215,7 @@ const Checkout = () => {
                 ))}
             </div>
 
-            <div className="mb-8 bg-gray-100 p-6 rounded-lg border rounded p-4 mb-4">
+            <div className="mb-8 bg-gray-100 p-6 rounded-lg border">
                 <div className="flex justify-between items-center mb-2">
                     <h3 className="text-lg font-semibold">Order Summary</h3>
                     <button className="text-blue-500" onClick={() => setShowItems(!showItems)}>
@@ -225,9 +225,9 @@ const Checkout = () => {
 
                 {showItems && (
                     <div>
-                        {formData.cartItems.map(item => {
+                        {formData.cartItems.map((item,index) => {
                             return (
-                                <div key={item.productId} className="border rounded p-2 mb-2">
+                                <div key={index} className="border rounded p-2 mb-2">
                                     <div className="flex items-center space-x-4">
                                         <img src={item.book.bookImage} alt="Book cover" className="w-16 h-24" />
                                         <div>
@@ -236,9 +236,9 @@ const Checkout = () => {
                                             <p className="text-gray-600">Price: ₹{item.book.bookPrice}</p>
                                         </div>
                                     </div>
-                                    <div>
+                                    {/* <div>
                                         <button className="text-red-500">Remove</button>
-                                    </div>
+                                    </div> */}
                                 </div>
                             );
                         })}
