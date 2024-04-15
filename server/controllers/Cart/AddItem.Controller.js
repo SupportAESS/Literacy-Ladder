@@ -2,10 +2,10 @@ const { Cart } = require("../../models/userModel.js");
 
 const addToCart = async (req, res) => {
     const { userId, book, quantity} = req.body;
-    console.log(req.body);
+    //console.log(req.body);
     try {
         let userCart = await Cart.findOne({ userId });
-        console.log(userCart);
+        //console.log(userCart);
         if (userCart === null) {
             // userCart = new Cart({
             //     userId: req.body.userId,
@@ -14,7 +14,7 @@ const addToCart = async (req, res) => {
             //         quantity: 1
             //     }]
             // });
-            console.log("inside");
+            //console.log("inside");
             await Cart.create({
                 userId,
                 cartItems:[{book,quantity}]

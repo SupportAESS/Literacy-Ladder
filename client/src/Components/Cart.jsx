@@ -16,7 +16,9 @@ const Cart = () => {
           const response = await axios.get('http://localhost:2211/getCartDetails',{
             params: {userId:userId}
           });
-          // items = response.data;
+          console.log(response.data);
+          items = response.data;
+          setCartItems(items);
         } catch (error) {
           console.error("Error fetching cart items: ", error);
           // Handle error
@@ -24,6 +26,7 @@ const Cart = () => {
       } else {
         // If session is not set, use data from localStorage
         items = JSON.parse(localStorage.getItem("userData"));
+        //console.log(JSON.parse(JSON.stringify(items.cartItem)));
         setCartItems(JSON.parse(JSON.stringify(items.cartItem)));
       }
       //console.log(items);
@@ -42,15 +45,15 @@ const Cart = () => {
         <div className="divide-y divide-gray-200">
           {cartItems.map((item, index) => (
             // No semicolon here and wrap the expression inside curly braces
-            total = total + (item.quantity * item.item.bookPrice),
+            total = total + (item.quantity * item.book.bookPrice),
             <div key={index} className="flex items-center justify-between p-4">
               <div className="flex items-center space-x-4">
-                <img src={item.item.bookImage} alt="Book cover" className="w-16 h-24" />
+                <img src={item.book.bookImage} alt="Book cover" className="w-16 h-24" />
                 <div>
                   {/* Assuming you have an endpoint to fetch book details */}
-                  <h3 className="text-lg font-semibold">{item.item.bookName}</h3>
+                  <h3 className="text-lg font-semibold">{item.book.bookName}</h3>
                   <p className="text-gray-500">{item.quantity}</p>
-                  <p className="text-gray-600">Price: ₹{item.item.bookPrice}</p>
+                  <p className="text-gray-600">Price: ₹{item.book.bookPrice}</p>
                 </div>
               </div>
               <div>
