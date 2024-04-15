@@ -2,6 +2,8 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { BsTrash, BsPlus, BsDash } from 'react-icons/bs';
 
+import { Link } from 'react-router-dom';
+
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
 
@@ -16,7 +18,7 @@ const Cart = () => {
           const response = await axios.get('http://localhost:2211/getCartDetails', {
             params: { userId: userId }
           });
-          console.log(response.data);
+          //console.log(response.data);
           setCartItems(response.data);
         } catch (error) {
           console.error("Error fetching cart items: ", error);
@@ -92,7 +94,7 @@ const Cart = () => {
         </div>
         <div className="p-4 flex items-center justify-between bg-gray-100">
           <p className="text-lg font-semibold">Total: ₹{total}</p>
-          <button className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Checkout</button>
+          <Link to="/cart/checkout" className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Checkout</Link>
         </div>
       </div>
     </div>

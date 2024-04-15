@@ -22,7 +22,7 @@ const router = createBrowserRouter(
       <Route path='login' element={<Login />}/>
       <Route path='cart' element={<Cart />}/>
       <Route path='userProfile' element={<ProtectedRoute Component={UserProfile} />}/> {/*Use ProtectedRoute for userProfile*/}
-      <Route path='checkOut' element={<Checkout />}/>
+      <Route path='/cart/checkout' element={<ProtectedRoute Component={Checkout} />}/>
     </Route>
   )
 );
