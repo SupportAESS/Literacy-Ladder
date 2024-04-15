@@ -7,6 +7,6 @@ const {userLogin} = require("../../controllers/user/userLoginController");
 
 //const bodyParser = require("body-parser");
 
-router.post("/userLogin", userLogin);
+router.post("/", userLogin);
 
 module.exports = router;

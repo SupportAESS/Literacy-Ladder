@@ -1,10 +1,10 @@
-const { Book } = require('../models/userModel');
-const uploadOnCloudinary = require('../utils/cloudinary.js');
+const { Book } = require('../../models/userModel.js');
+const uploadOnCloudinary = require('../../utils/cloudinary.js');
 
 const UpdateBooks = async (req, res) => {
   try {
     // Parsing the input object received from the frontend form
-    const { updateFields, bookId, bookName, author, genre, bookQuantity, bookPrice, bookISBN, bookDescription, image } = req.body;
+    const { updateFields, bookId, bookName, author, genre, bookQuantity, bookPrice, bookISBN, bookDescription } = req.body;
 
     // Find the book by its ID
     const book = await Book.findById(bookId);

@@ -4,21 +4,16 @@ const server = express();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-const addBookRoute = require('./routes/book.route.js');
-const updateBookRoute = require('./routes/bookUpdate.route.js');
+const cors = require('cors');
+
+//Routes
+const bookRoute = require('./routes/Book/book.route.js');
 const getLoginRoute = require('./routes/admin/login.route.js');
 const getSignUpRoute = require('./routes/admin/signup.route.js');
-const viewBookRoute = require('./routes/viewBook.route.js');
 const userLoginRoute = require('./routes/user/user.login.route.js');
 const userSignupRounte = require('./routes/user/user.signup.route.js');
 const userAddressSaveRoute = require('./routes/user/user.address.save.route.js');
-const cartRoute = require('./routes/Cart/addToCart.route.js');
-const cors = require('cors');
-
-
-// // Set 'ejs' as the view engine
-// server.set('view engine', 'ejs');
-
+const cartRoute = require('./routes/Cart/Cart.route.js');
 
 // Allow requests from the frontend server
 server.use(cors({
@@ -52,30 +47,35 @@ server.use('/', getLoginRoute);
 server.use('/',getSignUpRoute);
 
 // server.use(bodyParser.urlencoded());
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Book
 
-//Add, remove Book
-server.use('/', addBookRoute);
-
+//Add Book
+server.use('/addBook', bookRoute);
+//Remove Book
+server.use('/removeBook', bookRoute);
+//View Book
+server.use('/viewBook', bookRoute);
 //UpdateBook
-server.use('/', updateBookRoute);
+server.use('/updateBookDetails', bookRoute);
 
-//UpdateBook
-server.use('/', viewBookRoute);
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Cart
 
 //Add Book To Cart
-server.use('/api/cart', cartRoute);
+server.use('/addToCart', cartRoute);
 
 //Get Cart Details
-server.use('/', cartRoute);
+server.use('/getCartDetails', cartRoute);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //user
-server.use('/', userLoginRoute);
-server.use('/', userSignupRounte);
-server.use('/', userAddressSaveRoute);
+server.use('/userLogin', userLoginRoute);
+server.use('/userSignup', userSignupRounte);
+server.use('/userAddressSave', userAddressSaveRoute);
+server.use('/userAddressGet', userAddressSaveRoute);
+server.use('/deleteAddress', userAddressSaveRoute);
 
 // server.post('/addBook', (req, res)=>{
 //   console.log(req.body)

@@ -1,5 +1,5 @@
-const { Book } = require('../models/userModel');
-const uploadOnCloudinary = require('../utils/cloudinary.js');
+const { Book } = require('../../models/userModel.js');
+const uploadOnCloudinary = require('../../utils/cloudinary.js');
 
 const AddBooks = async (req, res) => {
   //desearlizing the req.body

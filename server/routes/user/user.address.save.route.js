@@ -7,8 +7,8 @@ const {userAddressSave, userAddressGet, deleteAddress} = require("../../controll
 
 //const bodyParser = require("body-parser");
 
-router.post("/userAddressSave", userAddressSave);
-router.get("/userAddressGet", userAddressGet);
-router.delete("/deleteAddress", deleteAddress);
+router.post("/", userAddressSave);
+router.get("/", userAddressGet);
+router.delete("/", deleteAddress);
 
 module.exports = router;
