@@ -36,7 +36,7 @@ function removeBook({ onClose }) {
     e.preventDefault();
     console.log(formData);
     try {
-      const response = await axios.post('http://localhost:2211/updateBookDetails', formData, {
+      const response = await axios.put('http://localhost:2211/updateBookDetails', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

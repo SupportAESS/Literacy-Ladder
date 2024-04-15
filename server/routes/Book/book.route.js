@@ -22,6 +22,6 @@ router.delete("/", removeBook);
 
 router.get("/", ViewBooks);
 
-router.post("/",upload.single('image'), UpdateBooks);
+router.put("/",upload.single('image'), UpdateBooks);
 
 module.exports = router;
