@@ -68,6 +68,11 @@ server.use('/addToCart', cartRoute);
 //Get Cart Details
 server.use('/getCartDetails', cartRoute);
 
+//Update Cart Details
+server.use("/updateCartItem", cartRoute);
+
+//Delete Cart item
+server.use('/deleteCartItem', cartRoute);
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //user
