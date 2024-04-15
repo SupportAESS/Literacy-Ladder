@@ -113,13 +113,15 @@ const Checkout = () => {
             console.log({userId: refUser,
                 addressId: formData.selectedAddress,
                 paymentMethod: formData.selectedPaymentMethod,
-                cartItems: formData.cartItems.map(item => item.book._id)
+                cartItems: formData.cartItems.map(item => item.book._id),
+                totalAmount: total
             });
             const response = await axios.post('http://localhost:2211/confirmOrder', {
                 userId: formData.userId,
                 addressId: formData.selectedAddress,
                 paymentMethod: formData.selectedPaymentMethod,
-                cartItems: formData.cartItems.map(item => item.book._id)
+                cartItems: formData.cartItems.map(item => item.book._id),
+                totalAmount: total
             });
             if (response.status === 200) {
                 // If payment method is cash on delivery, directly confirm the order
