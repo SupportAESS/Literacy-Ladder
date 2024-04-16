@@ -4,6 +4,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { Link } from 'react-router-dom';
 
 function Product() {
   const [productsByGenre, setProductsByGenre] = useState({});
@@ -165,7 +166,7 @@ function Product() {
               >
                 {productsByGenre[genre].map(product => (
                   <div
-                    key={product.bookName}
+                    key={product._id}
                     className='relative bg-white text-black rounded-xl overflow-hidden h-80'
                     onMouseEnter={() => handleHover(product)}
                     onMouseLeave={() => handleLeave()}
@@ -176,8 +177,12 @@ function Product() {
                         <p className='text-xl font-semibold'>{product.bookName}</p>
                         <p className="text-sm">{product.bookDescription}</p>
                         <button onClick={() => addToCart(product)} className='bg-indigo-500 text-white text-lg px-6 py-1 rounded-xl mt-2'>Add to Cart</button>
+                        {/* //Navigate to product page  */}
+                        <Link to={`/product/${product}`}>View Details</Link>
                       </div>
                     )}
+                    {/* //Navigate to product page 
+                    <Link to={`/${product._id}`}>View Details</Link>  */}
                   </div>
                 ))}
               </Slider>

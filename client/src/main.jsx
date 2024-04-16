@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
@@ -13,6 +13,7 @@ import Cart from './Components/Cart';
 import UserProfile from './Components/user/dashboard';
 import ProtectedRoute from './ProtectedRoute'; // Import ProtectedRoute
 import Checkout from './Components/Order/CheckOut';
+import ProductDetail from './Components/Product/ProductDetail';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -22,6 +23,7 @@ const router = createBrowserRouter(
       <Route path='login' element={<Login />}/>
       <Route path='cart' element={<Cart />}/>
       <Route path='userProfile' element={<ProtectedRoute Component={UserProfile} />}/> {/*Use ProtectedRoute for userProfile*/}
+      <Route path='/product/:productId' Component={ProductDetail} />
       <Route path='/cart/checkout' element={<ProtectedRoute Component={Checkout} />}/>
     </Route>
   )
