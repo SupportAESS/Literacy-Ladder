@@ -9,8 +9,6 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model('User', userSchema);
 
 const userAddressSchema = new mongoose.Schema({
-    // fullName: { type: String, required: true, minLength: 1, maxLength: 50 },
-    // email: { type: String, required: true, unique: true, minLength: 1, maxLength: 255 },
     refUser: { type: mongoose.Schema.Types.ObjectId, required: true, unique: true,  ref: 'User' }, // Reference to another User schema
     addresses: [
         {
@@ -24,8 +22,6 @@ const userAddressSchema = new mongoose.Schema({
             alternativeMobileNumber: { type: String } // Added field for alternative mobile number
         }
     ],
-    // mobileNumber: { type: String },
-    // alternativeMobileNumber: { type: String }, // Added field for alternative mobile number
 });
 
 
@@ -57,7 +53,6 @@ const bookSchema = new mongoose.Schema({
             message: props => `${props.value} is not a valid ISBN number!`
         }
     },
-    // bookType: { type: String, required: true, enum: ["Book","Magazine"] },
     bookImage: { type: String,  required: true, minLength: 1, maxLength: 255}, // Assuming image is stored as a path or URL
     bookDescription: { type: String, required: true, minLength: 1, maxLength: 255 }
 });
@@ -114,4 +109,39 @@ const cartSchema = new mongoose.Schema({
 
 const Cart  = mongoose.model('Cart', cartSchema);
 
-module.exports = { User, Admin, Book, Purchase, Review, Invoice, Cart, UserAddress };
+const orderSchema = new mongoose.Schema({
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User' // Reference to the User model
+    },
+    addressId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'UserAddress.addresses' // Reference to the UserAddress model and the addresses path
+    },
+    paymentMethod: {
+        type: String, // Assuming paymentMethod is a string
+        required: true
+    },
+    cartItems: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Book' // Reference to the Book model
+        }
+    ],
+    totalAmount: {
+        type: Number,
+        required: true
+    },
+    paymentStatus: {
+        type: String,
+        required: true
+    },
+    paymentMethod: {
+        type: String,
+        required: true
+    }
+});
+
+const Order  = mongoose.model('Order', orderSchema);
+
+module.exports = { User, Admin, Book, Purchase, Review, Invoice, Cart, UserAddress, Order };

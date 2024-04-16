@@ -20,7 +20,7 @@ const Checkout = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                
+
                 if (sessionData && sessionData.user) {
 
                     const addressResponse = await axios.get(`http://localhost:2211/userAddressGet?userId=${refUser}`);
@@ -68,43 +68,9 @@ const Checkout = () => {
         }));
     };
 
-    // Handle order confirmation and payment
-    // const handleConfirmOrder = async () => {
-    //     if(formData.selectedPaymentMethod === ""){
-    //         return toast.error("Payment Method Not Selected",{
-    //             theme: 'colored'
-    //         });
-    //     }
-    //     try {
-    //         // Make a request to the server to process the order and initiate the payment
-    //         console.log({userId: refUser,
-    //             addressId: formData.selectedAddress,
-    //             paymentMethod: formData.selectedPaymentMethod,
-    //             cartItems: formData.cartItems.map(item => item.book._id)
-    //         });
-    //         const response = await axios.post('http://localhost:2211/confirmOrder', {
-    //             userId: formData.userId,
-    //             addressId: formData.selectedAddress,
-    //             paymentMethod: formData.selectedPaymentMethod,
-    //             cartItems: formData.cartItems.map(item => item.book._id)
-    //         });
-    //         if (response.status === 200) {
-    //             // Order successfully confirmed and payment initiated
-    //             // Optionally, display a success message to the user
-    //             console.log('Order confirmed and payment initiated');
-    //         } else {
-    //             // Handle errors or display an error message
-    //             console.error('Failed to confirm order:', response.data);
-    //             // Optionally, display an error message to the user
-    //         }
-    //     } catch (error) {
-    //         console.error('Error confirming order:', error);
-    //         // Handle errors or display an error message
-    //     }
-    // };
     const handleConfirmOrder = async () => {
-        if(formData.selectedPaymentMethod === ""){
-            return toast.error("Payment Method Not Selected",{
+        if (formData.selectedPaymentMethod === "") {
+            return toast.error("Payment Method Not Selected", {
                 theme: 'colored'
             });
         }
@@ -116,29 +82,65 @@ const Checkout = () => {
             //     cartItems: formData.cartItems.map(item => item.book._id),
             //     totalAmount: total
             // });
-            const response = await axios.post('http://localhost:2211/confirmOrder', {
+            let paymentStatus; // Declare paymentStatus variable outside the if-else block
+
+            // if (formData.selectedPaymentMethod === 'cashOnDelivery') {
+            //     paymentStatus = "cashOnDelivery";
+            // } else {
+            //     paymentStatus = "Pending"; // Corrected spelling to "Pending"
+            //     console.log(paymentStatus); // Log the payment status
+            // }
+
+            const response = await axios.post('http://localhost:2211/orderPlace', {
                 userId: formData.userId,
                 addressId: formData.selectedAddress,
                 paymentMethod: formData.selectedPaymentMethod,
                 cartItems: formData.cartItems.map(item => item.book._id),
-                totalAmount: total
+                totalAmount: total,
+                paymentStatus: "panding"
             });
+            console.log(formData.cartItems[0]);
             if (response.status === 200) {
                 // If payment method is cash on delivery, directly confirm the order
-                if (formData.selectedPaymentMethod === 'cash') {
-                    confirmOrder(); // Function to confirm order
+                console.log(response.data.orderId);
+                if (formData.selectedPaymentMethod === 'cashOnDelivery') {
+                    toast.success('Order confirmed', {
+                        theme: 'colored'
+                    })
+
+                    for (let index = 0; index < formData.cartItems.length; index++) {
+                        const deletedCartItem = formData.cartItems[index];
+                        try {
+                            // Make DELETE request for each cart item
+                            await axios.delete('http://localhost:2211/deleteCartItem', { data: deletedCartItem });
+                            console.log('Deleted cart item:', deletedCartItem);
+                        } catch (error) {
+                            console.error('Error deleting cart item:', error);
+                            // Handle errors or display an error message
+                        }
+                    }
+                    // confirmOrder(response.data.orderId); // Function to confirm order
                     return;
-                }
-    
-                // Otherwise, wait for payment confirmation from the payment API
-                const paymentConfirmation = await waitForPaymentConfirmation(response.data.paymentId);
-    
-                if (paymentConfirmation) {
-                    // Payment confirmed, now confirm the order
-                    confirmOrder(); // Function to confirm order
                 } else {
-                    // Payment not confirmed, display an error message to the user
-                    console.error('Payment not confirmed');
+                    // Otherwise, wait for payment confirmation from the payment API
+                    const paymentConfirmation = await waitForPaymentConfirmation(response.data.paymentId);
+
+                    if (paymentConfirmation) {
+                        // Payment confirmed, now confirm the order
+                        toast.success('Payment confirmed', {
+                            theme: 'colored'
+                        })
+                        confirmOrder(response.data.orderId); // Function to confirm order
+                    } else {
+                        // Payment not confirmed, display an error message to the user
+                        const deleteResponse = await axios.delete('http://localhost:2211/deleteOrder', {
+                            data: { orderId: response.data.orderId }
+                        });
+                        console.error('Payment not confirmed', deleteResponse.data);
+                        toast.error('Payment not confirmed', {
+                            theme: 'colored'
+                        })
+                    }
                 }
             } else {
                 // Handle errors or display an error message
@@ -150,7 +152,7 @@ const Checkout = () => {
             // Handle errors or display an error message
         }
     };
-    
+
     // Function to wait for payment confirmation from the payment API
     const waitForPaymentConfirmation = async (paymentId) => {
         try {
@@ -163,18 +165,13 @@ const Checkout = () => {
             return false;
         }
     };
-    
+
     // Function to confirm the order after payment confirmation
-    const confirmOrder = async () => {
+    const confirmOrder = async (orderId) => {
         try {
             // Make a request to the server to confirm the order
-            const response = await axios.post('http://localhost:2211/confirmOrder', {
-                userId: formData.userId,
-                addressId: formData.selectedAddress,
-                paymentMethod: formData.selectedPaymentMethod,
-                cartItems: formData.cartItems,
-            });
-    
+            const response = await axios.put('http://localhost:2211/confirmOrder', orderId);
+
             if (response.status === 200) {
                 // Order confirmed successfully
                 // Optionally, display a success message to the user
@@ -189,7 +186,7 @@ const Checkout = () => {
             // Handle errors or display an error message
         }
     };
-    
+
     let total = 0;
     return (
         <div className="max-w-6xl mx-auto p-4 mt-16 min-h-screen bg-gray-100 rounded-lg">
@@ -219,13 +216,13 @@ const Checkout = () => {
                 <div className="flex justify-between items-center mb-2">
                     <h3 className="text-lg font-semibold">Order Summary</h3>
                     <button className="text-blue-500" onClick={() => setShowItems(!showItems)}>
-                        {showItems ? <SlArrowDown /> /* Downward-pointing triangle */ :  <SlArrowRight />/* Upward-pointing triangle */}
+                        {showItems ? <SlArrowDown /> /* Downward-pointing triangle */ : <SlArrowRight />/* Upward-pointing triangle */}
                     </button>
                 </div>
 
                 {showItems && (
                     <div>
-                        {formData.cartItems.map((item,index) => {
+                        {formData.cartItems.map((item, index) => {
                             return (
                                 <div key={index} className="border rounded p-2 mb-2">
                                     <div className="flex items-center space-x-4">

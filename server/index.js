@@ -14,6 +14,7 @@ const userLoginRoute = require('./routes/user/user.login.route.js');
 const userSignupRounte = require('./routes/user/user.signup.route.js');
 const userAddressSaveRoute = require('./routes/user/user.address.save.route.js');
 const cartRoute = require('./routes/Cart/Cart.route.js');
+const orderRoute = require('./routes/Order/Order.route.js');
 
 // Allow requests from the frontend server
 server.use(cors({
@@ -75,6 +76,11 @@ server.use("/updateCartItem", cartRoute);
 server.use('/deleteCartItem', cartRoute);
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//OrderConfirmation and Payment
+server.use('/orderPlace', orderRoute);
+server.use('/deleteOrder', orderRoute);
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //user
 server.use('/userLogin', userLoginRoute);
 server.use('/userSignup', userSignupRounte);
