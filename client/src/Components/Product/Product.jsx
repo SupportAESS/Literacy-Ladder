@@ -178,7 +178,7 @@ function Product() {
                         <p className="text-sm">{product.bookDescription}</p>
                         <button onClick={() => addToCart(product)} className='bg-indigo-500 text-white text-lg px-6 py-1 rounded-xl mt-2'>Add to Cart</button>
                         {/* //Navigate to product page  */}
-                        <Link to={`/product/${product}`}>View Details</Link>
+                        <Link to={`/product/${product.bookName}`}>View Details</Link>
                       </div>
                     )}
                     {/* //Navigate to product page 

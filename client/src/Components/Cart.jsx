@@ -90,7 +90,7 @@ const Cart = () => {
           <div>
             <div className="divide-y divide-gray-200">
               {cartItems.map((item, index) => (
-                total = total + item.book.bookPrice,
+                total = total + item.quantity*item.book.bookPrice,
                 <div key={index} className="flex items-center justify-between p-4">
                   <div className="flex items-center space-x-4">
                     <img src={item.book.bookImage} alt="Book cover" className="w-16 h-24" />
