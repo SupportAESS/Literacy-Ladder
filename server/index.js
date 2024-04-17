@@ -81,6 +81,11 @@ server.use('/deleteCartItem', cartRoute);
 //Add to Wishlist
 server.use("/addToWishlist", wishlistRoute);
 
+//Get Wishlist Data
+server.use("/getWishlist", wishlistRoute);
+
+//Deleted wishlisted item
+server.use("/deleteWishlistItem", wishlistRoute);
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

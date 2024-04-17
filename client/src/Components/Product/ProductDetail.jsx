@@ -28,6 +28,33 @@ const ProductDetail = () => {
         fetchData();
     }, []);
 
+    const addToWishlist = async (product) => {
+        const session = localStorage.getItem("session");
+        if (session !== null) {
+            try {
+                // Call API to add item to wishlist
+                const id = JSON.parse(session).user._id;
+                const data = {
+                    userId: id,
+                    bookId: product._id
+                };
+                const response = await axios.post("http://localhost:2211/addToWishlist", data);
+                if (response.status === 200) {
+                    toast.success("Added Item to wishlist", {
+                        theme: 'colored'
+                    });
+                } else {
+                    toast.error("Failed due to Server error", {
+                        theme: 'colored'
+                    })
+                }
+            } catch (error) {
+                console.error('Error adding to wishlist:', error);
+                throw error;
+            }
+        }
+    };
+
     const addToCart = async (product) => {
         const session = localStorage.getItem("session");
         if (session === null) {
@@ -99,12 +126,10 @@ const ProductDetail = () => {
         }
     };
 
-    const plusMinuceButton = "flex h-8 w-8 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500";
-
     return (
         <div className='min-h-screen'>
             {data.map((item, index) => (
-                <section className=" bg-slate-200 flex-none mx-auto max-w-[1250px] lg:w-full pt-14 lg:grid lg:grid-cols-2 lg:pt-10">
+                <section key={index} className=" bg-slate-200 flex-none mx-auto max-w-[1250px] lg:w-full pt-14 lg:grid lg:grid-cols-2 lg:pt-10">
                     {/* Image column */}
                     <div className="w-full lg:justify-center lg:w-full lg:pt-10 lg:pr-2 border-r-2">
                         <img src={item.bookImage} alt={item.bookName}
@@ -116,7 +141,7 @@ const ProductDetail = () => {
                                 <BiShoppingBag className="mx-2" />
                                 Add to cart
                             </button>
-                            <button className="flex h-12 w-1/3 lg:w-2/3 rounded items-center justify-center bg-amber-400 duration-100 hover:bg-yellow-300">
+                            <button onClick={() => addToWishlist(item)} className="flex h-12 w-1/3 lg:w-2/3 rounded items-center justify-center bg-amber-400 duration-100 hover:bg-yellow-300">
                                 <AiOutlineHeart className="mx-2" />
                                 Wishlist
                             </button>

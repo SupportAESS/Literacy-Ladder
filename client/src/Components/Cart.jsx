@@ -2,11 +2,14 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { BsTrash, BsPlus, BsDash } from 'react-icons/bs';
 import { MdOutlineRemoveShoppingCart } from "react-icons/md";
+import { AiOutlineHeart } from "react-icons/ai"
+
 
 import { Link } from 'react-router-dom';
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
+  const [wishlistedItems, setWishlistedItems] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,8 +36,30 @@ const Cart = () => {
       }
     };
 
+    const wishData = async () => {
+      const session = localStorage.getItem("session");
+      if (session !== null) {
+        const userId = JSON.parse(session).user._id;
+        try {
+          const getData = await axios.get('http://localhost:2211/getWishlist', {
+            params: { userId }
+          });
+          setWishlistedItems(getData.data);
+        } catch (error) {
+          console.error("Error fetching wishlisted items: ", error);
+          // Handle error
+        }
+      }
+    };
     fetchData();
+    wishData();
   }, []);
+
+  // useEffect(() => {
+
+  //   console.log(wishlistedItems);
+  //   fetchData();
+  // }, []);
 
   const updateQuantity = async (index, newQuantity) => {
     if (newQuantity <= 0) {
@@ -60,13 +85,12 @@ const Cart = () => {
   const deleteItem = async (index) => {
     const deletedCartItem = cartItems[index];
     const session = JSON.parse(localStorage.getItem("session"));
-    const sendData = {
-      userId: session.user._id,
-      item: deletedCartItem
-    }
     if (session !== null) {
       try {
-        console.log("hello");
+        const sendData = {
+          userId: session.user._id,
+          item: deletedCartItem
+        }
         await axios.delete('http://localhost:2211/deleteCartItem', { data: sendData });
         const updatedCartItems = cartItems.filter((_, i) => i !== index);
         setCartItems(updatedCartItems);
@@ -77,12 +101,64 @@ const Cart = () => {
     }
   };
 
+  const deleteWishlistItem = async (index) => {
+    const Item = wishlistedItems[index];
+    const session = JSON.parse(localStorage.getItem("session"));
+    if (session !== null) {
+      try {
+        const sendData = {
+          userId: session.user._id,
+          item: Item
+        }
+        await axios.delete('http://localhost:2211/deleteWishlistItem', { data: sendData });
+        const updatedwishlist = wishlistedItems.filter((_, i) => i !== index);
+        setWishlistedItems(updatedwishlist);
+      } catch (error) {
+        console.error("Error deleting item: ", error);
+        // Handle error
+      }
+    }
+  };
+
+  const addToWishlist = async (product) => {
+    try {
+      // Call API to add item to wishlist
+      //console.log(product.book);
+      console.log();
+      const session = localStorage.getItem("session");
+      if (session !== null) {
+        const updatedWishlist = [...wishlistedItems];
+        updatedWishlist.push(product.book);
+        //wishlistedItems.push(product);
+        setWishlistedItems(updatedWishlist);
+        const id = JSON.parse(session).user._id;
+        const data = {
+          userId: id,
+          bookId: product.book._id
+        };
+        const response = await axios.post("http://localhost:2211/addToWishlist", data);
+        // if (response.status === 200) {
+        //   toast.success("Added Item to wishlist", {
+        //     theme: 'colored'
+        //   });
+        // } else {
+        //   toast.error("Failed due to Server error", {
+        //     theme: 'colored'
+        //   });
+        // }
+      }
+    } catch (error) {
+      console.error('Error adding to wishlist:', error);
+      throw error;
+    }
+  };
+
   let total = 0;
 
   return (
     <div className="min-h-screen max-w-4xl mx-auto px-4 py-8">
-      <h2 className="text-3xl font-semibold mb-4">Your Cart</h2>
       <div className="bg-white shadow-md rounded-md overflow-hidden">
+        <h2 className="text-3xl font-semibold">Your Cart</h2>
         {cartItems.length === 0 ? (
           <div className="p-8 flex items-center justify-center">
             <div className="text-center flex flex-col items-center">
@@ -95,7 +171,7 @@ const Cart = () => {
           <div>
             <div className="divide-y divide-gray-200">
               {cartItems.map((item, index) => (
-                total = total + item.quantity*item.book.bookPrice,
+                total = total + item.quantity * item.book.bookPrice,
                 <div key={index} className="flex items-center justify-between p-4">
                   <div className="flex items-center space-x-4">
                     <img src={item.book.bookImage} alt="Book cover" className="w-16 h-24" />
@@ -105,10 +181,15 @@ const Cart = () => {
                       <p className="text-gray-600">Price: ₹{item.book.bookPrice}</p>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-4">
-                    <button onClick={() => updateQuantity(index, item.quantity - 1)} className="text-red-500"><BsDash /></button>
-                    <button onClick={() => updateQuantity(index, item.quantity + 1 > item.book.bookQuantity ? item.quantity : item.quantity + 1)} className="text-green-500"><BsPlus /></button>
-                    <button onClick={() => deleteItem(index)} className="text-red-500"><BsTrash /></button>
+                  <div>
+                    <div className="flex items-center space-x-3 mb-2">
+                      <button onClick={() => updateQuantity(index, item.quantity - 1)} className="text-red-500 cursor-pointer"><BsDash size={20} /></button>
+                      <button onClick={() => updateQuantity(index, item.quantity + 1 > item.book.bookQuantity ? item.quantity : item.quantity + 1)} className="text-green-500 cursor-pointer"><BsPlus size={20} /></button>
+                    </div>
+                    <div className="flex items-center space-x-4">
+                      <button onClick={() => deleteItem(index)} className="text-red-500 cursor-pointer transition-transform hover:scale-110"><BsTrash /></button>
+                      <button onClick={() => addToWishlist(item)} className="text-red-600 cursor-pointer transition-transform hover:scale-110"><AiOutlineHeart size={20} /></button>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -117,6 +198,27 @@ const Cart = () => {
               <p className="text-lg font-semibold">Total: ₹{total}</p>
               <Link to="/cart/checkout" className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Checkout</Link>
             </div>
+          </div>
+        )}
+        {/* Wishlisted items */}
+        {wishlistedItems.length > 0 && (
+          <div className="divide-y divide-gray-200">
+            <h2 className="text-3xl font-semibold mb-4">Wishlisted Items</h2>
+            {wishlistedItems.map((item, index) => (
+              <div key={index} className="flex items-center justify-between p-4">
+                <div className="flex items-center space-x-4">
+                  <img src={item.bookImage} alt="Book cover" className="w-16 h-24" />
+                  <div>
+                    <h3 className="text-lg font-semibold">{item.bookName}</h3>
+                    <p className="text-gray-600">Author: {item.author}</p>
+                    <p className="text-gray-600">Price: ₹{item.bookPrice}</p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-4">
+                  <button onClick={() => deleteWishlistItem(index)} className="text-red-500 cursor-pointer transition-transform hover:scale-110"><BsTrash /></button>
+                </div>
+              </div>
+            ))}
           </div>
         )}
       </div>
