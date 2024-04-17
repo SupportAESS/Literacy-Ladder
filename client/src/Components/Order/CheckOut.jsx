@@ -4,7 +4,10 @@ import { SlArrowDown, SlArrowUp, SlArrowRight } from "react-icons/sl";
 import { toast } from 'react-toastify';
 
 const sessionData = JSON.parse(localStorage.getItem('session'));
-const refUser = sessionData.user._id;
+let refUser;
+if(sessionData!==null){
+    refUser = sessionData.user._id;
+}
 const Checkout = () => {
     const [showItems, setShowItems] = useState(false);
     const [formData, setFormData] = useState({

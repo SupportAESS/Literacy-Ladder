@@ -11,7 +11,7 @@ const Cart = () => {
   useEffect(() => {
     const fetchData = async () => {
       const session = localStorage.getItem("session");
-
+      console.log(session);
       if (session !== null) {
         // If session is set, fetch data from the backend API
         try {
@@ -59,10 +59,15 @@ const Cart = () => {
 
   const deleteItem = async (index) => {
     const deletedCartItem = cartItems[index];
-    const session = localStorage.getItem("session");
+    const session = JSON.parse(localStorage.getItem("session"));
+    const sendData = {
+      userId: session.user._id,
+      item: deletedCartItem
+    }
     if (session !== null) {
       try {
-        await axios.delete('http://localhost:2211/deleteCartItem', { data: deletedCartItem });
+        console.log("hello");
+        await axios.delete('http://localhost:2211/deleteCartItem', { data: sendData });
         const updatedCartItems = cartItems.filter((_, i) => i !== index);
         setCartItems(updatedCartItems);
       } catch (error) {
