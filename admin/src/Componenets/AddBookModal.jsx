@@ -57,7 +57,6 @@ function AddBook({ onClose }) {
     
   };
   return (
-    <div className='fixed top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50 z-50'>
       <div className='w-96 bg-white rounded-md shadow-lg'>
         <Form encType='multipart/form-data' onSubmit={handleSubmit} className='p-6'>
           <Form.Group >
@@ -161,7 +160,6 @@ function AddBook({ onClose }) {
           </div>
         </Form>
       </div>
-    </div>
   )
 }
 
