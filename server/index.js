@@ -15,6 +15,8 @@ const getSignUpRoute = require('./routes/admin/signup.route.js');
 const userLoginRoute = require('./routes/user/user.login.route.js');
 const userSignupRounte = require('./routes/user/user.signup.route.js');
 const userAddressSaveRoute = require('./routes/user/user.address.save.route.js');
+const wishlistRoute = require('./routes/Wishlist/wishlist.route.js');
+const paymentRoute = require('./routes/Payment/paymentValidate.route.js')
 const cartRoute = require('./routes/Cart/Cart.route.js');
 const orderRoute = require('./routes/Order/Order.route.js');
 
