@@ -5,12 +5,18 @@ import { toast } from 'react-toastify';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Link } from 'react-router-dom';
+import { FiShoppingCart } from "react-icons/fi";
+import { FaRegHeart } from "react-icons/fa";
+
 
 function Product() {
   const [productsByGenre, setProductsByGenre] = useState({});
   const [hoveredProduct, setHoveredProduct] = useState(null);
   const [isHovering, setIsHovering] = useState(false);
+  const [wishlist, setWishlist] = useState([]);
   //const [cart, setCart] = useState([]); // State to manage the cart
+
+  const session = localStorage.getItem("session");
 
   const genres = ["Fiction", "Action and Adventure", "Mystery", "Science Fiction", "Fantasy", "Horror", "Biography", "Auto-biography", "History", "Self-help", "Science", "Romance"];
 
@@ -49,7 +55,6 @@ function Product() {
   };
 
   const addToCart = async (product) => {
-    const session = localStorage.getItem("session");
     if (session === null) {
       // Step 1: Retrieve existing data from local storage
       const existingDataString = localStorage.getItem('userData');
@@ -118,13 +123,29 @@ function Product() {
         }
       }
     }
-    
-  // };
-
-  // // useEffect(()=>{
-  // //   console.log(formData);
-  // // },[formData]);
-
+    const addToWishlist = async (product) => {
+      try {
+        // Call API to add item to wishlist
+        const id = JSON.parse(session).user._id;
+        const data = {
+          userId: id,
+          bookId: product._id
+        };
+        const response = await axios.post("http://localhost:2211/addToWishlist",data);
+        if (response.status === 200) {
+          toast.success("Added Item to wishlist", {
+            theme: 'colored'
+          });
+        } else {
+          toast.error("Failed due to Server error", {
+            theme: 'colored'
+          })
+        }
+      } catch (error) {
+        console.error('Error adding to wishlist:', error);
+        throw error;
+      }
+    };
 
 
   return (
@@ -167,18 +188,22 @@ function Product() {
                 {productsByGenre[genre].map(product => (
                   <div
                     key={product._id}
-                    className='relative bg-white text-black rounded-xl overflow-hidden h-80'
+                    className='relative bg-white text-black rounded-xl overflow-hidden h-96'
                     onMouseEnter={() => handleHover(product)}
                     onMouseLeave={() => handleLeave()}
                   >
                     <img src={product.bookImage} alt="" className='w-full h-full' />
                     {isHovering && hoveredProduct === product && (
                       <div className="absolute bottom-0 left-0 right-0 bg-white text-black p-4">
-                        <p className='text-xl font-semibold'>{product.bookName}</p>
-                        <p className="text-sm">{product.bookDescription}</p>
-                        <button onClick={() => addToCart(product)} className='bg-indigo-500 text-white text-lg px-6 py-1 rounded-xl mt-2'>Add to Cart</button>
+                        <p className='text-2xl font-semibold'>{product.bookName}</p>
+                        <p className='text-lg font-serif font-bold'>Author: {product.author}</p>
+                        <p className="text-base font-sans font-bold">Price: ₹ {product.bookPrice}</p>
+                        <div className='flex flex-row gap-6 items-center'>
+                        <FiShoppingCart onClick={() => addToCart(product)} size = {30} className="cursor-pointer transition-transform hover:scale-110 text-blue-500" />
+                        <Link to={`/product/${product.bookName}`} className='bg-indigo-500 text-white text-lg px-6 py-1 rounded-xl mt-2'>View Details</Link>
+                        <FaRegHeart onClick={() => addToWishlist(product)} size={30} className='cursor-pointer transition-transform hover:scale-110 text-red-500'/>
                         {/* //Navigate to product page  */}
-                        <Link to={`/product/${product.bookName}`}>View Details</Link>
+                        </div>
                       </div>
                     )}
                     {/* //Navigate to product page 

@@ -11,7 +11,7 @@ const Cart = () => {
   useEffect(() => {
     const fetchData = async () => {
       const session = localStorage.getItem("session");
-      console.log(session);
+      //console.log(session);
       if (session !== null) {
         // If session is set, fetch data from the backend API
         try {

@@ -113,9 +113,13 @@ const Checkout = () => {
 
                     for (let index = 0; index < formData.cartItems.length; index++) {
                         const deletedCartItem = formData.cartItems[index];
+                        const sendData = {
+                            userId: refUser,
+                            item: deletedCartItem
+                          }
                         try {
                             // Make DELETE request for each cart item
-                            await axios.delete('http://localhost:2211/deleteCartItem', { data: deletedCartItem });
+                            await axios.delete('http://localhost:2211/deleteCartItem', { data: sendData });
                             console.log('Deleted cart item:', deletedCartItem);
                         } catch (error) {
                             console.error('Error deleting cart item:', error);

@@ -15,6 +15,8 @@ const userSignupRounte = require('./routes/user/user.signup.route.js');
 const userAddressSaveRoute = require('./routes/user/user.address.save.route.js');
 const cartRoute = require('./routes/Cart/Cart.route.js');
 const orderRoute = require('./routes/Order/Order.route.js');
+const wishlistRoute = require("./routes/Wishlist/wishlist.route.js");
+
 
 // Allow requests from the frontend server
 server.use(cors({
@@ -74,6 +76,13 @@ server.use("/updateCartItem", cartRoute);
 
 //Delete Cart item
 server.use('/deleteCartItem', cartRoute);
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Add to Wishlist
+server.use("/addToWishlist", wishlistRoute);
+
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //OrderConfirmation and Payment
@@ -88,10 +97,6 @@ server.use('/userAddressSave', userAddressSaveRoute);
 server.use('/userAddressGet', userAddressSaveRoute);
 server.use('/deleteAddress', userAddressSaveRoute);
 
-// server.post('/addBook', (req, res)=>{
-//   console.log(req.body)
-//   res.send("success")
-// })
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

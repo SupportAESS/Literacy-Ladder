@@ -109,6 +109,20 @@ const cartSchema = new mongoose.Schema({
 
 const Cart  = mongoose.model('Cart', cartSchema);
 
+const wishlistItemSchema = new mongoose.Schema({
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
+    books: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Book'
+    }]
+});
+
+const Wishlist = mongoose.model('Wishlist', wishlistItemSchema);
+
 const orderSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -144,4 +158,4 @@ const orderSchema = new mongoose.Schema({
 
 const Order  = mongoose.model('Order', orderSchema);
 
-module.exports = { User, Admin, Book, Purchase, Review, Invoice, Cart, UserAddress, Order };
+module.exports = { User, Admin, Wishlist, Book, Purchase, Review, Invoice, Cart, UserAddress, Order };
