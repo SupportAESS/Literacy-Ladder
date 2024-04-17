@@ -153,6 +153,11 @@ const orderSchema = new mongoose.Schema({
     paymentMethod: {
         type: String,
         required: true
+    },
+    paymentId: {
+        type: String,
+        required: true,
+        unique: true
     }
 });
 

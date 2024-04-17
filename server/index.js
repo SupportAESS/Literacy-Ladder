@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const cors = require('cors');
+const Razorpay = require("razorpay");
+require("dotenv").config();
 
 //Routes
 const bookRoute = require('./routes/Book/book.route.js');
@@ -15,8 +17,6 @@ const userSignupRounte = require('./routes/user/user.signup.route.js');
 const userAddressSaveRoute = require('./routes/user/user.address.save.route.js');
 const cartRoute = require('./routes/Cart/Cart.route.js');
 const orderRoute = require('./routes/Order/Order.route.js');
-const wishlistRoute = require("./routes/Wishlist/wishlist.route.js");
-
 
 // Allow requests from the frontend server
 server.use(cors({
@@ -93,6 +93,10 @@ server.use("/deleteWishlistItem", wishlistRoute);
 //OrderConfirmation and Payment
 server.use('/orderPlace', orderRoute);
 server.use('/deleteOrder', orderRoute);
+server.use('/confirmOrder', orderRoute);
+
+//Payment
+server.use('/validate', paymentRoute);
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //user

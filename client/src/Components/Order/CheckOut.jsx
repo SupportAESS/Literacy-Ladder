@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { SlArrowDown, SlArrowUp, SlArrowRight } from "react-icons/sl";
 import { toast } from 'react-toastify';
+import logo from '../../asset/logo.png';
 
 const sessionData = JSON.parse(localStorage.getItem('session'));
 let refUser;
-if(sessionData!==null){
+if (sessionData !== null) {
     refUser = sessionData.user._id;
 }
 const Checkout = () => {
@@ -71,6 +72,24 @@ const Checkout = () => {
         }));
     };
 
+    const handleDeleteCart = async () => {
+        for (let index = 0; index < formData.cartItems.length; index++) {
+            const deletedCartItem = formData.cartItems[index];
+            const sendData = {
+                userId: refUser,
+                item: deletedCartItem
+            }
+            try {
+                // Make DELETE request for each cart item
+                await axios.delete('http://localhost:2211/deleteCartItem', { data: sendData });
+                console.log('Deleted cart item:', deletedCartItem);
+            } catch (error) {
+                console.error('Error deleting cart item:', error);
+                // Handle errors or display an error message
+            }
+        }
+    };
+
     const handleConfirmOrder = async () => {
         if (formData.selectedPaymentMethod === "") {
             return toast.error("Payment Method Not Selected", {
@@ -78,22 +97,7 @@ const Checkout = () => {
             });
         }
         try {
-            // Make a request to the server to process the order and initiate the payment
-            // console.log({userId: refUser,
-            //     addressId: formData.selectedAddress,
-            //     paymentMethod: formData.selectedPaymentMethod,
-            //     cartItems: formData.cartItems.map(item => item.book._id),
-            //     totalAmount: total
-            // });
-            let paymentStatus; // Declare paymentStatus variable outside the if-else block
-
-            // if (formData.selectedPaymentMethod === 'cashOnDelivery') {
-            //     paymentStatus = "cashOnDelivery";
-            // } else {
-            //     paymentStatus = "Pending"; // Corrected spelling to "Pending"
-            //     console.log(paymentStatus); // Log the payment status
-            // }
-
+            total = total * 100;
             const response = await axios.post('http://localhost:2211/orderPlace', {
                 userId: formData.userId,
                 addressId: formData.selectedAddress,
@@ -105,7 +109,7 @@ const Checkout = () => {
             console.log(formData.cartItems[0]);
             if (response.status === 200) {
                 // If payment method is cash on delivery, directly confirm the order
-                console.log(response.data.orderId);
+                console.log(response.body);
                 if (formData.selectedPaymentMethod === 'cashOnDelivery') {
                     toast.success('Order confirmed', {
                         theme: 'colored'
@@ -113,13 +117,9 @@ const Checkout = () => {
 
                     for (let index = 0; index < formData.cartItems.length; index++) {
                         const deletedCartItem = formData.cartItems[index];
-                        const sendData = {
-                            userId: refUser,
-                            item: deletedCartItem
-                          }
                         try {
                             // Make DELETE request for each cart item
-                            await axios.delete('http://localhost:2211/deleteCartItem', { data: sendData });
+                            await axios.delete('http://localhost:2211/deleteCartItem', { data: deletedCartItem });
                             console.log('Deleted cart item:', deletedCartItem);
                         } catch (error) {
                             console.error('Error deleting cart item:', error);
@@ -130,6 +130,7 @@ const Checkout = () => {
                     return;
                 } else {
                     // Otherwise, wait for payment confirmation from the payment API
+                    console.log(response.data.paymentId);
                     const paymentConfirmation = await waitForPaymentConfirmation(response.data.paymentId);
 
                     if (paymentConfirmation) {
@@ -137,7 +138,12 @@ const Checkout = () => {
                         toast.success('Payment confirmed', {
                             theme: 'colored'
                         })
-                        confirmOrder(response.data.orderId); // Function to confirm order
+                        //Remove items from Cart
+                        handleDeleteCart();
+                        const confirmation = await confirmOrder(response.data.paymentId); // Function to confirm order
+                        console.log(response.data.orderId);
+                        alert(`Order Confirmed with order Id: ${response.data.orderId}`);
+                        window.location.href = '/userProfile';
                     } else {
                         // Payment not confirmed, display an error message to the user
                         const deleteResponse = await axios.delete('http://localhost:2211/deleteOrder', {
@@ -163,9 +169,59 @@ const Checkout = () => {
     // Function to wait for payment confirmation from the payment API
     const waitForPaymentConfirmation = async (paymentId) => {
         try {
-            // Make a request to the payment API to check for payment confirmation
-            const response = await axios.get(`http://payment-api.com/checkPaymentStatus/${paymentId}`);
-            return response.data.paymentConfirmed; // Assuming the payment API returns a boolean indicating payment confirmation
+            // Wrap the Razorpay logic in a Promise
+            return new Promise(async (resolve, reject) => {
+                try {
+                    var option = {
+                        key: "",
+                        name: "Literacy Ladder",
+                        description: "Test Transaction",
+                        image: 'https://res.cloudinary.com/dyifiiyxl/image/upload/v1713370862/rfssy3ffqwieg80btidt.png',
+                        order_id: paymentId,
+                        handler: async function (response) {
+                            const body = { ...response, }
+                            const validateResponse = await fetch('http://localhost:2211/validate', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(body)
+                            });
+                            const jsonResponse = await validateResponse.json();
+                            console.log('jsonResponse', jsonResponse);
+                            resolve(true); // Resolve the Promise when the handler response is received
+                        },
+                        prefill: {
+                            name: "Literacy Ladder",
+                            email: "itstest323@gmail.com",
+                            contact: "+91-9415120130",
+                        },
+                        notes: {
+                            address: "Razorpay Corporate Office",
+                        },
+                        theme: {
+                            color: "#1f2937",
+                        },
+                    }
+
+                    var rzp1 = await new Razorpay(option);
+                    rzp1.on("payment.failed", function (response) {
+                        alert(response.error.code);
+                        alert(response.error.description);
+                        alert(response.error.source);
+                        alert(response.error.step);
+                        alert(response.error.reason);
+                        alert(response.error.metadata.order_id);
+                        alert(response.error.metadata.payment_id);
+                        reject(new Error("Payment failed")); // Reject the Promise in case of payment failure
+                    })
+
+                    await rzp1.open();
+                } catch (error) {
+                    console.error('Error during payment processing:', error);
+                    reject(error); // Reject the Promise if there's an error during payment processing
+                }
+            });
         } catch (error) {
             console.error('Error checking payment status:', error);
             // Handle errors or display an error message
@@ -173,11 +229,15 @@ const Checkout = () => {
         }
     };
 
+
     // Function to confirm the order after payment confirmation
-    const confirmOrder = async (orderId) => {
+    const confirmOrder = async (paymentId) => {
         try {
             // Make a request to the server to confirm the order
-            const response = await axios.put('http://localhost:2211/confirmOrder', orderId);
+            console.log(paymentId);
+            const confirmResponse = await axios.put('http://localhost:2211/confirmOrder', {
+                data: { paymentId: paymentId }
+            });
 
             if (response.status === 200) {
                 // Order confirmed successfully
@@ -188,9 +248,11 @@ const Checkout = () => {
                 console.error('Failed to confirm order:', response.data);
                 // Optionally, display an error message to the user
             }
+            return true;
         } catch (error) {
             console.error('Error confirming order:', error);
             // Handle errors or display an error message
+            return false;
         }
     };
 
