@@ -3,8 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { BsTrash, BsPlus, BsDash } from 'react-icons/bs';
 import { MdOutlineRemoveShoppingCart } from "react-icons/md";
 import { AiOutlineHeart } from "react-icons/ai"
-
-
+import { FiShoppingCart } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 
 const Cart = () => {
@@ -22,7 +21,7 @@ const Cart = () => {
           const response = await axios.get('http://localhost:2211/getCartDetails', {
             params: { userId: userId }
           });
-          //console.log(response.data);
+          // console.log(response.data);
           setCartItems(response.data);
         } catch (error) {
           console.error("Error fetching cart items: ", error);
@@ -103,11 +102,12 @@ const Cart = () => {
 
   const deleteWishlistItem = async (index) => {
     const Item = wishlistedItems[index];
-    const session = JSON.parse(localStorage.getItem("session"));
+    // console.log(Item);
+    const session = localStorage.getItem("session");
     if (session !== null) {
       try {
         const sendData = {
-          userId: session.user._id,
+          userId: JSON.parse(session).user._id,
           item: Item
         }
         await axios.delete('http://localhost:2211/deleteWishlistItem', { data: sendData });
@@ -119,6 +119,88 @@ const Cart = () => {
       }
     }
   };
+
+  const update = async (product, index) => {
+    const session = localStorage.getItem("session");
+    const addToCart = async (product) => {
+      if (session === null) {
+        // Step 1: Retrieve existing data from local storage
+        const existingDataString = localStorage.getItem('userData');
+        // Step 2: Update or append new data
+        // Check if the product already exists in the data
+        if (existingDataString !== null) {
+          let found = false;
+          let parsedData = JSON.parse(existingDataString);
+          let existingData = parsedData.cartItem;
+          console.log(existingData);
+          for (let entry of existingData) {
+            if (entry.item._id === product._id) {
+              entry.quantity += 1;
+              found = true;
+              break;
+            }
+          }
+
+          if (!found) {
+            existingData.push({
+              item: product,
+              quantity: 1
+            });
+          }
+          parsedData.cartItem = existingData;
+          localStorage.setItem('userData', JSON.stringify(parsedData));
+
+          console.log(localStorage.getItem('userData'));
+        }
+        else {
+          const data = {
+            cartItem: [{
+              item: product,
+              quantity: 1
+            }]
+          };
+          localStorage.setItem('userData', JSON.stringify(data));
+          console.log(localStorage.getItem('userData'));
+        }
+      }
+      else {
+        const id = JSON.parse(session).user._id;
+        const newData = {
+          book: product,
+          quantity: 1
+        }
+        const updatedCartItems = [...cartItems];
+        updatedCartItems.push(newData);
+        setCartItems(updatedCartItems);
+        const data = {
+          userId: id,
+          book: product._id,
+          quantity: 1
+        };
+        //console.log(data);
+        try {
+          const response = await axios.post("http://localhost:2211/addToCart", data);
+          // if (response.status === 200) {
+          //   toast.success("Added Item to cart", {
+          //     theme: 'colored'
+          //   });
+          // }
+          // else {
+          //   toast.error("Failed due to Server error", {
+          //     theme: 'colored'
+          //   })
+          // }
+        }
+        catch (error) {
+          console.error('Error submitting form:', error);
+          // Handle any errors that occur during the form submission process
+          throw error;
+        }
+      }
+    }
+    addToCart(product);
+    deleteWishlistItem(index);
+  }
 
   const addToWishlist = async (product) => {
     try {
@@ -137,6 +219,7 @@ const Cart = () => {
           bookId: product.book._id
         };
         const response = await axios.post("http://localhost:2211/addToWishlist", data);
+
         // if (response.status === 200) {
         //   toast.success("Added Item to wishlist", {
         //     theme: 'colored'
@@ -146,6 +229,8 @@ const Cart = () => {
         //     theme: 'colored'
         //   });
         // }
+        const index = cartItems.findIndex(item => item.book._id === product.book._id);
+        deleteItem(index);
       }
     } catch (error) {
       console.error('Error adding to wishlist:', error);
@@ -194,10 +279,14 @@ const Cart = () => {
                 </div>
               ))}
             </div>
-            <div className="p-4 flex items-center justify-between bg-gray-100">
-              <p className="text-lg font-semibold">Total: ₹{total}</p>
-              <Link to="/cart/checkout" className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Checkout</Link>
-            </div>
+            {
+              cartItems.length !== 0 ? (
+                <div className="p-4 flex items-center justify-between bg-gray-100">
+                  <p className="text-lg font-semibold">Total: ₹{total}</p>
+                  <Link to="/cart/checkout" className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Checkout</Link>
+                </div>
+              ) : total = 0
+            }
           </div>
         )}
         {/* Wishlisted items */}
@@ -214,8 +303,13 @@ const Cart = () => {
                     <p className="text-gray-600">Price: ₹{item.bookPrice}</p>
                   </div>
                 </div>
-                <div className="flex items-center space-x-4">
-                  <button onClick={() => deleteWishlistItem(index)} className="text-red-500 cursor-pointer transition-transform hover:scale-110"><BsTrash /></button>
+                <div>
+                  <div className="flex items-center space-x-4 mb-4">
+                    <button onClick={() => deleteWishlistItem(index)} className="text-red-500 cursor-pointer transition-transform hover:scale-110"><BsTrash /></button>
+                  </div>
+                  <div className="flex items-center space-x-4">
+                    <FiShoppingCart onClick={() => update(item, index)} size={20} className="cursor-pointer transition-transform hover:scale-110 text-blue-500" />
+                  </div>
                 </div>
               </div>
             ))}
