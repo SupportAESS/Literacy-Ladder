@@ -5,6 +5,8 @@ import UpdateBookModal from './UpdateBookModal';
 import ViewBookModal from './ViewBookModal';
 
 const AdminDashboard = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Assume initial state is logged out
+  const [username, setUsername] = useState('');
   const [showAddBookModal, setShowAddBookModal] = useState(false);
   const [showRemoveBookModal, setShowRemoveBookModal] = useState(false);
   const [showUpdateBookModal, setShowUpdateBookModal] = useState(false);
@@ -38,6 +40,10 @@ const AdminDashboard = () => {
 
   const logout = () => {
     // Code to destroy session data
+    localStorage.removeItem('session');
+    setIsLoggedIn(false);
+    setUsername('');
+    window.location.href = '/';
   };
 
   return (
@@ -65,7 +71,7 @@ const AdminDashboard = () => {
       </div>
 
       {/* Main Content */}
-      <div className="w-4/5 p-8 bg-gray-100">
+      <div className="w-screen p-8 bg-gray-100">
         <h1 className="text-3xl font-bold mb-8">Admin Dashboard</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* Your existing content */}

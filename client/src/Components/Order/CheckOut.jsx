@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { SlArrowDown, SlArrowUp, SlArrowRight } from "react-icons/sl";
 import { toast } from 'react-toastify';
-import logo from '../../asset/logo.png';
 
 const sessionData = JSON.parse(localStorage.getItem('session'));
 let refUser;

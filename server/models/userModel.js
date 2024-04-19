@@ -54,7 +54,7 @@ const bookSchema = new mongoose.Schema({
         }
     },
     bookImage: { type: String,  required: true, minLength: 1, maxLength: 255}, // Assuming image is stored as a path or URL
-    bookDescription: { type: String, required: true, minLength: 1, maxLength: 255 }
+    bookDescription: { type: String, required: true, minLength: 1, maxLength: 1000 }
 });
 
 const Book = mongoose.model('Book', bookSchema);
