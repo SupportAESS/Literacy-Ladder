@@ -54,12 +54,6 @@ const Cart = () => {
     wishData();
   }, []);
 
-  // useEffect(() => {
-
-  //   console.log(wishlistedItems);
-  //   fetchData();
-  // }, []);
-
   const updateQuantity = async (index, newQuantity) => {
     if (newQuantity <= 0) {
       deleteItem(index);
@@ -242,8 +236,8 @@ const Cart = () => {
 
   return (
     <div className="min-h-screen max-w-4xl mx-auto px-4 py-8">
-      <div className="bg-white shadow-md rounded-md overflow-hidden">
-        <h2 className="text-3xl font-semibold">Your Cart</h2>
+      <div className="bg-white shadow-md rounded-md overflow-hidden mt-9">
+        <h2 className="text-3xl font-semibold pl-2 pt-2">Cart</h2>
         {cartItems.length === 0 ? (
           <div className="p-8 flex items-center justify-center">
             <div className="text-center flex flex-col items-center">
@@ -292,7 +286,7 @@ const Cart = () => {
         {/* Wishlisted items */}
         {wishlistedItems.length > 0 && (
           <div className="divide-y divide-gray-200">
-            <h2 className="text-3xl font-semibold mb-4">Wishlisted Items</h2>
+            <h2 className="text-3xl font-semibold mb-4 pl-2 pt-2">Saved for later</h2>
             {wishlistedItems.map((item, index) => (
               <div key={index} className="flex items-center justify-between p-4">
                 <div className="flex items-center space-x-4">
