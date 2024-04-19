@@ -51,6 +51,9 @@ server.use('/', getLoginRoute);
 //SignUp System
 server.use('/',getSignUpRoute);
 
+//Google SignIn System
+
+
 // server.use(bodyParser.urlencoded());
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Book
@@ -108,6 +111,10 @@ server.use('/userAddressSave', userAddressSaveRoute);
 server.use('/userAddressGet', userAddressSaveRoute);
 server.use('/deleteAddress', userAddressSaveRoute);
 
+// server.post('/addBook', (req, res)=>{
+//   console.log(req.body)
+//   res.send("success")
+// })
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
