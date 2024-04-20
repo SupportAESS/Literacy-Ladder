@@ -98,7 +98,7 @@ const Checkout = () => {
         try {
             total = total * 100;
             const response = await axios.post('http://localhost:2211/orderPlace', {
-                userId: formData.userId,
+                userId: refUser,
                 addressId: formData.selectedAddress,
                 paymentMethod: formData.selectedPaymentMethod,
                 cartItems: formData.cartItems.map(item => item.book._id),

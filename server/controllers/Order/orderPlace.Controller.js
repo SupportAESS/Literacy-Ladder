@@ -30,6 +30,7 @@ const orderPlace = async (req, res) => {
             paymentStatus: paymentStatus,
             paymentId: order.id
         });
+        //console.log(newOrder);
 
         // Save the order document to the database
         const savedOrder = await newOrder.save();

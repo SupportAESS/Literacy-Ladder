@@ -16,6 +16,9 @@ function Slider() {
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [searchValue, setSearchValue] = useState('');
+  const [filteredSlides, setFilteredSlides] = useState([]);
+  const [showSearchResults, setShowSearchResults] = useState(false);
 
   const prevSlide = () => {
     const newIndex = (currentIndex - 1 + slides.length) % slides.length;
@@ -25,6 +28,16 @@ function Slider() {
   const nextSlide = () => {
     const newIndex = (currentIndex + 1) % slides.length;
     setCurrentIndex(newIndex);
+  };
+
+  const onChange = (event) => {
+    const searchTerm = event.target.value;
+    setSearchValue(searchTerm);
+    const filtered = slides.filter(slide =>
+      slide.url.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredSlides(filtered);
+    setShowSearchResults(searchTerm !== '' && filtered.length > 0);
   };
 
   useEffect(() => {
@@ -43,11 +56,13 @@ function Slider() {
         >
           {/* Search Bar */}
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-800 bg-opacity-75 rounded-lg px-4 py-2 w-3/5 flex items-center">
-            <HiSearch className="text-white mr-2" />
+            <button onClick={onChange}><HiSearch className="text-white mr-2" /></button>
             <input
               type="text"
               placeholder="Search..."
               className="w-full h-12 px-4 rounded-md border-2 border-gray-300 focus:outline-none focus:border-blue-500 bg-transparent text-white"
+              value={searchValue}
+              onChange={onChange}
             />
           </div>
 
@@ -67,6 +82,17 @@ function Slider() {
           </button>
         </div>
       </div>
+
+      {/* Search Results */}
+      {showSearchResults && (
+        <div className="absolute top-0 left-0 right-0 bottom-0 bg-gray-800 bg-opacity-75 flex items-center justify-center">
+          <ul className="text-white">
+            {filteredSlides.map((slide, index) => (
+              <li key={index}>{slide.url}</li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
