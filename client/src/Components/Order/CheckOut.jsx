@@ -113,18 +113,20 @@ const Checkout = () => {
                     toast.success('Order confirmed', {
                         theme: 'colored'
                     })
-
-                    for (let index = 0; index < formData.cartItems.length; index++) {
-                        const deletedCartItem = formData.cartItems[index];
-                        try {
-                            // Make DELETE request for each cart item
-                            await axios.delete('http://localhost:2211/deleteCartItem', { data: deletedCartItem });
-                            console.log('Deleted cart item:', deletedCartItem);
-                        } catch (error) {
-                            console.error('Error deleting cart item:', error);
-                            // Handle errors or display an error message
-                        }
-                    }
+                    handleDeleteCart();
+                    alert(`Order Confirmed with order Id: ${response.data.orderId}`);
+                    window.location.href = '/userProfile';
+                    // for (let index = 0; index < formData.cartItems.length; index++) {
+                    //     const deletedCartItem = formData.cartItems[index];
+                    //     try {
+                    //         // Make DELETE request for each cart item
+                    //         await axios.delete('http://localhost:2211/deleteCartItem', { data: deletedCartItem });
+                    //         console.log('Deleted cart item:', deletedCartItem);
+                    //     } catch (error) {
+                    //         console.error('Error deleting cart item:', error);
+                    //         // Handle errors or display an error message
+                    //     }
+                    // }
                     // confirmOrder(response.data.orderId); // Function to confirm order
                     return;
                 } else {
