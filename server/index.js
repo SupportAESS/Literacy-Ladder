@@ -100,6 +100,9 @@ server.use('/orderPlace', orderRoute);
 server.use('/deleteOrder', orderRoute);
 server.use('/confirmOrder', orderRoute);
 
+//Fetch Order Data
+server.use("/getOrders", orderRoute);
+
 //Payment
 server.use('/validate', paymentRoute);
 

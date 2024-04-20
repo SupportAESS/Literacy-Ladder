@@ -103,7 +103,7 @@ const Checkout = () => {
                 paymentMethod: formData.selectedPaymentMethod,
                 cartItems: formData.cartItems.map(item => item.book._id),
                 totalAmount: total,
-                paymentStatus: "panding"
+                paymentStatus: "pending"
             });
             console.log(formData.cartItems[0]);
             if (response.status === 200) {

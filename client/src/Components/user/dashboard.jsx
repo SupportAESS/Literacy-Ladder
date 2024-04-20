@@ -27,62 +27,79 @@ function UserProfile() {
   };
 
   return (
-    <div className="container mx-auto mt-20 flex bg-gray-300">
-      <div className="w-1/5 h-screen bg-gray-800 mr-4">
-        <ul className="mt-4">
-          <li className={`py-2 px-4 cursor-pointer ${selectedNavItem === 'orders' && 'bg-blue-500 text-white'}`} onClick={() => handleNavItemClick('orders')}>
-            <Link to="#">My Orders</Link>
-          </li>
-          <li className={`py-2 px-4 cursor-pointer ${selectedNavItem === 'address' && 'bg-blue-500 text-white'}`} onClick={() => handleNavItemClick('address')}>
-            <Link to="#">Address</Link>
-          </li>
-          <li className={`py-2 px-4 cursor-pointer ${selectedNavItem === 'details' && 'bg-blue-500 text-white'}`} onClick={() => handleNavItemClick('details')}>
-            <Link to="#">Personal Details</Link>
-          </li>
+    <div className="min-h-screen container mx-auto mt-10 flex bg-gray-100">
+      <div className="w-1/4 bg-gray-800 text-white py-6 px-4">
+        <h2 className="text-lg font-semibold mb-4">Profile Navigation</h2>
+        <ul className="space-y-2" style={{ maxHeight: 'calc(100vh - 120px)', overflowY: 'auto' }}>
+          <NavItem
+            title="My Orders"
+            selected={selectedNavItem === 'orders'}
+            onClick={() => handleNavItemClick('orders')}
+          />
+          <NavItem
+            title="Address"
+            selected={selectedNavItem === 'address'}
+            onClick={() => handleNavItemClick('address')}
+          />
+          <NavItem
+            title="Personal Details"
+            selected={selectedNavItem === 'details'}
+            onClick={() => handleNavItemClick('details')}
+          />
         </ul>
       </div>
-      <div className="w-3/4">
-        <div>
-          <h1 className="text-2xl font-bold mb-4">User Profile</h1>
-          {user ? (
-            <div>
-              {selectedNavItem === 'orders' && (
-                <div>
-                  <h2 className="text-xl font-bold mb-2">My Orders</h2>
-                  {user.orders && user.orders.length > 0 ? (
-                    <ul>
-                      {user.orders.map(order => (
-                        <li key={order.id}>
-                          <Link to={`/orders/${order.id}`}>{order.title}</Link>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p>No orders found.</p>
-                  )}
-                </div>
-              )}
-              {selectedNavItem === 'address' && (
-                <div>
-                  <UserAddress />
-                </div>
-              )}
-              {selectedNavItem === 'details' && (
-                <div>
-                  <h2 className="text-xl font-bold mb-2">Personal Details</h2>
-                  <p>Name: {user.fullName}</p>
-                  <p>Email: {user.email}</p>
-                  {/* Add more user details as needed */}
-                </div>
-              )}
-            </div>
-          ) : (
-            <p>Loading...</p>
-          )}
-        </div>
+      <div className="w-3/4 bg-white p-6">
+        <h1 className="text-2xl font-bold mb-4">User Profile</h1>
+        {user ? (
+          <div>
+            {selectedNavItem === 'orders' && (
+              <div>
+                <h2 className="text-xl font-semibold mb-2">My Orders</h2>
+                {user.orders && user.orders.length > 0 ? (
+                  <ul className="space-y-2">
+                    {user.orders.map(order => (
+                      <li key={order.id}>
+                        <Link to={`/orders/${order.id}`} className="text-blue-600 hover:underline">{order.title}</Link>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>No orders found.</p>
+                )}
+              </div>
+            )}
+            {selectedNavItem === 'address' && (
+              <div>
+                <UserAddress />
+              </div>
+            )}
+            {selectedNavItem === 'details' && (
+              <div>
+                <h2 className="text-xl font-semibold mb-2">Personal Details</h2>
+                <p><span className="font-semibold">Name:</span> {user.fullName}</p>
+                <p><span className="font-semibold">Email:</span> {user.email}</p>
+                {/* Add more user details as needed */}
+              </div>
+            )}
+          </div>
+        ) : (
+          <p>Loading...</p>
+        )}
       </div>
     </div>
   );
 }
 
+const NavItem = ({ title, selected, onClick }) => {
+  return (
+    <li
+      className={`py-2 px-4 cursor-pointer ${selected ? 'bg-blue-600' : ''}`}
+      onClick={onClick}
+    >
+      <span className={`${selected ? 'text-white' : 'text-gray-300'}`}>{title}</span>
+    </li>
+  );
+};
+
 export default UserProfile;
+
