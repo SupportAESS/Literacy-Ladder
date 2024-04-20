@@ -19,6 +19,7 @@ const wishlistRoute = require('./routes/Wishlist/wishlist.route.js');
 const paymentRoute = require('./routes/Payment/paymentValidate.route.js')
 const cartRoute = require('./routes/Cart/Cart.route.js');
 const orderRoute = require('./routes/Order/Order.route.js');
+const searchBookRoute = require('./routes/Search/Search.route.js');
 
 // Allow requests from the frontend server
 server.use(cors({
@@ -92,7 +93,8 @@ server.use("/getWishlist", wishlistRoute);
 //Deleted wishlisted item
 server.use("/deleteWishlistItem", wishlistRoute);
 
-
+//search books
+server.use('/searchBook', searchBookRoute);
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //OrderConfirmation and Payment

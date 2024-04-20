@@ -17,6 +17,7 @@ function Slider() {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [searchValue, setSearchValue] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
 
   const prevSlide = () => {
     const newIndex = (currentIndex - 1 + slides.length) % slides.length;
@@ -33,7 +34,20 @@ function Slider() {
   };
 
   const onSearch = () => {
-    console.log(searchValue); // Here you can perform the actual search operation
+    // Perform the actual search operation
+    fetchSearchResults();
+  };
+
+  const fetchSearchResults = () => {
+    // Make a GET request to fetch search results based on searchValue
+    // Replace the URL with your backend endpoint
+    fetch(`http://localhost:2211/searchBook?searchQuery=${searchValue}`)
+      .then(response => response.json())
+      .then(data => {
+        setSearchResults(data); // Update searchResults state with fetched data
+        console.log(data);
+      })
+      .catch(error => console.error('Error fetching search results:', error));
   };
 
   const handleKeyPress = (event) => {
@@ -84,6 +98,15 @@ function Slider() {
             <BsChevronRight size={30} />
           </button>
         </div>
+      </div>
+      {/* Search Results */}
+      <div className="mt-4">
+        <h2 className="text-xl font-bold mb-2">Search Results</h2>
+        <ul>
+          {searchResults.map((result, index) => (
+            <li key={index}>{/* Render your search result items here */}</li>
+          ))}
+        </ul>
       </div>
     </div>
   );
