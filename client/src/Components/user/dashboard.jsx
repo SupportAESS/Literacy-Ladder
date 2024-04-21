@@ -28,33 +28,37 @@ function UserProfile() {
 
   return (
     <div className="min-h-screen container mx-auto mt-10 flex bg-gray-100">
-      <div className="w-1/4 bg-gray-800 text-white py-6 px-4">
-        <h2 className="text-lg font-semibold mb-4">Profile Navigation</h2>
-        <ul className="space-y-2" style={{ maxHeight: 'calc(100vh - 120px)', overflowY: 'auto' }}>
-          <NavItem
-            title="My Orders"
-            selected={selectedNavItem === 'orders'}
-            onClick={() => handleNavItemClick('orders')}
-          />
-          <NavItem
-            title="Address"
-            selected={selectedNavItem === 'address'}
-            onClick={() => handleNavItemClick('address')}
-          />
-          <NavItem
-            title="Personal Details"
-            selected={selectedNavItem === 'details'}
-            onClick={() => handleNavItemClick('details')}
-          />
-        </ul>
-      </div>
+      {user ? (
+        <div className="w-1/4 bg-gray-800 text-white py-6 px-4">
+          <h2 className="text-lg font-semibold mb-4">{user.fullName}</h2>
+          <ul className="space-y-2" style={{ maxHeight: 'calc(100vh - 120px)', overflowY: 'auto' }}>
+            <NavItem
+              title="My Orders"
+              selected={selectedNavItem === 'orders'}
+              onClick={() => handleNavItemClick('orders')}
+            />
+            <NavItem
+              title="Address"
+              selected={selectedNavItem === 'address'}
+              onClick={() => handleNavItemClick('address')}
+            />
+            <NavItem
+              title="Personal Details"
+              selected={selectedNavItem === 'details'}
+              onClick={() => handleNavItemClick('details')}
+            />
+          </ul>
+        </div>
+      ) : (
+        <h1>Please Login to see Orders</h1>
+      )
+      }
       <div className="w-3/4 bg-white p-6">
-        <h1 className="text-2xl font-bold mb-4">User Profile</h1>
         {user ? (
           <div>
             {selectedNavItem === 'orders' && (
               <div>
-                <h2 className="text-xl font-semibold mb-2">My Orders</h2>
+                <h2 className="text-xl font-semibold mt-2 mb-2">My Orders</h2>
                 {user.orders && user.orders.length > 0 ? (
                   <ul className="space-y-2">
                     {user.orders.map(order => (

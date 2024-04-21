@@ -38,7 +38,7 @@ function AddAddressForm({ onSubmit }) {
             mobileNumber: '',
             alternativeMobileNumber: ''
         });
-        console.log(address);
+        //console.log(address);
         try {
             const response = await axios.post('http://localhost:2211/userAddressSave', address);
             if (response.status === 200) {
@@ -122,7 +122,7 @@ function UserAddress() {
     useEffect(() => {
         const userData = getUserData();
         userData.then(value => {
-            console.log(value.addresses); // Output: "8435963744"
+            //console.log(value.addresses); // Output: "8435963744"
             if (value.addresses) {
                 setUser(value.addresses);
                 if (value.addresses) {
@@ -137,12 +137,12 @@ function UserAddress() {
         }).catch(error => {
             console.error(error);
         });
-        console.log(userData);
+        //console.log(userData);
     }, []);
 
     const getUserData = async () => {
         const sessionData = localStorage.getItem('session');
-        console.log(sessionData);
+        //console.log(sessionData);
         const id = JSON.parse(sessionData);
         const refUser = id.user._id;
 
@@ -160,7 +160,7 @@ function UserAddress() {
     };
 
     const deleteAddress = async (addressId) => {
-        console.log(addressId);
+        //console.log(addressId);
         const deleteAddress = {
             "addressId": addressId
         }
