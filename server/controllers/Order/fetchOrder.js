@@ -4,7 +4,7 @@ const Orders = async(req, res) => {
     try {
         const {userId} = req.query;
         console.log(userId);
-        const response = await Order.find({userId:userId});
+        const response = await Order.find({userId:userId}).populate('cartItems');
         console.log(response);
         if(response!==null){
             return res.status(200).json(response);

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom'; // Assuming you're using React Router for navigation
 import UserAddress from './userAddress';
+import Orders from './myOrder';
 
 function UserProfile() {
   const [user, setUser] = useState(null);
@@ -58,18 +59,7 @@ function UserProfile() {
           <div>
             {selectedNavItem === 'orders' && (
               <div>
-                <h2 className="text-xl font-semibold mt-2 mb-2">My Orders</h2>
-                {user.orders && user.orders.length > 0 ? (
-                  <ul className="space-y-2">
-                    {user.orders.map(order => (
-                      <li key={order.id}>
-                        <Link to={`/orders/${order.id}`} className="text-blue-600 hover:underline">{order.title}</Link>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p>No orders found.</p>
-                )}
+                <Orders/>
               </div>
             )}
             {selectedNavItem === 'address' && (
