@@ -80,7 +80,7 @@ const OrderDetails = ({ order }) => {
                             <span className="text-gray-800 font-semibold">Subtotal:</span>
                         </div>
                         <div className="text-right">
-                            <span className="text-gray-800">₹{(order.totalAmount / 100).toFixed(2)}</span>
+                            <span className="text-gray-800">₹{(order.totalAmount * 0.01 - shippingCharge + discount - gst).toFixed(2)}</span>
                         </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4 mb-2">
@@ -112,7 +112,7 @@ const OrderDetails = ({ order }) => {
                             <span className="text-gray-800 font-semibold">Total:</span>
                         </div>
                         <div className="text-right">
-                            <span className="text-gray-800 font-semibold">₹{(order.totalAmount * 0.01 + shippingCharge - discount + gst).toFixed(2)}</span>
+                            <span className="text-gray-800 font-semibold">₹{(order.totalAmount * 0.01).toFixed(2)}</span>
                         </div>
                     </div>
                 </div>

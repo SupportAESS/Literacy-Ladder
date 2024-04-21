@@ -45,11 +45,6 @@ const OrderPage = () => {
             ) : (
                 <div>
                     {Orders.map((order, index) => (
-                    // Calculate discount (5% of total amount)
-                    discount = order.totalAmount * 0.0005,
-                    // Calculate GST (18% of subtotal + shipping charge after discount)
-                    subtotalAfterDiscount = order.totalAmount*0.01 - discount,
-                    gst = (subtotalAfterDiscount + shippingCharge) * 0.18,
                     <div key={index} className="bg-white shadow-md rounded-md p-6 mb-6">
                         <div className="flex justify-between items-center mb-4">
                             <div>
@@ -80,7 +75,7 @@ const OrderPage = () => {
                                     <span className="text-gray-800 font-semibold">Total <span className="text-sm">(inc. disc. & tax)</span>:</span>
                                 </div>
                                 <div>
-                                    <span className="text-gray-800 font-semibold">₹{(order.totalAmount * 0.01 + shippingCharge - discount + gst).toFixed(2)}</span>
+                                    <span className="text-gray-800 font-semibold">₹{(order.totalAmount * 0.01).toFixed(2)}</span>
                                 </div>
                             </div>
                         </div>
