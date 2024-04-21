@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
 import { HiSearch } from 'react-icons/hi';
+import { FiShoppingCart } from 'react-icons/fi';
+import { FaRegHeart } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 function Slider() {
   const slides = [
@@ -18,6 +21,8 @@ function Slider() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [searchValue, setSearchValue] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [isHovering, setIsHovering] = useState(false);
+  const [hoveredProduct, setHoveredProduct] = useState(null);
 
   const prevSlide = () => {
     const newIndex = (currentIndex - 1 + slides.length) % slides.length;
@@ -45,7 +50,6 @@ function Slider() {
       .then(response => response.json())
       .then(data => {
         setSearchResults(data); // Update searchResults state with fetched data
-        console.log(data);
       })
       .catch(error => console.error('Error fetching search results:', error));
   };
@@ -54,6 +58,26 @@ function Slider() {
     if (event.key === 'Enter') {
       onSearch();
     }
+  };
+
+  const handleHover = (product) => {
+    setIsHovering(true);
+    setHoveredProduct(product);
+  };
+
+  const handleLeave = () => {
+    setIsHovering(false);
+    setHoveredProduct(null);
+  };
+
+  const addToCart = (product) => {
+    // Implement addToCart functionality
+    console.log('Added to cart:', product);
+  };
+
+  const addToWishlist = (product) => {
+    // Implement addToWishlist functionality
+    console.log('Added to wishlist:', product);
   };
 
   useEffect(() => {
@@ -102,11 +126,43 @@ function Slider() {
       {/* Search Results */}
       <div className="mt-4">
         <h2 className="text-xl font-bold mb-2">Search Results</h2>
-        <ul>
-          {searchResults.map((result, index) => (
-            <li key={index}>{/* Render your search result items here */}</li>
+        <div className="grid grid-cols-5 gap-4">
+          {searchResults.map((product, index) => (
+            <div
+              key={product._id}
+              className="relative bg-white text-black rounded-xl overflow-hidden h-96"
+              onMouseEnter={() => handleHover(product)}
+              onMouseLeave={handleLeave}
+            >
+              <img src={product.bookImage} alt="" className="w-full h-full" />
+              {isHovering && hoveredProduct === product && (
+                <div className="absolute bottom-0 left-0 right-0 bg-white text-black p-4">
+                  <p className="text-2xl font-semibold">{product.bookName}</p>
+                  <p className="text-lg font-serif font-bold">Author: {product.author}</p>
+                  <p className="text-base font-sans font-bold">Price: ₹ {product.bookPrice}</p>
+                  <div className="flex flex-row gap-6 items-center">
+                    <FiShoppingCart
+                      onClick={() => addToCart(product)}
+                      size={30}
+                      className="cursor-pointer transition-transform hover:scale-110 text-blue-500"
+                    />
+                    <Link
+                      to={`/product/${product.bookName}`}
+                      className="bg-indigo-500 text-white text-lg px-6 py-1 rounded-xl mt-2"
+                    >
+                      View Details
+                    </Link>
+                    <FaRegHeart
+                      onClick={() => addToWishlist(product)}
+                      size={30}
+                      className="cursor-pointer transition-transform hover:scale-110 text-red-500"
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
     </div>
   );
