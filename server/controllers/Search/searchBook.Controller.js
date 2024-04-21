@@ -12,7 +12,8 @@ const searchBook = async (req, res) => {
     const searchResults = await Book.find({
       $or: [
         { bookName: { $regex: regexQuery } },
-        { author: { $regex: regexQuery } }
+        { author: { $regex: regexQuery } },
+        { genre: { $regex: regexQuery}}
       ]
     });
 
