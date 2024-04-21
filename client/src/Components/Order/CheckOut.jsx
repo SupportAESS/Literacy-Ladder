@@ -101,7 +101,10 @@ const Checkout = () => {
                 userId: refUser,
                 addressId: formData.selectedAddress,
                 paymentMethod: formData.selectedPaymentMethod,
-                cartItems: formData.cartItems.map(item => item.book._id),
+                cartItems: formData.cartItems.map(item => ({
+                    bookId: item.book._id,
+                    quantity: item.quantity
+                })),
                 totalAmount: total,
                 paymentStatus: "pending"
             });

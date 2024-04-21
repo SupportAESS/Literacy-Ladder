@@ -139,8 +139,15 @@ const orderSchema = new mongoose.Schema({
     },
     cartItems: [
         {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Book' // Reference to the Book model
+            bookId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Book', // Reference to the Book model
+                required: true
+            },
+            quantity: {
+                type: Number,
+                required: true
+            }
         }
     ],
     totalAmount: {
