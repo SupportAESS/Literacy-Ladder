@@ -166,7 +166,12 @@ const orderSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true
-    }
+    },
+    orderStatus: {
+        type: String,
+        required: true
+    },
+    timeStamp: { type: Date, required: true }
 });
 
 const Order  = mongoose.model('Order', orderSchema);

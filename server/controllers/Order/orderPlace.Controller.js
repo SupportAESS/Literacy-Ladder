@@ -26,8 +26,10 @@ const orderPlace = async (req, res) => {
             cartItems: cartItems,
             totalAmount: totalAmount,
             paymentStatus: paymentStatus,
-            paymentId: order.id
-        });
+            paymentId: order.id,
+            orderStatus: "confirm",
+            timeStamp: new Date() // Setting the current time
+        });        
 
         const savedOrder = await newOrder.save();
 
