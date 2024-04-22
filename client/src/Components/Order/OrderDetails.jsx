@@ -1,7 +1,52 @@
 import React from 'react';
 import moment from 'moment';
+import { PDFDownloadLink, Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 
-const OrderDetails = ({ order }) => {
+
+const styles = StyleSheet.create({
+    page: {
+        fontFamily: 'Helvetica',
+        padding: 20,
+    },
+    section: {
+        marginBottom: 10,
+    },
+    title: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 10,
+    },
+    subtitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 5,
+    },
+    info: {
+        fontSize: 12,
+        marginBottom: 3,
+    },
+    table: {
+        display: 'table',
+        width: '100%',
+        borderStyle: 'solid',
+        borderColor: '#bfbfbf',
+        borderWidth: 1,
+        borderCollapse: 'collapse',
+    },
+    tableRow: {
+        flexDirection: 'row',
+    },
+    tableCell: {
+        width: '25%',
+        borderStyle: 'solid',
+        borderColor: '#bfbfbf',
+        borderWidth: 1,
+        padding: 5,
+    },
+});
+
+
+const OrderDetails = ({ order, handleBackToOrders }) => {
     // Calculate shipping charge (static value of 10 rupees)
     const shippingCharge = 10;
     // Calculate discount (5% of total amount)
@@ -15,12 +60,62 @@ const OrderDetails = ({ order }) => {
     // Shipped from address
     const shippedFromAddress = (
         <>
-            Literacy Ladder, <br/>
+            Literacy Ladder, <br />
             Computer Science and Engineering Department,<br />
             MNNIT, {city}, {postalCode}<br />
             {state}, {country}
         </>
     );
+
+
+    const InvoiceDocument = (
+        <Document>
+            <Page size="A4" style={styles.page}>
+                <View style={styles.section}>
+                    <Text style={styles.title}>Invoice</Text>
+                    <Text style={styles.info}>Order Id: {order._id}</Text>
+                    <Text style={styles.info}>Date: {moment(order.timeStamp).format('MMMM, Do YYYY')}</Text>
+                </View>
+                <View style={styles.section}>
+                    <Text style={styles.subtitle}>Shipped from:</Text>
+                    <Text style={styles.info}>{shippedFromAddress}</Text>
+                </View>
+                <View style={styles.section}>
+                    <Text style={styles.subtitle}>Delivered to:</Text>
+                    <Text style={styles.info}>{street}</Text>
+                    <Text style={styles.info}>{city}, {state}, {postalCode}</Text>
+                    <Text style={styles.info}>{country}</Text>
+                </View>
+                <View style={styles.section}>
+                    <Text style={styles.subtitle}>Products:</Text>
+                    <View style={styles.table}>
+                        <View style={styles.tableRow}>
+                            <Text style={styles.tableCell}>Product</Text>
+                            <Text style={styles.tableCell}>Author</Text>
+                            <Text style={styles.tableCell}>Quantity</Text>
+                            <Text style={styles.tableCell}>Price</Text>
+                        </View>
+                        {order.cartItems.map((item, index) => (
+                            <View style={styles.tableRow} key={index}>
+                                <Text style={styles.tableCell}>{item.bookId.bookName}</Text>
+                                <Text style={styles.tableCell}>{item.bookId.author}</Text>
+                                <Text style={styles.tableCell}>{item.quantity}</Text>
+                                <Text style={styles.tableCell}>&#x20B9;{item.bookId.bookPrice}</Text>
+                            </View>
+                        ))}
+                    </View>
+                </View>
+                <View style={styles.section}>
+                    <Text style={styles.info}>Subtotal: {(order.totalAmount * 0.01 - shippingCharge + discount - gst).toFixed(2)}</Text>
+                    <Text style={styles.info}>Shipping Charge: {shippingCharge.toFixed(2)}</Text>
+                    <Text style={styles.info}>Discount (5%): -{discount.toFixed(2)}</Text>
+                    <Text style={styles.info}>GST (18%): {gst.toFixed(2)}</Text>
+                    <Text style={styles.total}>Total: {(order.totalAmount * 0.01).toFixed(2)}</Text>
+                </View>
+            </Page>
+        </Document>
+    );
+
 
     return (
         <div className="container mx-auto mt-10">
@@ -28,9 +123,16 @@ const OrderDetails = ({ order }) => {
                 <div className="flex justify-between items-center mb-4">
                     <h1 className="text-3xl font-bold">Invoice</h1>
                     <div>
-                        <span className="text-gray-600">Order Number: {order._id}</span>
+                        <div>
+                            <button className="text-blue-500 hover:text-blue-700" onClick={() => handleBackToOrders()}>Back to Orders</button>
+                        </div>
+                        <span className="text-gray-600">Order Id: {order._id}</span>
                         <br />
                         <span className="text-gray-600">Date: {moment(order.timeStamp).format('MMMM, Do YYYY')}</span>
+                        <br />
+                        <PDFDownloadLink document={InvoiceDocument} fileName="invoice.pdf">
+                            {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Print Invoice')}
+                        </PDFDownloadLink>
                     </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4 mb-6">
