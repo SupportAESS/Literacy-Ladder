@@ -13,6 +13,8 @@ import UserProfile from './Components/user/dashboard';
 import ProtectedRoute from './ProtectedRoute'; // Import ProtectedRoute
 import Checkout from './Components/Order/CheckOut';
 import ProductDetail from './Components/Product/ProductDetail';
+import ContactUs from './Components/Public/ContactUs';
+import PrivacyPolicy from './Components/Public/PrivacyPolicy';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -24,6 +26,8 @@ const router = createBrowserRouter(
       <Route path='userProfile' element={<ProtectedRoute Component={UserProfile} />}/> {/*Use ProtectedRoute for userProfile*/}
       <Route path='/product/:productId' Component={ProductDetail} />
       <Route path='/cart/checkout' element={<ProtectedRoute Component={Checkout} />}/>
+      <Route path='/contactUs' element={<ContactUs />} />
+      <Route path='/privacyPolicy' element={<PrivacyPolicy />} />
     </Route>
   )
 );

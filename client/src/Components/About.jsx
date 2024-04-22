@@ -1,8 +1,8 @@
-import React from 'react'
+import React from 'react';
 
 function About() {
   return (
-    <div className="bg-gray-100 py-16 mx min-h-screen ">
+    <div className="bg-gray-100 py-16 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="lg:text-center">
           <h2 className="text-base text-indigo-600 font-semibold tracking-wide uppercase">About Us</h2>
@@ -56,16 +56,34 @@ function About() {
                 </div>
                 <h3 className="text-xl font-medium text-gray-900 mb-3">Our Values</h3>
                 <p className="text-gray-600">
-                We are committed to providing exceptional customer service and fostering a welcoming and inclusive community of readers. We believe in the power of literature to educate, inspire, and empower individuals from all walks of life.
+                  We are committed to providing exceptional customer service and fostering a welcoming and inclusive community of readers. We believe in the power of literature to educate, inspire, and empower individuals from all walks of life.
                 </p>
+              </div>
+            </div>
+
+            {/* Additional Section */}
+            <div className="flex flex-col bg-white rounded-lg shadow-lg overflow-hidden">
+              <div className="px-6 py-8">
+                <div className="rounded-full bg-indigo-500 inline-flex items-center justify-center text-white mb-5 w-12 h-12">
+                  <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                  </svg>
+                </div>
+                <h3 className="text-xl font-medium text-gray-900 mb-3">Our Team</h3>
+                <p class="text-gray-600">
+                  Founder: <span class="font-semibold">Shivendra Singh Thakur</span><br />
+                  Co-Founder & CEO: <span class="font-semibold">Abhinay Verma</span><br />
+                  Marketing Head: <span class="font-semibold">Shiva Teja</span><br />
+                  Product Head: <span class="font-semibold">Eram Fatma</span>
+                </p>
+
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default About
-
+export default About;

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thank You for Contacting Us</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      color: #333333;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .header {
+      padding: 40px 0;
+      background-color: #f7f7f7;
+      text-align: center;
+    }
+    .header h1 {
+      font-size: 24px;
+      color: #333333;
+      margin-bottom: 20px;
+    }
+    .content {
+      padding: 20px;
+      background-color: #ffffff;
+    }
+    .content p {
+      font-size: 16px;
+      color: #666666;
+      margin-bottom: 20px;
+    }
+    .signature {
+      border-top: 1px solid #ccc;
+      padding-top: 20px;
+      text-align: center;
+    }
+    .logo {
+      max-width: 150px;
+      margin-bottom: 10px;
+    }
+    .contact-info p {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td align="center">
+        <div class="container">
+          <div class="header">
+            <h1>Thank You for Contacting Us</h1>
+            <p>Dear {{name}},</p>
+            <p>We received your message and will get back to you as soon as possible.</p>
+            <p>Thank you for reaching out to us!</p>
+            <p>Best regards,</p>
+            <p>Your Literacy Ladder</p>
+          </div>
+          <div class="content">
+            <div class="signature">
+              <img src="https://res.cloudinary.com/dyifiiyxl/image/upload/v1713370862/rfssy3ffqwieg80btidt.png" alt="Company Logo" class="logo">
+              <div class="contact-info">
+                <p>Shiva Teja</p>
+                <p>Marketing Manager</p>
+                <p>Literacy Ladder</p>
+                <p>Computer Science and Engineering Department,</p>
+                <p>MNNIT, Prayagraj, 211004, Uttar Pradesh, India</p>
+                <p>Phone: +91-9415120130</p>
+                <p>Email: shiva.teja@literacyladder.com</p>
+                <p>Website: www.literacyladder.com</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+
