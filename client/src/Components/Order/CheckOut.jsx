@@ -289,11 +289,11 @@ const Checkout = () => {
                 <div className="flex justify-between items-center mb-2">
                     <h3 className="text-lg font-semibold">Order Summary</h3>
                     <button className="text-blue-500" onClick={() => setShowItems(!showItems)}>
-                        {showItems ? <SlArrowDown /> /* Downward-pointing triangle */ : <SlArrowRight />/* Upward-pointing triangle */}
+                        {showItems ? <SlArrowRight /> /* Downward-pointing triangle */ : <SlArrowDown />/* Upward-pointing triangle */}
                     </button>
                 </div>
 
-                {showItems && (
+                {!showItems && (
                     <div>
                         {formData.cartItems.map((item, index) => {
                             return (

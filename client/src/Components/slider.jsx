@@ -27,6 +27,7 @@ function Slider() {
   const [searchResults, setSearchResults] = useState([]);
   const [isHovering, setIsHovering] = useState(false);
   const [hoveredProduct, setHoveredProduct] = useState(null);
+  const [isSearch, setSearchView] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const prevSlide = () => {
@@ -45,6 +46,7 @@ function Slider() {
 
   const onSearch = () => {
     // Perform the actual search operation
+    setSearchView(true);
     setIsLoading(true);
     fetchSearchResults();
   };
@@ -52,6 +54,9 @@ function Slider() {
   const fetchSearchResults = () => {
     // Make a GET request to fetch search results based on searchValue
     // Replace the URL with your backend endpoint
+    if(searchValue == ''){
+      setSearchView(false);
+    }
     fetch(`http://localhost:2211/searchBook?searchQuery=${searchValue}`)
       .then(response => response.json())
       .then(data => {
@@ -221,6 +226,7 @@ function Slider() {
         </div>
       </div>
       {/* Search Results */}
+      {isSearch &&(
       <div className="mt-4">
         <h2 className="text-xl font-bold mb-2">Search Results</h2>
         {isLoading ? (
@@ -267,6 +273,7 @@ function Slider() {
           </div>
         )}
       </div>
+      )}
     </div>
   );
 }
