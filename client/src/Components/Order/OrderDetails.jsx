@@ -1,12 +1,15 @@
 import React from 'react';
 import moment from 'moment';
-import { PDFDownloadLink, Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
+import { PDFDownloadLink, Page, Text, View, Document, StyleSheet, Image } from '@react-pdf/renderer';
 
 
 const styles = StyleSheet.create({
     page: {
         fontFamily: 'Helvetica',
         padding: 20,
+    },
+    rupeeSymbol: {
+        fontFamily: 'Arial', // Change the font family as needed
     },
     section: {
         marginBottom: 10,
@@ -58,17 +61,42 @@ const styles = StyleSheet.create({
     right: {
         textAlign: 'right',
     },
+    image: {
+        width: 150, // Adjust as per your requirement
+        height: 100, // Adjust as per your requirement
+        marginBottom: 10,
+        position: 'absolute',
+        top: 20,
+        right: 20,
+    },
+    sign: {
+        width: 150,
+        height: 100,
+        marginTop: 10,
+        position: 'absolute',
+        right: 20,
+        bottom: 50
+    },
+    signatureContainer: {
+        position: 'absolute',
+        bottom: 50,
+        right: 20,
+    },
+    authorizedText: {
+        marginTop: 10,
+        textAlign: 'right',
+    },
 });
 
 
 const OrderDetails = ({ order, handleBackToOrders }) => {
     // Calculate shipping charge (static value of 10 rupees)
-    const shippingCharge = 10;
+    // const shippingCharge = 10;
     // Calculate discount (5% of total amount)
     const discount = order.totalAmount * 0.0005;
     // Calculate GST (18% of subtotal + shipping charge after discount)
     const subtotalAfterDiscount = order.totalAmount * 0.01 - discount;
-    const gst = (subtotalAfterDiscount + shippingCharge) * 0.18;
+    const gst = (subtotalAfterDiscount) * 0.18;
 
     // Extract address details from the order
     const { street, city, state, postalCode, country } = order.address.addresses[0];
@@ -82,10 +110,14 @@ const OrderDetails = ({ order, handleBackToOrders }) => {
         </>
     );
 
+    let disc = 0;
+    let sad = 0;
+    let tax = 0;
 
     const InvoiceDocument = (
         <Document>
             <Page size="A4" style={styles.page}>
+                <Image src='https://res.cloudinary.com/dyifiiyxl/image/upload/v1713370862/rfssy3ffqwieg80btidt.png' style={styles.image} />
                 <View style={styles.section}>
                     <Text style={styles.title}>Invoice</Text>
                     <Text style={styles.info}>Order Id: {order._id}</Text>
@@ -115,7 +147,7 @@ const OrderDetails = ({ order, handleBackToOrders }) => {
                                 <Text style={styles.tableCell}>{item.bookId.bookName}</Text>
                                 <Text style={styles.tableCell}>{item.bookId.author}</Text>
                                 <Text style={styles.tableCell}>{item.quantity}</Text>
-                                <Text style={styles.tableCell}>{(order.totalAmount * 0.01 - shippingCharge + discount - gst).toFixed(2)}</Text>
+                                <Text style={styles.tableCell}>Rs. {(item.bookId.bookPrice + disc - tax).toFixed(2)}</Text>
                             </View>
                         ))}
                     </View>
@@ -123,29 +155,30 @@ const OrderDetails = ({ order, handleBackToOrders }) => {
                 <View style={styles.section}>
                     <View style={styles.flexContainer}>
                         <Text style={styles.left}>Subtotal:</Text>
-                        <Text style={styles.right}>{(order.totalAmount * 0.01 - shippingCharge + discount - gst).toFixed(2)}</Text>
-                    </View>
-                    <View style={styles.flexContainer}>
-                        <Text style={styles.left}>Shipping Charge:</Text>
-                        <Text style={styles.right}>{shippingCharge.toFixed(2)}</Text>
+                        <Text style={styles.right}>Rs. {(order.totalAmount * 0.01 + discount - gst).toFixed(2)}</Text>
                     </View>
                     <View style={styles.flexContainer}>
                         <Text style={styles.left}>Discount (5%):</Text>
-                        <Text style={styles.right}>-{discount.toFixed(2)}</Text>
+                        <Text style={styles.right}>- Rs. {discount.toFixed(2)}</Text>
                     </View>
                     <View style={styles.flexContainer}>
                         <Text style={styles.left}>GST (18%):</Text>
-                        <Text style={styles.right}>{gst.toFixed(2)}</Text>
+                        <Text style={styles.right}>Rs. {gst.toFixed(2)}</Text>
                     </View>
                     <View style={styles.flexContainer}>
                         <Text style={[styles.total, styles.left]}>Total:</Text>
-                        <Text style={[styles.total, styles.right]}>{(order.totalAmount * 0.01).toFixed(2)}</Text>
+                        <Text style={[styles.total, styles.right]}>Rs. {(order.totalAmount * 0.01).toFixed(2)}</Text>
                     </View>
+                </View>
+                <View style={styles.signatureContainer}>
+                    <Image src='https://res.cloudinary.com/dyifiiyxl/image/upload/v1713883859/iytdpat7fvklwgrl5exs.png' style={styles.sign} />
+                    <Text style={styles.authorizedText}>(Marketing head of Literacy Ladder)</Text>
                 </View>
             </Page>
         </Document>
     );
-    
+
+
 
 
     return (
@@ -191,6 +224,9 @@ const OrderDetails = ({ order, handleBackToOrders }) => {
                         </div>
                     </div>
                     {order.cartItems.map(item => (
+                        disc = item.bookId.bookPrice * 0.05,
+                        sad = item.bookId.bookPrice - disc,
+                        tax = sad * 0.18,
                         <div key={item._id} className="grid grid-cols-3 gap-4 items-center mb-2">
                             <div className="text-left">
                                 <span className="text-gray-800">{item.bookId.bookName}</span>
@@ -200,7 +236,7 @@ const OrderDetails = ({ order, handleBackToOrders }) => {
                                 <span className="text-gray-500">{item.quantity}</span>
                             </div>
                             <div className="text-right">
-                                <span className="text-gray-800">₹{(order.totalAmount * 0.01 - shippingCharge + discount - gst).toFixed(2)}</span>
+                                <span className="text-gray-800">₹{(item.bookId.bookPrice + disc - tax).toFixed(2)}</span>
                             </div>
                         </div>
                     ))}
@@ -211,17 +247,17 @@ const OrderDetails = ({ order, handleBackToOrders }) => {
                             <span className="text-gray-800 font-semibold">Subtotal:</span>
                         </div>
                         <div className="text-right">
-                            <span className="text-gray-800">₹{(order.totalAmount * 0.01 - shippingCharge + discount - gst).toFixed(2)}</span>
+                            <span className="text-gray-800">₹{(order.totalAmount * 0.01 + discount - gst).toFixed(2)}</span>
                         </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-4 mb-2">
+                    {/* <div className="grid grid-cols-2 gap-4 mb-2">
                         <div className="text-left">
                             <span className="text-gray-800 font-semibold">Shipping Charge:</span>
                         </div>
                         <div className="text-right">
                             <span className="text-gray-800">₹{shippingCharge.toFixed(2)}</span>
                         </div>
-                    </div>
+                    </div> */}
                     <div className="grid grid-cols-2 gap-4 mb-2">
                         <div className="text-left">
                             <span className="text-gray-800 font-semibold">Discount (5%):</span>
