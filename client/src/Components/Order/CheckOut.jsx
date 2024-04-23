@@ -29,6 +29,10 @@ const Checkout = () => {
                     const addressResponse = await axios.get(`http://localhost:2211/userAddressGet?userId=${refUser}`);
                     if (addressResponse.data && addressResponse.data.ok) {
                         const addresses = addressResponse.data.address.addresses;
+                        if(addresses.length === 0){
+                            alert("For the subsequent step, please ensure that your address has been successfully added before proceeding further.");
+                            window.location.href = '/userProfile';
+                        }
                         setFormData(prevFormData => ({
                             ...prevFormData,
                             addresses: addresses,
