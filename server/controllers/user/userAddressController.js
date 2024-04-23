@@ -1,4 +1,4 @@
-const { UserAddress, User } = require('../../models/userModel');
+const { UserAddress, User, Order } = require('../../models/userModel');
 
 const userAddressSave = async (req, res) => {
   try {
@@ -92,7 +92,13 @@ const deleteAddress = async (req, res) => {
   try {
     // Extract the address ID from the request parameters
     const addressId = req.body.addressId;
-    // console.log(req.body.addressId);
+
+    // Check if there are any orders associated with this address
+    const ordersForAddress = await Order.find({ 'addressId': addressId });
+    if (ordersForAddress.length > 0) {
+      return res.status(201).json({ message: 'Orders exist for this address. Cannot delete.' });
+    }
+
     // Check if the address exists
     const address = await UserAddress.findOne({ 'addresses._id': addressId });
     if (!address) {
@@ -111,6 +117,7 @@ const deleteAddress = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
 
 
 module.exports = { userAddressSave, userAddressGet, deleteAddress };

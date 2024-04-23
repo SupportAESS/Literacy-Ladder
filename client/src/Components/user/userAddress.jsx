@@ -16,16 +16,45 @@ function AddAddressForm({ onSubmit }) {
         alternativeMobileNumber: ''
     });
 
+    const [errors, setErrors] = useState({});
+
     const handleChange = (e) => {
         setAddress({ ...address, [e.target.name]: e.target.value });
+        // Clear error message when user starts typing
+        setErrors({ ...errors, [e.target.name]: '' });
+    };
+
+    const validateForm = () => {
+        let isValid = true;
+        const newErrors = {};
+
+        // Validate mobile number
+        if (address.mobileNumber.length !== 10) {
+            newErrors.mobileNumber = 'Mobile number must be 10 digits';
+            isValid = false;
+        }
+
+        // Validate postal code
+        if (address.postalCode.length !== 6) {
+            newErrors.postalCode = 'Postal code must be 6 digits';
+            isValid = false;
+        }
+
+        setErrors(newErrors);
+        return isValid;
     };
 
     const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!validateForm()) {
+            return;
+        }
+
         const sessionData = localStorage.getItem('session');
         const data = JSON.parse(sessionData);
         address.refUser = data.user._id;
 
-        e.preventDefault();
         onSubmit(address);
         setAddress({
             refUser: '',
@@ -38,7 +67,7 @@ function AddAddressForm({ onSubmit }) {
             mobileNumber: '',
             alternativeMobileNumber: ''
         });
-        //console.log(address);
+
         try {
             const response = await axios.post('http://localhost:2211/userAddressSave', address);
             if (response.status === 200) {
@@ -46,74 +75,78 @@ function AddAddressForm({ onSubmit }) {
                     theme: 'colored'
                 });
             }
-
-        } catch (e) {
-            toast.error(e, {
+        } catch (error) {
+            toast.error(error.response?.data?.message || 'An error occurred', {
                 theme: 'colored'
-            })
+            });
         }
     };
 
     return (
         <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col">
-                <label htmlFor="street" className="text-gray-700 font-bold mb-1">
-                    <span className="text-red-500">*</span> Street:
-                </label>
-                <input type="text" id="street" name="street" value={address.street} onChange={handleChange} required className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500" />
+            <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col">
+                    <label htmlFor="street" className="text-gray-700 font-bold mb-1">
+                        <span className="text-red-500">*</span> Street:
+                    </label>
+                    <input type="text" id="street" name="street" value={address.street} onChange={handleChange} required className={`p-2 border rounded-md focus:outline-none focus:ring ${errors.street ? 'border-red-500' : 'border-gray-300'}`} />
+                    {errors.street && <p className="text-sm text-red-500">{errors.street}</p>}
+                </div>
+                <div className="flex flex-col">
+                    <label htmlFor="city" className="text-gray-700 font-bold mb-1">
+                        <span className="text-red-500">*</span> City:
+                    </label>
+                    <input type="text" id="city" name="city" value={address.city} onChange={handleChange} required className={`p-2 border rounded-md focus:outline-none focus:ring ${errors.city ? 'border-red-500' : 'border-gray-300'}`} />
+                    {errors.city && <p className="text-sm text-red-500">{errors.city}</p>}
+                </div>
+                <div className="flex flex-col">
+                    <label htmlFor="state" className="text-gray-700 font-bold mb-1">
+                        <span className="text-red-500">*</span> State:
+                    </label>
+                    <input type="text" id="state" name="state" value={address.state} onChange={handleChange} required className={`p-2 border rounded-md focus:outline-none focus:ring ${errors.state ? 'border-red-500' : 'border-gray-300'}`} />
+                    {errors.state && <p className="text-sm text-red-500">{errors.state}</p>}
+                </div>
+                <div className="flex flex-col">
+                    <label htmlFor="country" className="text-gray-700 font-bold mb-1">
+                        <span className="text-red-500">*</span> Country:
+                    </label>
+                    <input type="text" id="country" name="country" value={address.country} onChange={handleChange} required className={`p-2 border rounded-md focus:outline-none focus:ring ${errors.country ? 'border-red-500' : 'border-gray-300'}`} />
+                    {errors.country && <p className="text-sm text-red-500">{errors.country}</p>}
+                </div>
+                <div className="flex flex-col">
+                    <label htmlFor="postalCode" className="text-gray-700 font-bold mb-1">
+                        <span className="text-red-500">*</span> Postal Code:
+                    </label>
+                    <input type="number" id="postalCode" name="postalCode" value={address.postalCode} onChange={handleChange} required className={`p-2 border rounded-md focus:outline-none focus:ring ${errors.postalCode ? 'border-red-500' : 'border-gray-300'}`} />
+                    {errors.postalCode && <p className="text-sm text-red-500">{errors.postalCode}</p>}
+                </div>
+                <div className="flex flex-col">
+                    <label htmlFor="mobileNumber" className="text-gray-700 font-bold mb-1">
+                        <span className="text-red-500">*</span> Mobile Number:
+                    </label>
+                    <input type="tel" id="mobileNumber" name="mobileNumber" value={address.mobileNumber} onChange={handleChange} required className={`p-2 border rounded-md focus:outline-none focus:ring ${errors.mobileNumber ? 'border-red-500' : 'border-gray-300'}`} />
+                    {errors.mobileNumber && <p className="text-sm text-red-500">{errors.mobileNumber}</p>}
+                </div>
+                <div className="flex flex-col">
+                    <label htmlFor="alternativeMobileNumber" className="text-gray-700 font-bold mb-1">
+                        Alternative Mobile Number:
+                    </label>
+                    <input type="tel" id="alternativeMobileNumber" name="alternativeMobileNumber" value={address.alternativeMobileNumber} onChange={handleChange} className="p-2 border rounded-md focus:outline-none focus:ring" />
+                    <p className="text-sm text-gray-500">This field is optional.</p>
+                </div>
+                <div className="flex flex-col">
+                    <label htmlFor="isDefault" className="flex items-center">
+                        <input type="checkbox" id="isDefault" name="isDefault" checked={address.isDefault} onChange={() => setAddress({ ...address, isDefault: !address.isDefault })} className="mr-2 rounded focus:outline-none focus:ring" />
+                        <span className="text-gray-700">Default Address</span>
+                    </label>
+                </div>
             </div>
-            <div className="flex flex-col">
-                <label htmlFor="city" className="text-gray-700 font-bold mb-1">
-                    <span className="text-red-500">*</span> City:
-                </label>
-                <input type="text" id="city" name="city" value={address.city} onChange={handleChange} required className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500" />
-            </div>
-            <div className="flex flex-col">
-                <label htmlFor="state" className="text-gray-700 font-bold mb-1">
-                    <span className="text-red-500">*</span> State:
-                </label>
-                <input type="text" id="state" name="state" value={address.state} onChange={handleChange} required className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500" />
-            </div>
-            <div className="flex flex-col">
-                <label htmlFor="country" className="text-gray-700 font-bold mb-1">
-                    <span className="text-red-500">*</span> Country:
-                </label>
-                <input type="text" id="country" name="country" value={address.country} onChange={handleChange} required className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500" />
-            </div>
-            <div className="flex flex-col">
-                <label htmlFor="postalCode" className="text-gray-700 font-bold mb-1">
-                    <span className="text-red-500">*</span> Postal Code:
-                </label>
-                <input type="number" id="postalCode" name="postalCode" value={address.postalCode} onChange={handleChange} required className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500" />
-            </div>
-            <div className="flex flex-col">
-                <label htmlFor="mobileNumber" className="text-gray-700 font-bold mb-1">
-                    <span className="text-red-500">*</span> Mobile Number:
-                </label>
-                <input type="number" id="mobileNumber" name="mobileNumber" value={address.mobileNumber} onChange={handleChange} required className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500" />
-            </div>
-            <div className="flex flex-col">
-                <label htmlFor="alternativeMobileNumber" className="text-gray-700 font-bold mb-1">
-                    Alternative Mobile Number:
-                </label>
-                <input type="number" id="alternativeMobileNumber" name="alternativeMobileNumber" value={address.alternativeMobileNumber} onChange={handleChange} className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500" />
-                <p className="text-sm text-gray-500">This field is optional.</p>
-            </div>
-            <div className="flex flex-col">
-                <label htmlFor="isDefault" className="flex items-center">
-                    <input type="checkbox" id="isDefault" name="isDefault" checked={address.isDefault} onChange={() => setAddress({ ...address, isDefault: !address.isDefault })} className="mr-2 rounded focus:outline-none focus:ring focus:border-blue-500" />
-                    <span className="text-gray-700">Default Address</span>
-                </label>
-            </div>
-        </div>
-        <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 focus:outline-none focus:ring focus:border-blue-500">Add Address</button>
-        <p className="mt-2 text-sm text-gray-500">Note: Fields marked with <span className="text-red-500">*</span> are mandatory.</p>
-    </form>
-        
-
+            <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 focus:outline-none focus:ring focus:border-blue-500">Add Address</button>
+            <p className="mt-2 text-sm text-gray-500">Note: Fields marked with <span className="text-red-500">*</span> are mandatory.</p>
+        </form>
     );
 }
+
 
 function UserAddress() {
     const [user, setUser] = useState(null);
@@ -166,7 +199,7 @@ function UserAddress() {
         }
         try {
             const response = await axios.delete(`http://localhost:2211/deleteAddress/`, {
-                data: deleteAddress
+                data: { addressId: addressId } // Pass the addressId to be deleted
             });
             if (response.status === 200) {
                 // Address deleted successfully from the server
@@ -177,8 +210,14 @@ function UserAddress() {
                 toast.success('Address deleted successfully', {
                     theme: 'colored'
                 });
+            } else if (response.status === 201) {
+                // Handle specific error message from the server
+                const errorMessage = response.data.message; // Assuming the server sends error message in response
+                toast.error(errorMessage, {
+                    theme: 'colored'
+                });
             } else {
-                // Handle errors or display an error message
+                // Handle other status codes or display an error message
                 toast.error('Failed to delete address:', {
                     theme: 'colored'
                 });
@@ -188,6 +227,7 @@ function UserAddress() {
             console.error('Error deleting address:', error);
             // Handle errors or display an error message
         }
+        
     };
 
 
