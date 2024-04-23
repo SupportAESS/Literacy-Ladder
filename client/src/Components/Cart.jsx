@@ -144,7 +144,7 @@ const Cart = () => {
           parsedData.cartItem = existingData;
           localStorage.setItem('userData', JSON.stringify(parsedData));
 
-          console.log(localStorage.getItem('userData'));
+          //console.log(localStorage.getItem('userData'));
         }
         else {
           const data = {
@@ -154,7 +154,7 @@ const Cart = () => {
             }]
           };
           localStorage.setItem('userData', JSON.stringify(data));
-          console.log(localStorage.getItem('userData'));
+          //console.log(localStorage.getItem('userData'));
         }
       }
       else {
@@ -164,31 +164,34 @@ const Cart = () => {
           quantity: 1
         }
         const updatedCartItems = [...cartItems];
-        updatedCartItems.push(newData);
-        setCartItems(updatedCartItems);
-        const data = {
-          userId: id,
-          book: product._id,
-          quantity: 1
-        };
-        //console.log(data);
-        try {
-          const response = await axios.post("http://localhost:2211/addToCart", data);
-          // if (response.status === 200) {
-          //   toast.success("Added Item to cart", {
-          //     theme: 'colored'
-          //   });
-          // }
-          // else {
-          //   toast.error("Failed due to Server error", {
-          //     theme: 'colored'
-          //   })
-          // }
-        }
-        catch (error) {
-          console.error('Error submitting form:', error);
-          // Handle any errors that occur during the form submission process
-          throw error;
+        const existingCartItemIndex = updatedCartItems.findIndex(item => item.book._id === product._id);
+        if (existingCartItemIndex === -1) {
+          updatedCartItems.push(newData);
+          setCartItems(updatedCartItems);
+          const data = {
+            userId: id,
+            book: product._id,
+            quantity: 1
+          };
+          //console.log(data);
+          try {
+            const response = await axios.post("http://localhost:2211/addToCart", data);
+            // if (response.status === 200) {
+            //   toast.success("Added Item to cart", {
+            //     theme: 'colored'
+            //   });
+            // }
+            // else {
+            //   toast.error("Failed due to Server error", {
+            //     theme: 'colored'
+            //   })
+            // }
+          }
+          catch (error) {
+            console.error('Error submitting form:', error);
+            // Handle any errors that occur during the form submission process
+            throw error;
+          }
         }
       }
     }

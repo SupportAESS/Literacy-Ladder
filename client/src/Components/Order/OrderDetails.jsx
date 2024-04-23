@@ -43,6 +43,21 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         padding: 5,
     },
+    flexContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 5,
+    },
+    total: {
+        fontWeight: 'bold',
+        marginTop: 10,
+    },
+    left: {
+        textAlign: 'left',
+    },
+    right: {
+        textAlign: 'right',
+    },
 });
 
 
@@ -100,21 +115,37 @@ const OrderDetails = ({ order, handleBackToOrders }) => {
                                 <Text style={styles.tableCell}>{item.bookId.bookName}</Text>
                                 <Text style={styles.tableCell}>{item.bookId.author}</Text>
                                 <Text style={styles.tableCell}>{item.quantity}</Text>
-                                <Text style={styles.tableCell}>&#x20B9;{item.bookId.bookPrice}</Text>
+                                <Text style={styles.tableCell}>{(order.totalAmount * 0.01 - shippingCharge + discount - gst).toFixed(2)}</Text>
                             </View>
                         ))}
                     </View>
                 </View>
                 <View style={styles.section}>
-                    <Text style={styles.info}>Subtotal: {(order.totalAmount * 0.01 - shippingCharge + discount - gst).toFixed(2)}</Text>
-                    <Text style={styles.info}>Shipping Charge: {shippingCharge.toFixed(2)}</Text>
-                    <Text style={styles.info}>Discount (5%): -{discount.toFixed(2)}</Text>
-                    <Text style={styles.info}>GST (18%): {gst.toFixed(2)}</Text>
-                    <Text style={styles.total}>Total: {(order.totalAmount * 0.01).toFixed(2)}</Text>
+                    <View style={styles.flexContainer}>
+                        <Text style={styles.left}>Subtotal:</Text>
+                        <Text style={styles.right}>{(order.totalAmount * 0.01 - shippingCharge + discount - gst).toFixed(2)}</Text>
+                    </View>
+                    <View style={styles.flexContainer}>
+                        <Text style={styles.left}>Shipping Charge:</Text>
+                        <Text style={styles.right}>{shippingCharge.toFixed(2)}</Text>
+                    </View>
+                    <View style={styles.flexContainer}>
+                        <Text style={styles.left}>Discount (5%):</Text>
+                        <Text style={styles.right}>-{discount.toFixed(2)}</Text>
+                    </View>
+                    <View style={styles.flexContainer}>
+                        <Text style={styles.left}>GST (18%):</Text>
+                        <Text style={styles.right}>{gst.toFixed(2)}</Text>
+                    </View>
+                    <View style={styles.flexContainer}>
+                        <Text style={[styles.total, styles.left]}>Total:</Text>
+                        <Text style={[styles.total, styles.right]}>{(order.totalAmount * 0.01).toFixed(2)}</Text>
+                    </View>
                 </View>
             </Page>
         </Document>
     );
+    
 
 
     return (
@@ -130,9 +161,7 @@ const OrderDetails = ({ order, handleBackToOrders }) => {
                         <br />
                         <span className="text-gray-600">Date: {moment(order.timeStamp).format('MMMM, Do YYYY')}</span>
                         <br />
-                        <PDFDownloadLink document={InvoiceDocument} fileName="invoice.pdf">
-                            {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Print Invoice')}
-                        </PDFDownloadLink>
+
                     </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4 mb-6">
@@ -171,7 +200,7 @@ const OrderDetails = ({ order, handleBackToOrders }) => {
                                 <span className="text-gray-500">{item.quantity}</span>
                             </div>
                             <div className="text-right">
-                                <span className="text-gray-800">₹{item.bookId.bookPrice}</span>
+                                <span className="text-gray-800">₹{(order.totalAmount * 0.01 - shippingCharge + discount - gst).toFixed(2)}</span>
                             </div>
                         </div>
                     ))}
@@ -219,6 +248,9 @@ const OrderDetails = ({ order, handleBackToOrders }) => {
                     </div>
                 </div>
             </div>
+            <PDFDownloadLink document={InvoiceDocument} fileName="invoice.pdf" className="text-blue-500 hover:text-blue-700">
+                {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Print Invoice')}
+            </PDFDownloadLink>
         </div>
     );
 };

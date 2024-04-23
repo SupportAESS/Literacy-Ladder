@@ -7,7 +7,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { Link } from 'react-router-dom';
 import { FiShoppingCart } from "react-icons/fi";
 import { FaRegHeart } from "react-icons/fa";
-
+import { FaHeart } from 'react-icons/fa';
 
 function Product() {
   const [productsByGenre, setProductsByGenre] = useState({});
@@ -65,87 +65,93 @@ function Product() {
         let parsedData = JSON.parse(existingDataString);
         let existingData = parsedData.cartItem;
         console.log(existingData);
-        for(let entry of existingData){
-          if(entry.item._id === product._id){
+        for (let entry of existingData) {
+          if (entry.item._id === product._id) {
             entry.quantity += 1;
             found = true;
             break;
           }
         }
 
-        if(!found){
+        if (!found) {
           existingData.push({
-            item:product,
+            item: product,
             quantity: 1
           });
         }
         parsedData.cartItem = existingData;
-        localStorage.setItem('userData',JSON.stringify(parsedData));
+        localStorage.setItem('userData', JSON.stringify(parsedData));
 
         console.log(localStorage.getItem('userData'));
-        }
-        else{
-          const data = {
-            cartItem: [{
-              item: product,
-              quantity: 1
-            }]
-          };
-          localStorage.setItem('userData', JSON.stringify(data));
-          console.log(localStorage.getItem('userData'));
-        }
       }
-      else{
-        const id = JSON.parse(session).user._id;
+      else {
         const data = {
-          userId:id,
-          book: product._id,
-          quantity: 1
+          cartItem: [{
+            item: product,
+            quantity: 1
+          }]
         };
-        //console.log(data);
-        try {
-          const response = await axios.post("http://localhost:2211/addToCart", data);
-          if (response.status === 200){
-            toast.success("Added Item to cart",{
-              theme:'colored'
-            });
-          }
-          else{
-            toast.error("Failed due to Server error",{
-              theme: 'colored'
-            })
-          }
-        }
-        catch (error) {
-          console.error('Error submitting form:', error);
-          // Handle any errors that occur during the form submission process
-          throw error;
-        }
+        localStorage.setItem('userData', JSON.stringify(data));
+        console.log(localStorage.getItem('userData'));
       }
     }
-    const addToWishlist = async (product) => {
+    else {
+      const id = JSON.parse(session).user._id;
+      const data = {
+        userId: id,
+        book: product._id,
+        quantity: 1
+      };
+      //console.log(data);
       try {
-        // Call API to add item to wishlist
-        const id = JSON.parse(session).user._id;
-        const data = {
-          userId: id,
-          bookId: product._id
-        };
-        const response = await axios.post("http://localhost:2211/addToWishlist",data);
+        const response = await axios.post("http://localhost:2211/addToCart", data);
         if (response.status === 200) {
-          toast.success("Added Item to wishlist", {
+          toast.success("Added Item to cart", {
             theme: 'colored'
           });
-        } else {
+        }
+        else {
           toast.error("Failed due to Server error", {
             theme: 'colored'
           })
         }
-      } catch (error) {
-        console.error('Error adding to wishlist:', error);
+      }
+      catch (error) {
+        console.error('Error submitting form:', error);
+        // Handle any errors that occur during the form submission process
         throw error;
       }
-    };
+    }
+  }
+  const addToWishlist = async (product) => {
+    try {
+      // Call API to add item to wishlist
+      const id = JSON.parse(session).user._id;
+      const data = {
+        userId: id,
+        bookId: product._id
+      };
+      const updatedCartItems = [...wishlist];
+      const existingCartItemIndex = updatedCartItems.findIndex(item => item.book._id === product._id);
+      if (existingCartItemIndex === -1) {
+        updatedCartItems.push(data);
+        setWishlist(updatedCartItems);
+      }
+      const response = await axios.post("http://localhost:2211/addToWishlist", data);
+      if (response.status === 200) {
+        toast.success("Added Item to wishlist", {
+          theme: 'colored'
+        });
+      } else {
+        toast.error("Failed due to Server error", {
+          theme: 'colored'
+        })
+      }
+    } catch (error) {
+      console.error('Error adding to wishlist:', error);
+      throw error;
+    }
+  };
 
 
   return (
@@ -199,10 +205,15 @@ function Product() {
                         <p className='text-lg font-serif font-bold'>Author: {product.author}</p>
                         <p className="text-base font-sans font-bold">Price: ₹ {product.bookPrice}</p>
                         <div className='flex flex-row gap-6 items-center'>
-                        <FiShoppingCart onClick={() => addToCart(product)} size = {30} className="cursor-pointer transition-transform hover:scale-110 text-blue-500" />
-                        <Link to={`/product/${product.bookName}`} className='bg-indigo-500 text-white text-lg px-6 py-1 rounded-xl mt-2'>View Details</Link>
-                        <FaRegHeart onClick={() => addToWishlist(product)} size={30} className='cursor-pointer transition-transform hover:scale-110 text-red-500'/>
-                        {/* //Navigate to product page  */}
+                          <FiShoppingCart onClick={() => addToCart(product)} size={30} className="cursor-pointer transition-transform hover:scale-110 text-blue-500" />
+                          <Link to={`/product/${product.bookName}`} className='bg-indigo-500 text-white text-lg px-6 py-1 rounded-xl mt-2'>View Details</Link>
+                          {wishlist.some(item => item._id === product._id) ? (
+                            <FaHeart size={30} className='text-red-500' />
+                          ) : (
+                            <FaRegHeart onClick={() => addToWishlist(product)} size={30} className='cursor-pointer transition-transform hover:scale-110 text-red-500' />
+                          )}
+                          {/* <FaRegHeart onClick={() => addToWishlist(product)} size={30} className='cursor-pointer transition-transform hover:scale-110 text-red-500' /> */}
+                          {/* //Navigate to product page  */}
                         </div>
                       </div>
                     )}
