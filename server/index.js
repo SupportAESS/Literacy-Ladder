@@ -22,6 +22,7 @@ const orderRoute = require('./routes/Order/Order.route.js');
 const searchBookRoute = require('./routes/Search/Search.route.js');
 const otpVerification = require('./routes/user/user.otp.validation.route.js');
 const generateOTP = require('./routes/user/user.otp.generateOTP.route.js');
+const resetPassword = require('./routes/user/user.reset.password.route.js');
 
 // Allow requests from the frontend server
 server.use(cors({
@@ -97,7 +98,19 @@ server.use("/deleteWishlistItem", wishlistRoute);
 
 //search books
 server.use('/searchBook', searchBookRoute);
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////const { User, OTP } = require('../../models/userModel');
+//const { cryptoSha } = require('../securityController');
+//const { otpVerification } = require('../../controllers/user/otpVerifictionController');
+
+async function ResetPassword() {
+  try {
+    
+}catch(error){
+
+}
+};
+
+module.exports = { ResetPassword};//////////////////////////////////////////////////////////////////////////////
 
 //OrderConfirmation and Payment
 server.use('/orderPlace', orderRoute);
@@ -122,6 +135,7 @@ server.use('/deleteAddress', userAddressSaveRoute);
 //otp
 server.use('/otpVerification', otpVerification);
 server.use('/sendOTP', generateOTP);
+server.use('/resetPassword', resetPassword);
 
 // server.post('/addBook', (req, res)=>{
 //   console.log(req.body)

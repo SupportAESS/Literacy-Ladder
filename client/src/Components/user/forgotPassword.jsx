@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import emailjs from 'emailjs-com';
+import { toast } from 'react-toastify';
 
 const ForgotPasswordForm = () => {
   // State variables for form fields
@@ -7,13 +8,62 @@ const ForgotPasswordForm = () => {
   const [otp, setOTP] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [isSendOTP, setOtpState] = useState(false);
 
   // Function to handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add your logic here to handle form submission, such as sending data to the server
-    console.log('Form submitted:', { email, otp, password, confirmPassword });
+    if(!isSendOTP){
+        toast.error('OTP not found');
+        return;
+    }
+    try {
+      // Check if all fields are filled
+      if (!email || !otp || !password || !confirmPassword) {
+        // If any field is empty, display an error message and return
+        toast.error('All fields are required');
+        return;
+      }
+  
+      // Check if password and confirm password match
+      if (password !== confirmPassword) {
+        // If passwords don't match, display an error message and return
+        toast.error('Passwords do not match');
+        return;
+      }
+  
+      // Prepare the data to send to the server
+      const formData = { email, otp, password, confirmPassword };
+  
+      // Make a POST request to the server to handle form submission
+      const response = await fetch('http://localhost:2211/resetPassword', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      // Check if the request was successful (status code 200)
+      if (response.ok) {
+        // Display a success message
+        toast.success('Password Successfully Changed');
+        window.location.href = '/login';
+      } else {
+        // If the request failed, display an error message
+        toast.error('Failed to Change Password');
+        setEmail('');
+        setOTP('');
+        setPassword('');
+        setConfirmPassword('');
+      }
+    } catch (error) {
+      // If an error occurs during form submission, log the error and display an error message
+      console.error('Error submitting form:', error);
+      toast.error('An error occurred. Please try again later.');
+    }
   };
+  
 
   // Function to handle sending OTP
   const handleSendOTP = async(e) => {
@@ -52,7 +102,7 @@ const ForgotPasswordForm = () => {
         const result = await emailjs.send('LiteracyLadder', 'template_h5lk6ad', templateParams, 'tXVPxxq_dX4fjUab2');
         console.log(result.text); // You can remove this line
         toast.success('Email sent successfully'); // Notify user of success
-        setIsOTP(true);
+        setOtpState(true);
       } catch (error) {
         console.error('Error sending email:', error);
         toast.error('Failed to send email. Please try again later.'); // Notify user of error
@@ -111,7 +161,7 @@ const ForgotPasswordForm = () => {
             required
           />
         </div>
-        <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Reset Password</button>
+        <button id='ResetPassword' type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Reset Password</button>
         <button onClick={handleSendOTP} className="mt-4 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Send OTP</button>
       </form>
     </div>
