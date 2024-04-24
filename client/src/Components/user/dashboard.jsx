@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom'; // Assuming you're using React Router for navigation
 import UserAddress from './userAddress';
 import Orders from './myOrder';
+import Profile from './Profile';
 
 function UserProfile() {
   const [user, setUser] = useState(null);
@@ -70,8 +71,9 @@ function UserProfile() {
             {selectedNavItem === 'details' && (
               <div>
                 <h2 className="text-xl font-semibold mb-2">Personal Details</h2>
-                <p><span className="font-semibold">Name:</span> {user.fullName}</p>
-                <p><span className="font-semibold">Email:</span> {user.email}</p>
+                <div>
+                  <Profile/>
+                </div>
                 {/* Add more user details as needed */}
               </div>
             )}
