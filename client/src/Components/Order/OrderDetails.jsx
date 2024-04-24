@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
         textAlign: 'right',
     },
     image: {
-        width: 150, // Adjust as per your requirement
+        width: 100, // Adjust as per your requirement
         height: 100, // Adjust as per your requirement
         marginBottom: 10,
         position: 'absolute',
@@ -75,15 +75,16 @@ const styles = StyleSheet.create({
         marginTop: 10,
         position: 'absolute',
         right: 20,
-        bottom: 50
+        bottom: 0
     },
     signatureContainer: {
         position: 'absolute',
         bottom: 50,
         right: 20,
+        marginTop: 10
     },
     authorizedText: {
-        marginTop: 10,
+        marginTop: 0,
         textAlign: 'right',
     },
 });
