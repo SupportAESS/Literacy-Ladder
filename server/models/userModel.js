@@ -8,6 +8,27 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
+// Define schema for OTP verification
+const otpSchema = new mongoose.Schema({
+    email: {
+      type: String,
+      required: true,
+      unique: true
+    },
+    otp: {
+      type: String,
+      required: true
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+      expires: 300 // OTP documents expire after 5 minutes (adjust as needed)
+    }
+  });
+  
+  // Create a model from the schema
+  const OTP = mongoose.model('OTP', otpSchema);
+
 const userAddressSchema = new mongoose.Schema({
     refUser: { type: mongoose.Schema.Types.ObjectId, required: true, unique: true,  ref: 'User' }, // Reference to another User schema
     addresses: [
@@ -176,4 +197,4 @@ const orderSchema = new mongoose.Schema({
 
 const Order  = mongoose.model('Order', orderSchema);
 
-module.exports = { User, Admin, Wishlist, Book, Purchase, Review, Invoice, Cart, UserAddress, Order };
+module.exports = { User, Admin, Wishlist, Book, Purchase, Review, Invoice, Cart, UserAddress, Order, OTP };

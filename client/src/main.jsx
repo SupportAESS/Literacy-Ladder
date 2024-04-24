@@ -15,6 +15,7 @@ import Checkout from './Components/Order/CheckOut';
 import ProductDetail from './Components/Product/ProductDetail';
 import ContactUs from './Components/Public/ContactUs';
 import PrivacyPolicy from './Components/Public/PrivacyPolicy';
+import ForgotPasswordForm from './Components/user/forgotPassword';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -28,6 +29,7 @@ const router = createBrowserRouter(
       <Route path='/cart/checkout' element={<ProtectedRoute Component={Checkout} />}/>
       <Route path='/contactUs' element={<ContactUs />} />
       <Route path='/privacyPolicy' element={<PrivacyPolicy />} />
+      <Route path='/login/forgotPassword' element={<ForgotPasswordForm />} />
     </Route>
   )
 );

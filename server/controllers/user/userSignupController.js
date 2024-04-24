@@ -1,13 +1,8 @@
 const { User } = require('../../models/userModel');
 const { cryptoSha } = require('../securityController');
 
-async function registerUser(fullName, email, password, confirmPassword) {
+async function registerUser(fullName, email, password) {
   try {
-    // Check if passwords match
-    if (password !== confirmPassword) {
-      throw new Error('Passwords do not match');
-    }
-
     // Create new user
     const newUser = new User({
       fullName: fullName,
@@ -29,13 +24,21 @@ async function registerUser(fullName, email, password, confirmPassword) {
 const userSignup = async (req, res) => {
   const { fullName, email, password, confirmPassword } = req.body;
   const pw = cryptoSha(password);
-  const cpw = cryptoSha(confirmPassword);
-
-  console.log("Signup clicked with full name: " + fullName + ", email: " + email +  ", and password: "+ pw + ", confirm-password: "+  cpw);
 
   try {
+    // Check if passwords match
+    if (password !== confirmPassword) {
+      throw new Error('Passwords do not match');
+    }
+
+    // Check if the email already exists (case-insensitive)
+    const existingUser = await User.findOne({ email: { $regex: new RegExp(email, 'i') } });
+    if (existingUser) {
+      throw new Error('Email already exists');
+    }
+
     // Create new user
-    const newUser = await registerUser(fullName, email, pw, cpw);
+    const newUser = await registerUser(fullName, email, pw);
 
     // Redirect to signup success page
     res.send("Register successful");
@@ -43,7 +46,7 @@ const userSignup = async (req, res) => {
   } catch (error) {
     if (error.message === 'Passwords do not match') {
       res.status(400).send('Passwords do not match');
-    } else if (error.code === 11000 && error.keyPattern && error.keyPattern.email === 1) {
+    } else if (error.message === 'Email already exists') {
       res.status(400).send('Email already exists');
     } else {
       console.error('Error during signup:', error);

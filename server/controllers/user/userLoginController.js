@@ -4,7 +4,7 @@ const { cryptoSha } = require('../securityController')
 async function validateUser(email, password) {
   try {
     // Find user by email
-    const user = await User.findOne({ email: email });
+    const user = await User.findOne({ email: { $regex: new RegExp(email, 'i') } });
 
     // If user not found, return null
     if (!user) {

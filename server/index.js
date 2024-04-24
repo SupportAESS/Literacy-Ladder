@@ -20,6 +20,8 @@ const paymentRoute = require('./routes/Payment/paymentValidate.route.js')
 const cartRoute = require('./routes/Cart/Cart.route.js');
 const orderRoute = require('./routes/Order/Order.route.js');
 const searchBookRoute = require('./routes/Search/Search.route.js');
+const otpVerification = require('./routes/user/user.otp.validation.route.js');
+const generateOTP = require('./routes/user/user.otp.generateOTP.route.js');
 
 // Allow requests from the frontend server
 server.use(cors({
@@ -115,6 +117,11 @@ server.use('/userSignup', userSignupRounte);
 server.use('/userAddressSave', userAddressSaveRoute);
 server.use('/userAddressGet', userAddressSaveRoute);
 server.use('/deleteAddress', userAddressSaveRoute);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//otp
+server.use('/otpVerification', otpVerification);
+server.use('/sendOTP', generateOTP);
 
 // server.post('/addBook', (req, res)=>{
 //   console.log(req.body)
