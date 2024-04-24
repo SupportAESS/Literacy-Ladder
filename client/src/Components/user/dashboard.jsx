@@ -70,7 +70,6 @@ function UserProfile() {
             )}
             {selectedNavItem === 'details' && (
               <div>
-                <h2 className="text-xl font-semibold mb-2">Personal Details</h2>
                 <div>
                   <Profile/>
                 </div>

@@ -16,6 +16,7 @@
     "@mui/icons-material": "^5.15.15",
     "@mui/material": "^5.15.15",
     "@react-pdf/renderer": "^3.4.2",
+    "@tailwindcss/forms": "^0.5.7",
     "axios": "^1.6.8",
     "bootstrap": "^5.3.3",
     "emailjs-com": "^3.2.0",
