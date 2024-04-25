@@ -71,10 +71,10 @@ function About() {
                 </div>
                 <h3 className="text-xl font-medium text-gray-900 mb-3">Our Team</h3>
                 <p class="text-gray-600">
-                  Founder: <span class="font-semibold">Shivendra Singh Thakur</span><br />
-                  Co-Founder & CEO: <span class="font-semibold">Abhinay Verma</span><br />
-                  Marketing Head: <span class="font-semibold">Shiva Teja</span><br />
-                  Product Head: <span class="font-semibold">Eram Fatma</span>
+                   <span class="font-semibold">Shivendra Singh Thakur</span><br />
+                  <span class="font-semibold">Abhinay Verma</span><br />
+                  <span class="font-semibold">Shiva Teja</span><br />
+                   <span class="font-semibold">Eram Fatma</span>
                 </p>
 
               </div>
