@@ -14,4 +14,8 @@ export default defineConfig({
   // server: {
   //   open: '/view/index.html',
   // },
+  // server: {
+  //   host: 'localhost',
+  //   port: 5173,
+  // },
 })

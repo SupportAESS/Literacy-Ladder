@@ -41,13 +41,13 @@ const userSignup = async (req, res) => {
     const newUser = await registerUser(fullName, email, pw);
 
     // Redirect to signup success page
-    res.send("Register successful");
+    res.status(200).send("Register successful");
     console.log('User registered successfully');
   } catch (error) {
     if (error.message === 'Passwords do not match') {
       res.status(400).send('Passwords do not match');
     } else if (error.message === 'Email already exists') {
-      res.status(400).send('Email already exists');
+      res.status(401).send('Email already exists');
     } else {
       console.error('Error during signup:', error);
       res.status(500).send('Internal server error');

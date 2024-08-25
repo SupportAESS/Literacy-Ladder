@@ -25,14 +25,21 @@ const Checkout = () => {
             try {
 
                 if (sessionData && sessionData.user) {
-
+                    //console.log(refUser);
                     const addressResponse = await axios.get(`http://localhost:2211/userAddressGet?userId=${refUser}`);
-                    if (addressResponse.data && addressResponse.data.ok) {
-                        const addresses = addressResponse.data.address.addresses;
-                        if(addresses.length === 0){
+                    //console.log(addressResponse.status);
+                    
+                    if (addressResponse.data && !addressResponse.data.ok) {
+                        
+                        // console.log(addressResponse.data.ok);
+                        
+                        if(!addressResponse.data.ok){
                             alert("For the subsequent step, please ensure that your address has been successfully added before proceeding further.");
                             window.location.href = '/userProfile';
                         }
+                        
+                    }else{
+                        const addresses = addressResponse.data.address.addresses;
                         setFormData(prevFormData => ({
                             ...prevFormData,
                             addresses: addresses,

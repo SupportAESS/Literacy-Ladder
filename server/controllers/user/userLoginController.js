@@ -41,7 +41,7 @@ const userLogin = async (req, res) => {
       // Set session variables
       req.session.user = user;
       req.session.loggedIn = true;
-      res.json({ message: 'Login successful', session: req.session })
+      res.status(200).json({ message: 'Login successful', session: req.session })
     } else {
       res.status(401).send('Invalid email or password');
     }

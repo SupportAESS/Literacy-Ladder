@@ -17,7 +17,7 @@ const Login = () => {
     e.preventDefault();
     // Handle login logic
 
-    console.log('Logging in with email:', email, 'and password:', password);
+    // console.log('Logging in with email:', email, 'and password:', password);
     try {
       const response = await fetch('http://localhost:2211/userLogin', {
         method: 'POST',
@@ -31,7 +31,7 @@ const Login = () => {
 
       });
 
-      if (response.ok) {
+      if (response.status === 200) {
         const data = await response.json();
         console.log('Response from server:', data.message);
         console.log('Session:', data.session);
@@ -56,7 +56,11 @@ const Login = () => {
           // Optionally, you can also toggle the form to show the login form after successful signup
           setIsLogin(true);
         }
-      } else {
+      } else if(response.status === 401){
+        toast.error("Invalid email or password", {
+          theme: 'colored'
+        });
+      }else {
         console.error('Failed to submit form:', response.statusText);
         // Handle error response from server
       }
@@ -79,7 +83,7 @@ const Login = () => {
       toast.error('Passwords do not match'); // Display error message using toastify
       return;
     }
-    console.log('Signing up with full name:', fullName, 'email:', email, 'and password:', password, 'confirmPassword:', confirmPassword);
+    //console.log('Signing up with full name:', fullName, 'email:', email, 'and password:', password, 'confirmPassword:', confirmPassword);
 
     try {
       const response = await fetch('http://localhost:2211/userSignup', {
@@ -95,7 +99,7 @@ const Login = () => {
         })
       });
 
-      if (response.ok) {
+      if (response.status === 200) {
         // Signup successful
         const data = await response.json();
         toast.success(data.message); // Display success message using toastify
@@ -106,6 +110,11 @@ const Login = () => {
         setFullName('');
         setOTP('');
         setIsLogin(false);
+      }else if(response.status === 400){
+        toast.error(`Passwords do not match`);
+        
+      }else if(response.status === 401){
+        toast.error(`Email already exists`);
       } else {
         // Signup failed
         const responseData = await response.text();

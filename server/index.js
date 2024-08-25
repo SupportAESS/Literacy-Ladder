@@ -32,7 +32,7 @@ server.use(cors({
 
 
 const connectionOptions = {
-  // useNewUrlParser: true,
+  // useNewUrlParser: true,password
   // useUnifiedTopology: true,
   dbName: 'literacyLadder',
 };
@@ -99,18 +99,18 @@ server.use("/deleteWishlistItem", wishlistRoute);
 //search books
 server.use('/searchBook', searchBookRoute);
 /////////////////////////////////////////////const { User, OTP } = require('../../models/userModel');
-//const { cryptoSha } = require('../securityController');
-//const { otpVerification } = require('../../controllers/user/otpVerifictionController');
+// //const { cryptoSha } = require('../securityController');
+// //const { otpVerification } = require('../../controllers/user/otpVerifictionController');
 
-async function ResetPassword() {
-  try {
+// async function ResetPassword() {
+//   try {
     
-}catch(error){
+// }catch(error){
 
-}
-};
+// }
+// };
 
-module.exports = { ResetPassword};//////////////////////////////////////////////////////////////////////////////
+// module.exports = { ResetPassword};//////////////////////////////////////////////////////////////////////////////
 
 //OrderConfirmation and Payment
 server.use('/orderPlace', orderRoute);
@@ -142,7 +142,18 @@ server.use('/resetPassword', resetPassword);
 //   res.send("success")
 // })
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+const globalAgent = require('global-agent');
+
+// Configure HTTP and HTTPS proxy settings
+globalAgent.bootstrap({
+  // Replace with your proxy server details
+  http: 'http://edcguest:edcguest@172.31.100.25:3128',
+  https: 'http://edcguest:edcguest@172.31.100.25:3128',
+});
+
+// Start your server code here...
+
 
 //  connect database
 const connectionUri = "mongodb+srv://shivendra2023is21:xl1XseRiuLs88wKf@literacyladder.kkfnufu.mongodb.net/?retryWrites=true&w=majority";

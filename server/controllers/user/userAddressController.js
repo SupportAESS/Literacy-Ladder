@@ -64,7 +64,7 @@ const userAddressGet = async (req, res) => {
       res.status(200).json({ ok: true, address: userAddress });
     } else {
       // If user address data is not found, send a 404 Not Found response
-      res.status(404).json({ ok: false, error: 'User address not found' });
+      res.status(200).json({ ok: false, error: 'User address not found' });
     }
   } catch (e) {
     // Handle any errors that occur during the process
