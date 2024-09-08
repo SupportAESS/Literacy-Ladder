@@ -120,5 +120,5 @@ This project is licensed under the MIT License.
 ## Contact
 
 For any queries or support, please reach out at:
-- **Email**: Shivendra323@gmail.com
+- **Email**: Shivendra323@gmail.com, Aman.ver56@gmail.com
 - **GitHub**: [Shivendra323](https://github.com/Shivendra323), [Monk-AbhinayVerma](https://github.com/Monk-AbhinayVerma)
