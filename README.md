@@ -102,11 +102,11 @@ Before running this project, ensure that you have the following installed on you
 
 | Homepage | Book Details |
 | --- | --- |
-| ![Homepage](https://i.imgur.com/zkXXrkF.png) | ![Book Details](https://i.imgur.com/rbZb3J3.png) |
+| ![Homepage]([https://i.imgur.com/zkXXrkF.png](https://res.cloudinary.com/dyifiiyxl/image/upload/v1725794254/screenshots/Screenshot_from_2024-09-08_16-39-42_lwqpmy.png)) | ![Book Details]([https://i.imgur.com/rbZb3J3.png](https://res.cloudinary.com/dyifiiyxl/image/upload/v1725794288/screenshots/Screenshot_from_2024-09-08_16-40-02_sycagq.png)) |
 
 | Cart Page | Payment Gateway |
 | --- | --- |
-| ![Cart Page](https://i.imgur.com/fz84nP3.png) | ![Payment Gateway](https://i.imgur.com/6O6dtbZ.png) |
+| ![Cart Page]([https://i.imgur.com/fz84nP3.png](https://res.cloudinary.com/dyifiiyxl/image/upload/v1725794297/screenshots/Screenshot_from_2024-09-08_16-41-03_zmwejl.png)) | ![Payment Gateway]([https://i.imgur.com/6O6dtbZ.png](https://res.cloudinary.com/dyifiiyxl/image/upload/v1725794305/screenshots/Screenshot_from_2024-09-08_16-41-39_own9ql.png)) |
 
 ## Contributing
 
