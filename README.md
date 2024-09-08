@@ -2,6 +2,11 @@
 
 **Literacy Ladder** is a full-stack e-commerce platform designed for buying and selling books online. This platform offers a seamless user experience for browsing books by genre, managing shopping carts, and completing purchases securely via RazorPay integration. Additionally, it features an admin panel for inventory management with complete CRUD (Create, Read, Update, Delete) functionalities.
 
+## Live Demo
+
+Check out the live version of the project:  
+[https://literacy-ladder-client.vercel.app/](https://literacy-ladder-client.vercel.app/)
+
 ## Features
 
 - **User Authentication**: Secure user sign-up and login functionalities.
@@ -97,7 +102,11 @@ Before running this project, ensure that you have the following installed on you
 
 | Homepage | Book Details |
 | --- | --- |
-| ![Homepage](path-to-homepage-image) | ![Book Details](path-to-book-details-image) |
+| ![Homepage](https://i.imgur.com/zkXXrkF.png) | ![Book Details](https://i.imgur.com/rbZb3J3.png) |
+
+| Cart Page | Payment Gateway |
+| --- | --- |
+| ![Cart Page](https://i.imgur.com/fz84nP3.png) | ![Payment Gateway](https://i.imgur.com/6O6dtbZ.png) |
 
 ## Contributing
 
